@@ -11,6 +11,6 @@ class TelegramController extends Controller
         $client = new \GuzzleHttp\Client();
         $me = "https://api.telegram.org/bot707434480:AAGsDoc4tSudDB1F4nWKGXYKDyQxHi4tL7A/getMe";
         $response = $client->post($me);
-        return $response;
+        var_dump($response);
     }
 }
