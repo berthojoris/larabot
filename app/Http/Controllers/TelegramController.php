@@ -9,17 +9,17 @@ class TelegramController extends Controller
 {
     public function me()
     {
-        // $client = new \GuzzleHttp\Client();
-        // $me = "https://api.telegram.org/bot707434480:AAGsDoc4tSudDB1F4nWKGXYKDyQxHi4tL7A/getMe";
-        // $response = $client->post($me);
-        // return response()->json($response->getBody());
+        $client = new \GuzzleHttp\Client();
+        $getMe = "https://api.telegram.org/bot707434480:AAGsDoc4tSudDB1F4nWKGXYKDyQxHi4tL7A/getMe";
+        $response = $client->get($getMe);
+        return response()->json($response->getBody());
 
-        $response = Telegram::getMe();
+        // $response = Telegram::getMe();
 
-        $botId = $response->getId();
-        $firstName = $response->getFirstName();
-        $username = $response->getUsername();
+        // $botId = $response->getId();
+        // $firstName = $response->getFirstName();
+        // $username = $response->getUsername();
 
-        return response()->json($botId);
+        // return response()->json($botId);
     }
 }
