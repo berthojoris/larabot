@@ -64,7 +64,7 @@ export default {
         }
     },
     mounted() {
-        this.chatList()
+        this.getChatList()
     },
     methods: {
         sendMessage() {
@@ -80,17 +80,17 @@ export default {
             })
             this.messagetext = ''
         },
-        chatList() {
+        getChatList() {
             var self = this;
             axios.get('/api/chat/list/1/2')
             .then((response) => {
                 let chatDB = response.data
                 this.chats = chatDB
             })
-            .catch(function (error) {
+            .catch((error) => {
                 console.log(error);
             })
-            .then(function () {
+            .then(function() {
                 // always executed
             });
         },
@@ -98,10 +98,10 @@ export default {
             axios.post('/api/chat/insert', {
                 message: this.messagetext
             })
-            .then(function (response) {
+            .then((response) => {
                 this.messagetext = ''
             })
-            .catch(function (error) {
+            .catch((error) => {
                 this.messagetext = ''
             });
         }

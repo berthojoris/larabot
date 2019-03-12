@@ -1896,7 +1896,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    this.chatList();
+    this.getChatList();
   },
   methods: {
     sendMessage: function sendMessage() {
@@ -1912,7 +1912,7 @@ __webpack_require__.r(__webpack_exports__);
       });
       this.messagetext = '';
     },
-    chatList: function chatList() {
+    getChatList: function getChatList() {
       var _this = this;
 
       var self = this;
@@ -1925,12 +1925,14 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     saveChatToDB: function saveChatToDB() {
+      var _this2 = this;
+
       axios.post('/api/chat/insert', {
         message: this.messagetext
       }).then(function (response) {
-        this.messagetext = '';
+        _this2.messagetext = '';
       }).catch(function (error) {
-        this.messagetext = '';
+        _this2.messagetext = '';
       });
     }
   }
