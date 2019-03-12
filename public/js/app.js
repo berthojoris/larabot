@@ -1871,7 +1871,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       messagetext: '',
       profile: 'images/man1.png',
-      chats: [{
+      chats: [],
+      dummychats: [{
         image: 'images/man1.png',
         type: 'sent',
         message: 'Woi brian, pa kbr bro? Lama gak liat...Gmna kbr skrng? Kerja dmna skrng?'
@@ -1894,6 +1895,9 @@ __webpack_require__.r(__webpack_exports__);
       }]
     };
   },
+  mounted: function mounted() {
+    this.chatList();
+  },
   methods: {
     sendMessage: function sendMessage() {
       if (this.messagetext.trim().length < 1) return;
@@ -1902,9 +1906,31 @@ __webpack_require__.r(__webpack_exports__);
         type: 'sent',
         message: this.messagetext
       });
-      this.messagetext = '';
+      this.saveChatToDB();
       VueScrollTo.scrollTo("ul li:last-child", 0, {
         container: '.messages'
+      });
+      this.messagetext = '';
+    },
+    chatList: function chatList() {
+      var _this = this;
+
+      var self = this;
+      axios.get('/api/chat/list/1/2').then(function (response) {
+        var chatDB = response.data;
+        _this.chats = chatDB;
+      }).catch(function (error) {
+        console.log(error);
+      }).then(function () {// always executed
+      });
+    },
+    saveChatToDB: function saveChatToDB() {
+      axios.post('/api/chat/insert', {
+        message: this.messagetext
+      }).then(function (response) {
+        this.messagetext = '';
+      }).catch(function (error) {
+        this.messagetext = '';
       });
     }
   }
@@ -47394,9 +47420,9 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "contact-profile" }, [
-      _c("img", { attrs: { src: "images/man1.png", alt: "" } }),
+      _c("img", { attrs: { src: "images/man2.png", alt: "" } }),
       _vm._v(" "),
-      _c("p", [_vm._v("Bertho")]),
+      _c("p", [_vm._v("Brian")]),
       _vm._v(" "),
       _c("div", { staticClass: "social-media" }, [
         _c("i", {

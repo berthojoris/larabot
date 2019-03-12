@@ -1,8 +1,8 @@
 <template>
 <div class="content">
     <div class="contact-profile">
-        <img src="images/man1.png" alt="" />
-        <p>Bertho</p>
+        <img src="images/man2.png" alt="" />
+        <p>Brian</p>
         <div class="social-media">
             <i class="fa fa-facebook" aria-hidden="true"></i>
             <i class="fa fa-twitter" aria-hidden="true"></i>
@@ -33,7 +33,8 @@ export default {
         return {
             messagetext: '',
             profile: 'images/man1.png',
-            chats: [
+            chats: [],
+            dummychats: [
                 {
                     image: 'images/man1.png',
                     type: 'sent',
@@ -62,6 +63,9 @@ export default {
             ]
         }
     },
+    mounted() {
+        this.chatList()
+    },
     methods: {
         sendMessage() {
             if (this.messagetext.trim().length < 1) return;
@@ -70,10 +74,36 @@ export default {
                 type: 'sent',
                 message: this.messagetext
             })
-            this.messagetext = ''
+            this.saveChatToDB()
             VueScrollTo.scrollTo("ul li:last-child", 0, {
                 container: '.messages'
             })
+            this.messagetext = ''
+        },
+        chatList() {
+            var self = this;
+            axios.get('/api/chat/list/1/2')
+            .then((response) => {
+                let chatDB = response.data
+                this.chats = chatDB
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+            .then(function () {
+                // always executed
+            });
+        },
+        saveChatToDB() {
+            axios.post('/api/chat/insert', {
+                message: this.messagetext
+            })
+            .then(function (response) {
+                this.messagetext = ''
+            })
+            .catch(function (error) {
+                this.messagetext = ''
+            });
         }
     }
 }
