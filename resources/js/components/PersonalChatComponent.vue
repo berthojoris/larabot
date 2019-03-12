@@ -1,6 +1,10 @@
 <template>
 <div class="content">
-    <div class="contact-profile">
+    <div v-show="!chats.length" class="center">
+        No chat available at this moment
+    </div>
+
+    <div v-if="chats.length" class="contact-profile">
         <img src="images/man2.png" alt="" />
         <p>Brian</p>
         <div class="social-media">
@@ -33,38 +37,11 @@ export default {
         return {
             messagetext: '',
             profile: 'images/man1.png',
-            chats: [],
-            dummychats: [
-                {
-                    image: 'images/man1.png',
-                    type: 'sent',
-                    message: 'Woi brian, pa kbr bro? Lama gak liat...Gmna kbr skrng? Kerja dmna skrng?'
-                },
-                {
-                    image: 'images/man2.png',
-                    type: 'replies',
-                    message: "Kabar baik bro...Gimna u? Makin sukses aja ne gw liat. Kapan ne meet up lagi broh?"
-                },
-                {
-                    image: 'images/man1.png',
-                    type: 'sent',
-                    message: 'Minggu depan gimana? Gw ada acara d rumah juga ne. Skalian mau ajak anak2 pada ngumpul'
-                },
-                {
-                    image: 'images/man2.png',
-                    type: 'replies',
-                    message: "Ah...boleh juga :D btw skalian gw mau kasi undangan ya"
-                },
-                {
-                    image: 'images/man1.png',
-                    type: 'sent',
-                    message: 'Siap 86 gan.....Meluncur ke KTP'
-                },
-            ]
+            chats: []
         }
     },
     mounted() {
-        this.getChatList()
+        // this.getChatList()
     },
     methods: {
         sendMessage() {
@@ -74,14 +51,12 @@ export default {
                 type: 'sent',
                 message: this.messagetext
             })
-            this.saveChatToDB()
             VueScrollTo.scrollTo("ul li:last-child", 0, {
                 container: '.messages'
             })
-            this.messagetext = ''
+            this.saveChatToDB()
         },
         getChatList() {
-            var self = this;
             axios.get('/api/chat/list/1/2')
             .then((response) => {
                 let chatDB = response.data
@@ -95,8 +70,11 @@ export default {
             });
         },
         saveChatToDB() {
+            const userID = $("meta[name=user-id]").attr("content")
+
             axios.post('/api/chat/insert', {
-                message: this.messagetext
+                message: this.messagetext,
+                sender_id: userID
             })
             .then((response) => {
                 this.messagetext = ''
@@ -110,5 +88,12 @@ export default {
 </script>
 
 <style scoped>
-
+.center {
+    margin-top: 40%;
+    margin-left: 20%;
+    width: 60%;
+    border: 3px solid #73AD21;
+    padding: 10px;
+    text-align: center;
+}
 </style>

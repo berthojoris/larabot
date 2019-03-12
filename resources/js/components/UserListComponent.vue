@@ -1,5 +1,5 @@
 <template>
-<div>
+<div @click="openChat(user.id)">
     <li class="contact">
         <div class="wrap">
             <span class="contact-status online"></span>
@@ -15,7 +15,12 @@
 
 <script>
 export default {
-    props: ['user']
+    props: ['user'],
+    methods: {
+        openChat: function(id) {
+            this.$emit('openChatNow', id)
+        }
+    }
 }
 </script>
 

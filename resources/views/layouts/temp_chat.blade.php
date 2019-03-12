@@ -7,6 +7,9 @@
     <title>Chat</title>
     <link rel="icon" href="{{ asset('favicon.ico') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="user-id" content="{{ auth()->user()->id }}">
+    <meta name="user-email" content="{{ auth()->user()->email }}">
+    <meta name="user-name" content="{{ auth()->user()->name }}">
     <link href='{{ asset('css/fontchat.css') }}' rel='stylesheet' type='text/css'>
     <link href='{{ asset('css/chatfontawesome.css') }}' rel='stylesheet' type='text/css'>
     <link href="{{ asset('css/chat.css') }}" rel="stylesheet">

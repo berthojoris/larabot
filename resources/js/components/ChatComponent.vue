@@ -7,7 +7,11 @@
         
         <div id="contacts">
             <ul>
-                <comp-user-list v-for="(user, index) in userlist" :key="index" :user="user"></comp-user-list>
+                <comp-user-list 
+                    v-for="(user, index) in userlist" 
+                    :key="index" 
+                    :user="user" @openChatNow="openChatViaID">
+                </comp-user-list>
             </ul>
         </div>
         
@@ -22,25 +26,27 @@
 export default {
     data() {
         return {
-            userlist : [
-                {
-                    id: 2,
-                    image: 'images/man2.png',
-                    name: 'Brian',
-                    message: 'Woi brian, pa kbr bro? Lama gak liat...Gmna kbr skrng? Kerja dmna skrng?'
-                },
-                {
-                    id: 3,
-                    image: 'images/man3.png',
-                    name: 'Ronald',
-                    message: 'Dimana lau? Gw di P5 ni'
-                }
-            ]
+            userlist : []
         }
     },
+    mounted() {
+        this.getUserList()
+    },
     methods: {
-        openChat(user) {
-            alert("Chat personal opened")
+        openChatViaID(id) {
+            alert(id)
+        },
+        getUserList() {
+            const userID = $("meta[name=user-id]").attr("content")
+
+            axios.get('/api/user/online/'+userID)
+            .then((response) => {
+                let listUserDB = response.data
+                this.userlist = listUserDB
+            })
+            .catch((error) => {
+                console.log(error);
+            });
         }
     }
 }

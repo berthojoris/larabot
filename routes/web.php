@@ -17,6 +17,7 @@ Route::get('/', function () {
 
 Route::get('/me', 'TelegramController@me');
 Route::view('/chat', 'chat')->middleware('auth');
+Route::get('user/online', 'ChatController@online');
 
 Auth::routes();
 
