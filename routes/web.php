@@ -17,3 +17,7 @@ Route::get('/', function () {
 
 Route::get('/me', 'TelegramController@me');
 Route::view('/chat', 'chat');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

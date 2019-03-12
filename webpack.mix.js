@@ -14,4 +14,5 @@ const mix = require('laravel-mix');
 mix.js('resources/js/app.js', 'public/js')
    .sass('resources/sass/app.scss', 'public/css')
    .sass('resources/sass/chatfont.scss', 'public/css')
+   .sass('resources/sass/chatfontawesome.scss', 'public/css')
    .sass('resources/sass/chat.scss', 'public/css');
