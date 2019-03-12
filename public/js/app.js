@@ -1884,13 +1884,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['id', 'img', 'name'],
   data: function data() {
     return {
       messagetext: '',
       chats: [],
-      loadStatus: false
+      loadStatus: false,
+      nochat: false
     };
   },
   watch: {
@@ -1915,12 +1924,21 @@ __webpack_require__.r(__webpack_exports__);
     getChatList: function getChatList(receiverID) {
       var _this = this;
 
+      this.loadStatus = true;
+      this.nochat = false;
       var userID = $("meta[name=user-id]").attr("content");
       this.chats = [];
       axios.get('/api/chat/list/' + userID + '/' + receiverID).then(function (response) {
+        _this.loadStatus = false;
         var chatDB = response.data;
         _this.chats = chatDB;
+
+        if (chatDB.length == 0 || chatDB === undefined) {
+          _this.nochat = true;
+        }
       }).catch(function (error) {
+        _this.loadStatus = false;
+        _this.nochat = false;
         console.log(error);
       }).then(function () {// always executed
       });
@@ -2057,9 +2075,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
+  data: function data() {
+    return {
+      active_el: 0
+    };
+  },
   methods: {
     openChat: function openChat(id, image, name) {
       this.$emit('openChatNow', id, image, name);
+    },
+    activate: function activate(id) {
+      $('body').on('click', 'li', function () {
+        $('li.active').removeClass('active');
+        $(this).addClass('active');
+      });
     }
   }
 });
@@ -6512,9 +6541,9 @@ __webpack_require__.r(__webpack_exports__);
 /***/ }),
 
 /***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/PersonalChatComponent.vue?vue&type=style&index=0&id=298d7b6c&scoped=true&lang=css&":
-/*!***************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader??ref--9-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--9-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/PersonalChatComponent.vue?vue&type=style&index=0&id=298d7b6c&scoped=true&lang=css& ***!
-  \***************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--10-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--10-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/PersonalChatComponent.vue?vue&type=style&index=0&id=298d7b6c&scoped=true&lang=css& ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -47274,14 +47303,14 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ }),
 
 /***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/PersonalChatComponent.vue?vue&type=style&index=0&id=298d7b6c&scoped=true&lang=css&":
-/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--9-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--9-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/PersonalChatComponent.vue?vue&type=style&index=0&id=298d7b6c&scoped=true&lang=css& ***!
-  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--10-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--10-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/PersonalChatComponent.vue?vue&type=style&index=0&id=298d7b6c&scoped=true&lang=css& ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--9-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--9-2!../../../node_modules/vue-loader/lib??vue-loader-options!./PersonalChatComponent.vue?vue&type=style&index=0&id=298d7b6c&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/PersonalChatComponent.vue?vue&type=style&index=0&id=298d7b6c&scoped=true&lang=css&");
+var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--10-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--10-2!../../../node_modules/vue-loader/lib??vue-loader-options!./PersonalChatComponent.vue?vue&type=style&index=0&id=298d7b6c&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/PersonalChatComponent.vue?vue&type=style&index=0&id=298d7b6c&scoped=true&lang=css&");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -48012,25 +48041,34 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "content" }, [
-    _c(
-      "div",
-      {
-        directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value: !_vm.chats.length,
-            expression: "!chats.length"
-          }
-        ],
-        staticClass: "center"
-      },
-      [
-        _vm._v("\r\n        No chat with "),
-        _c("b", [_vm._v(_vm._s(_vm.name))]),
-        _vm._v(" available at this moment\r\n    ")
-      ]
-    ),
+    _vm.nochat
+      ? _c("div", { staticClass: "circonf-wrapper center" }, [
+          _c("h3", [_vm._v("Sorry there is no chat history with this user")])
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.loadStatus
+      ? _c("div", { staticClass: "item loading-5" }, [
+          _c("div", { staticClass: "svg-wrapper" }, [
+            _c(
+              "svg",
+              {
+                attrs: {
+                  xmlns: "http://www.w3.org/2000/svg",
+                  width: "1.2em",
+                  height: "1.2em"
+                }
+              },
+              [
+                _c("circle", {
+                  staticClass: "circle",
+                  attrs: { cx: "0.6em", cy: "0.6em", r: "0.5em" }
+                })
+              ]
+            )
+          ])
+        ])
+      : _vm._e(),
     _vm._v(" "),
     _vm.chats.length
       ? _c("div", { staticClass: "contact-profile" }, [
@@ -48042,79 +48080,83 @@ var render = function() {
         ])
       : _vm._e(),
     _vm._v(" "),
-    _c("div", { staticClass: "messages" }, [
-      _c(
-        "ul",
-        _vm._l(_vm.chats, function(chat, index) {
-          return _c(
-            "li",
-            {
-              key: index,
-              class: {
-                sent: chat.type == "sent",
-                replies: chat.type == "replies"
-              }
-            },
-            [
-              _c("img", { attrs: { src: chat.image } }),
-              _vm._v(" "),
-              _c("p", [_vm._v(_vm._s(chat.message))])
-            ]
+    _vm.chats.length
+      ? _c("div", { staticClass: "messages" }, [
+          _c(
+            "ul",
+            _vm._l(_vm.chats, function(chat, index) {
+              return _c(
+                "li",
+                {
+                  key: index,
+                  class: {
+                    sent: chat.type == "sent",
+                    replies: chat.type == "replies"
+                  }
+                },
+                [
+                  _c("img", { attrs: { src: chat.image } }),
+                  _vm._v(" "),
+                  _c("p", [_vm._v(_vm._s(chat.message))])
+                ]
+              )
+            }),
+            0
           )
-        }),
-        0
-      )
-    ]),
+        ])
+      : _vm._e(),
     _vm._v(" "),
-    _c("div", { staticClass: "message-input" }, [
-      _c("div", { staticClass: "wrap" }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.messagetext,
-              expression: "messagetext"
-            }
-          ],
-          attrs: { type: "text", placeholder: "Write your message..." },
-          domProps: { value: _vm.messagetext },
-          on: {
-            keyup: function($event) {
-              if (
-                !$event.type.indexOf("key") &&
-                _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
-              ) {
-                return null
+    _vm.chats.length
+      ? _c("div", { staticClass: "message-input" }, [
+          _c("div", { staticClass: "wrap" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.messagetext,
+                  expression: "messagetext"
+                }
+              ],
+              attrs: { type: "text", placeholder: "Write your message..." },
+              domProps: { value: _vm.messagetext },
+              on: {
+                keyup: function($event) {
+                  if (
+                    !$event.type.indexOf("key") &&
+                    _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                  ) {
+                    return null
+                  }
+                  return _vm.sendMessage($event)
+                },
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.messagetext = $event.target.value
+                }
               }
-              return _vm.sendMessage($event)
-            },
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.messagetext = $event.target.value
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c("i", {
-          staticClass: "fa fa-paperclip attachment",
-          attrs: { "aria-hidden": "true" }
-        }),
-        _vm._v(" "),
-        _c(
-          "button",
-          { staticClass: "submit", on: { click: _vm.sendMessage } },
-          [
+            }),
+            _vm._v(" "),
             _c("i", {
-              staticClass: "fa fa-paper-plane",
+              staticClass: "fa fa-paperclip attachment",
               attrs: { "aria-hidden": "true" }
-            })
-          ]
-        )
-      ])
-    ])
+            }),
+            _vm._v(" "),
+            _c(
+              "button",
+              { staticClass: "submit", on: { click: _vm.sendMessage } },
+              [
+                _c("i", {
+                  staticClass: "fa fa-paper-plane",
+                  attrs: { "aria-hidden": "true" }
+                })
+              ]
+            )
+          ])
+        ])
+      : _vm._e()
   ])
 }
 var staticRenderFns = [
@@ -48327,21 +48369,32 @@ var render = function() {
       }
     },
     [
-      _c("li", { staticClass: "contact" }, [
-        _c("div", { staticClass: "wrap" }, [
-          _c("span", { staticClass: "contact-status online" }),
-          _vm._v(" "),
-          _c("img", { attrs: { src: _vm.user.image } }),
-          _vm._v(" "),
-          _c("div", { staticClass: "meta" }, [
-            _c("p", { staticClass: "name" }, [_vm._v(_vm._s(_vm.user.name))]),
+      _c(
+        "li",
+        {
+          staticClass: "contact",
+          on: {
+            click: function($event) {
+              return _vm.activate(_vm.user.id)
+            }
+          }
+        },
+        [
+          _c("div", { staticClass: "wrap" }, [
+            _c("span", { staticClass: "contact-status online" }),
             _vm._v(" "),
-            _c("p", { staticClass: "preview" }, [
-              _vm._v(_vm._s(_vm.user.message))
+            _c("img", { attrs: { src: _vm.user.image } }),
+            _vm._v(" "),
+            _c("div", { staticClass: "meta" }, [
+              _c("p", { staticClass: "name" }, [_vm._v(_vm._s(_vm.user.name))]),
+              _vm._v(" "),
+              _c("p", { staticClass: "preview" }, [
+                _vm._v(_vm._s(_vm.user.message))
+              ])
             ])
           ])
-        ])
-      ])
+        ]
+      )
     ]
   )
 }
@@ -61265,10 +61318,10 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_9_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonalChatComponent_vue_vue_type_style_index_0_id_298d7b6c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader!../../../node_modules/css-loader??ref--9-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--9-2!../../../node_modules/vue-loader/lib??vue-loader-options!./PersonalChatComponent.vue?vue&type=style&index=0&id=298d7b6c&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/PersonalChatComponent.vue?vue&type=style&index=0&id=298d7b6c&scoped=true&lang=css&");
-/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_9_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonalChatComponent_vue_vue_type_style_index_0_id_298d7b6c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_9_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonalChatComponent_vue_vue_type_style_index_0_id_298d7b6c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_9_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonalChatComponent_vue_vue_type_style_index_0_id_298d7b6c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_9_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonalChatComponent_vue_vue_type_style_index_0_id_298d7b6c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
- /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_9_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonalChatComponent_vue_vue_type_style_index_0_id_298d7b6c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_10_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonalChatComponent_vue_vue_type_style_index_0_id_298d7b6c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader!../../../node_modules/css-loader??ref--10-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--10-2!../../../node_modules/vue-loader/lib??vue-loader-options!./PersonalChatComponent.vue?vue&type=style&index=0&id=298d7b6c&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/PersonalChatComponent.vue?vue&type=style&index=0&id=298d7b6c&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_10_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonalChatComponent_vue_vue_type_style_index_0_id_298d7b6c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_10_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonalChatComponent_vue_vue_type_style_index_0_id_298d7b6c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_10_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonalChatComponent_vue_vue_type_style_index_0_id_298d7b6c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_10_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonalChatComponent_vue_vue_type_style_index_0_id_298d7b6c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_10_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonalChatComponent_vue_vue_type_style_index_0_id_298d7b6c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -61541,10 +61594,21 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/sass/loader.scss":
+/*!************************************!*\
+  !*** ./resources/sass/loader.scss ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
 /***/ 0:
-/*!*************************************************************************************************************************************************************!*\
-  !*** multi ./resources/js/app.js ./resources/sass/app.scss ./resources/sass/chatfont.scss ./resources/sass/chatfontawesome.scss ./resources/sass/chat.scss ***!
-  \*************************************************************************************************************************************************************/
+/*!******************************************************************************************************************************************************************************************!*\
+  !*** multi ./resources/js/app.js ./resources/sass/app.scss ./resources/sass/chatfont.scss ./resources/sass/chatfontawesome.scss ./resources/sass/loader.scss ./resources/sass/chat.scss ***!
+  \******************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -61552,6 +61616,7 @@ __webpack_require__(/*! D:\laragon\www\larabot\resources\js\app.js */"./resource
 __webpack_require__(/*! D:\laragon\www\larabot\resources\sass\app.scss */"./resources/sass/app.scss");
 __webpack_require__(/*! D:\laragon\www\larabot\resources\sass\chatfont.scss */"./resources/sass/chatfont.scss");
 __webpack_require__(/*! D:\laragon\www\larabot\resources\sass\chatfontawesome.scss */"./resources/sass/chatfontawesome.scss");
+__webpack_require__(/*! D:\laragon\www\larabot\resources\sass\loader.scss */"./resources/sass/loader.scss");
 module.exports = __webpack_require__(/*! D:\laragon\www\larabot\resources\sass\chat.scss */"./resources/sass/chat.scss");
 
 

@@ -14,6 +14,7 @@
     <link href='{{ asset('css/fontchat.css') }}' rel='stylesheet' type='text/css'>
     <link href='{{ asset('css/chatfontawesome.css') }}' rel='stylesheet' type='text/css'>
     <link href="{{ asset('css/chat.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/loader.css') }}" rel="stylesheet">
     <script src="{{ asset('js/app.js') }}" defer></script>
     <style>
     #app {

@@ -1,8 +1,16 @@
 <template>
 <div class="content">
-    
-    <div v-show="!chats.length" class="center">
-        No chat with <b>{{ name }}</b> available at this moment
+
+    <div v-if="nochat" class="circonf-wrapper center">
+        <h3>Sorry there is no chat history with this user</h3>
+    </div>
+
+    <div class="item loading-5" v-if="loadStatus">
+        <div class="svg-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em">
+                <circle cx="0.6em" cy="0.6em" r="0.5em" class="circle"/>
+            </svg>
+        </div>
     </div>
 
     <div v-if="chats.length" class="contact-profile">
@@ -14,7 +22,7 @@
             <i class="fa fa-instagram" aria-hidden="true"></i>
         </div>
     </div>
-    <div class="messages">
+    <div v-if="chats.length" class="messages">
         <ul>
             <li v-for="(chat, index) in chats" :key="index" v-bind:class="{'sent': chat.type == 'sent',  'replies': chat.type == 'replies'}">
                 <img :src="chat.image">
@@ -22,7 +30,7 @@
             </li>
         </ul>
     </div>
-    <div class="message-input">
+    <div v-if="chats.length" class="message-input">
         <div class="wrap">
             <input type="text" @keyup.enter="sendMessage" v-model="messagetext" placeholder="Write your message..." />
             <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
@@ -39,7 +47,8 @@ export default {
         return {
             messagetext: '',
             chats: [],
-            loadStatus: false
+            loadStatus: false,
+            nochat: false
         }
     },
     watch: {
@@ -62,15 +71,23 @@ export default {
             this.saveChatToDB()
         },
         getChatList(receiverID) {
+            this.loadStatus = true
+            this.nochat = false
             const userID = $("meta[name=user-id]").attr("content")
             
             this.chats = []
             axios.get('/api/chat/list/'+userID+'/'+receiverID)
             .then((response) => {
+                this.loadStatus = false
                 let chatDB = response.data
                 this.chats = chatDB
+                if(chatDB.length == 0 || chatDB === undefined) {
+                    this.nochat = true
+                }
             })
             .catch((error) => {
+                this.loadStatus = false
+                this.nochat = false
                 console.log(error);
             })
             .then(function() {
