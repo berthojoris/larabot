@@ -1,8 +1,8 @@
 <template>
 <div id="profile">
     <div class="wrap">
-        <img id="profile-img" src="images/profile.png" class="online" alt="" />
-        <p>Mike Ross</p>
+        <img id="profile-img" src="images/man1.png" class="online" alt="" />
+        <p>Bertho</p>
         <i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
         <div id="status-options">
             <ul>
