@@ -1892,6 +1892,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['id', 'img', 'name'],
   data: function data() {
@@ -1899,8 +1900,12 @@ __webpack_require__.r(__webpack_exports__);
       messagetext: '',
       chats: [],
       loadStatus: false,
-      nochat: false
+      nochat: false,
+      idLogged: null
     };
+  },
+  mounted: function mounted() {
+    this.idLogged = $("meta[name=user-id]").attr("content");
   },
   watch: {
     id: function id(val) {
@@ -1912,10 +1917,13 @@ __webpack_require__.r(__webpack_exports__);
       if (this.messagetext.trim().length < 1) return;
       var picture = $("meta[name=user-profile-pic]").attr("content");
       this.chats.push({
-        image: picture,
+        sender_id: this.idLogged,
+        sender_image: picture,
+        receive_image: '',
         type: 'sent',
         message: this.messagetext
       });
+      console.log(this.chats);
       VueScrollTo.scrollTo("ul li:last-child", 0, {
         container: '.messages'
       });
@@ -48090,12 +48098,22 @@ var render = function() {
                 {
                   key: index,
                   class: {
-                    sent: chat.type == "sent",
-                    replies: chat.type == "replies"
+                    sent: chat.sender_id == _vm.idLogged,
+                    replies: chat.sender_id != _vm.idLogged
                   }
                 },
                 [
-                  _c("img", { attrs: { src: chat.image } }),
+                  chat.sender_id == _vm.idLogged
+                    ? _c("img", {
+                        attrs: { src: chat.sender_image, hasil: "sama" }
+                      })
+                    : _vm._e(),
+                  _vm._v(" "),
+                  chat.sender_id != _vm.idLogged
+                    ? _c("img", {
+                        attrs: { src: chat.sender_image, hasil: "tidak sama" }
+                      })
+                    : _vm._e(),
                   _vm._v(" "),
                   _c("p", [_vm._v(_vm._s(chat.message))])
                 ]
@@ -48118,7 +48136,11 @@ var render = function() {
                   expression: "messagetext"
                 }
               ],
-              attrs: { type: "text", placeholder: "Write your message..." },
+              attrs: {
+                disabled: _vm.loadStatus,
+                type: "text",
+                placeholder: "Write your message..."
+              },
               domProps: { value: _vm.messagetext },
               on: {
                 keyup: function($event) {
@@ -48146,7 +48168,11 @@ var render = function() {
             _vm._v(" "),
             _c(
               "button",
-              { staticClass: "submit", on: { click: _vm.sendMessage } },
+              {
+                staticClass: "submit",
+                attrs: { disabled: _vm.loadStatus },
+                on: { click: _vm.sendMessage }
+              },
               [
                 _c("i", {
                   staticClass: "fa fa-paper-plane",

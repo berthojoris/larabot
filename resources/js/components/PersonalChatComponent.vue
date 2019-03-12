@@ -24,17 +24,18 @@
     </div>
     <div v-if="chats.length" class="messages">
         <ul>
-            <li v-for="(chat, index) in chats" :key="index" v-bind:class="{'sent': chat.type == 'sent',  'replies': chat.type == 'replies'}">
-                <img :src="chat.image">
+            <li v-for="(chat, index) in chats" :key="index" :class="{'sent': chat.sender_id == idLogged,  'replies': chat.sender_id != idLogged}">
+                <img :src="chat.sender_image" v-if="chat.sender_id == idLogged" hasil="sama">
+                <img :src="chat.sender_image" v-if="chat.sender_id != idLogged" hasil="tidak sama">
                 <p>{{ chat.message }}</p>
             </li>
         </ul>
     </div>
     <div v-if="chats.length" class="message-input">
         <div class="wrap">
-            <input type="text" @keyup.enter="sendMessage" v-model="messagetext" placeholder="Write your message..." />
+            <input :disabled="loadStatus" type="text" @keyup.enter="sendMessage" v-model="messagetext" placeholder="Write your message..." />
             <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
-            <button @click="sendMessage" class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+            <button :disabled="loadStatus" @click="sendMessage" class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
         </div>
     </div>
 </div>
@@ -48,8 +49,12 @@ export default {
             messagetext: '',
             chats: [],
             loadStatus: false,
-            nochat: false
+            nochat: false,
+            idLogged: null
         }
+    },
+    mounted() {
+        this.idLogged = $("meta[name=user-id]").attr("content")
     },
     watch: {
         id: function(val) {
@@ -61,10 +66,13 @@ export default {
             if (this.messagetext.trim().length < 1) return;
             const picture = $("meta[name=user-profile-pic]").attr("content")
             this.chats.push({
-                image: picture,
+                sender_id: this.idLogged,
+                sender_image: picture,
+                receive_image: '',
                 type: 'sent',
                 message: this.messagetext
             })
+            console.log(this.chats)
             VueScrollTo.scrollTo("ul li:last-child", 0, {
                 container: '.messages'
             })

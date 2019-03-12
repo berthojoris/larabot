@@ -14,7 +14,7 @@ class ChatController extends Controller
     {
         // "select * from `chat` where (`sender_id` = ? or `receive_id` = ?) and (`sender_id` = ? or `receive_id` = ?)"
 
-        $data = Chat::where(function($query) use ($senderID, $receiveID) {
+        $data = Chat::with('sender', 'receive')->where(function($query) use ($senderID, $receiveID) {
 
             return $query->whereSenderId($senderID)->orWhere('receive_id', $senderID);
 
