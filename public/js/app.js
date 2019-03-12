@@ -1787,18 +1787,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      userlist: []
+      userlist: [],
+      id: null,
+      image: null,
+      name: null
     };
   },
   mounted: function mounted() {
     this.getUserList();
   },
   methods: {
-    openChatViaID: function openChatViaID(id) {
-      alert(id);
+    openChatViaID: function openChatViaID(id, image, name) {
+      this.id = id, this.image = image;
+      this.name = name;
     },
     getUserList: function getUserList() {
       var _this = this;
@@ -1878,15 +1883,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['id', 'img', 'name'],
   data: function data() {
     return {
       messagetext: '',
-      profile: 'images/man1.png',
-      chats: []
+      chats: [],
+      loadStatus: false
     };
   },
-  mounted: function mounted() {// this.getChatList()
+  watch: {
+    id: function id(val) {
+      this.getChatList(val);
+    }
   },
   methods: {
     sendMessage: function sendMessage() {
@@ -1901,10 +1911,12 @@ __webpack_require__.r(__webpack_exports__);
       });
       this.saveChatToDB();
     },
-    getChatList: function getChatList() {
+    getChatList: function getChatList(receiverID) {
       var _this = this;
 
-      axios.get('/api/chat/list/1/2').then(function (response) {
+      var userID = $("meta[name=user-id]").attr("content");
+      this.chats = [];
+      axios.get('/api/chat/list/' + userID + '/' + receiverID).then(function (response) {
         var chatDB = response.data;
         _this.chats = chatDB;
       }).catch(function (error) {
@@ -2028,8 +2040,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
   methods: {
-    openChat: function openChat(id) {
-      this.$emit('openChatNow', id);
+    openChat: function openChat(id, image, name) {
+      this.$emit('openChatNow', id, image, name);
     }
   }
 });
@@ -47903,7 +47915,9 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c("comp-personal-chat")
+      _c("comp-personal-chat", {
+        attrs: { id: _vm.id, img: _vm.image, name: _vm.name }
+      })
     ],
     1
   )
@@ -47993,12 +48007,16 @@ var render = function() {
         ],
         staticClass: "center"
       },
-      [_vm._v("\r\n        No chat available at this moment\r\n    ")]
+      [
+        _vm._v("\r\n        No chat with "),
+        _c("b", [_vm._v(_vm._s(_vm.name))]),
+        _vm._v(" available at this moment\r\n    ")
+      ]
     ),
     _vm._v(" "),
     _vm.chats.length
       ? _c("div", { staticClass: "contact-profile" }, [
-          _c("img", { attrs: { src: "images/man2.png", alt: "" } }),
+          _c("img", { attrs: { src: _vm.img } }),
           _vm._v(" "),
           _c("p", [_vm._v("Brian")]),
           _vm._v(" "),
@@ -48284,7 +48302,7 @@ var render = function() {
     {
       on: {
         click: function($event) {
-          return _vm.openChat(_vm.user.id)
+          return _vm.openChat(_vm.user.id, _vm.user.image, _vm.user.name)
         }
       }
     },

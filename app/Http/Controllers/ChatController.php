@@ -12,7 +12,19 @@ class ChatController extends Controller
 {
     public function list($senderID, $receiveID)
     {
-        return ChatCollection::collection(Chat::whereSenderId($senderID)->whereReceiveId($receiveID)->get());
+        // "select * from `chat` where (`sender_id` = ? or `receive_id` = ?) and (`sender_id` = ? or `receive_id` = ?)"
+        
+        $data = Chat::where(function($query) use ($senderID, $receiveID) {
+
+            return $query->whereSenderId($senderID)->orWhere('receive_id', $senderID);
+
+        })->where(function($query) use ($senderID, $receiveID) {
+
+            return $query->whereSenderId($receiveID)->orWhere('receive_id', $receiveID);
+
+        })->get();
+
+        return ChatCollection::collection($data);
     }
 
     public function insert()

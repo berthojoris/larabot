@@ -1,5 +1,5 @@
 <template>
-<div @click="openChat(user.id)">
+<div @click="openChat(user.id, user.image, user.name)">
     <li class="contact">
         <div class="wrap">
             <span class="contact-status online"></span>
@@ -17,8 +17,8 @@
 export default {
     props: ['user'],
     methods: {
-        openChat: function(id) {
-            this.$emit('openChatNow', id)
+        openChat: function(id, image, name) {
+            this.$emit('openChatNow', id, image, name)
         }
     }
 }

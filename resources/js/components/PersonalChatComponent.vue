@@ -1,11 +1,12 @@
 <template>
 <div class="content">
+    
     <div v-show="!chats.length" class="center">
-        No chat available at this moment
+        No chat with <b>{{ name }}</b> available at this moment
     </div>
 
     <div v-if="chats.length" class="contact-profile">
-        <img src="images/man2.png" alt="" />
+        <img :src="img">
         <p>Brian</p>
         <div class="social-media">
             <i class="fa fa-facebook" aria-hidden="true"></i>
@@ -33,15 +34,18 @@
 
 <script>
 export default {
+    props: ['id', 'img', 'name'],
     data() {
         return {
             messagetext: '',
-            profile: 'images/man1.png',
-            chats: []
+            chats: [],
+            loadStatus: false
         }
     },
-    mounted() {
-        // this.getChatList()
+    watch: {
+        id: function(val){
+            this.getChatList(val)
+        }
     },
     methods: {
         sendMessage() {
@@ -56,8 +60,11 @@ export default {
             })
             this.saveChatToDB()
         },
-        getChatList() {
-            axios.get('/api/chat/list/1/2')
+        getChatList(receiverID) {
+            const userID = $("meta[name=user-id]").attr("content")
+            
+            this.chats = []
+            axios.get('/api/chat/list/'+userID+'/'+receiverID)
             .then((response) => {
                 let chatDB = response.data
                 this.chats = chatDB

@@ -10,7 +10,8 @@
                 <comp-user-list 
                     v-for="(user, index) in userlist" 
                     :key="index" 
-                    :user="user" @openChatNow="openChatViaID">
+                    :user="user" 
+                    @openChatNow="openChatViaID">
                 </comp-user-list>
             </ul>
         </div>
@@ -18,7 +19,7 @@
         <comp-menu></comp-menu>
     </div>
 
-    <comp-personal-chat></comp-personal-chat>
+    <comp-personal-chat :id="id" :img="image" :name="name"></comp-personal-chat>
 </div>
 </template>
 
@@ -26,15 +27,20 @@
 export default {
     data() {
         return {
-            userlist : []
+            userlist : [],
+            id: null,
+            image: null,
+            name: null
         }
     },
     mounted() {
         this.getUserList()
     },
     methods: {
-        openChatViaID(id) {
-            alert(id)
+        openChatViaID(id, image, name) {
+            this.id = id,
+            this.image = image
+            this.name = name
         },
         getUserList() {
             const userID = $("meta[name=user-id]").attr("content")
