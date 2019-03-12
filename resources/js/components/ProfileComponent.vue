@@ -1,8 +1,8 @@
 <template>
 <div id="profile">
     <div class="wrap">
-        <img id="profile-img" src="images/man1.png" class="online" alt="" />
-        <p>Bertho</p>
+        <img :src="picture" id="profile-img" class="online">
+        <p>{{ name }}</p>
         <i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
         <div id="status-options">
             <ul>
@@ -31,14 +31,28 @@
             <input name="twitter" type="text" value="ross81" />
             <label for="twitter"><i class="fa fa-instagram fa-fw" aria-hidden="true"></i></label>
             <input name="twitter" type="text" value="mike.ross" />
-                </div>
+        </div>
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    
+    data() {
+        return {
+            picture: null,
+            userid: null,
+            name: null
+        }
+    },
+    mounted() {
+        const userID = $("meta[name=user-id]").attr("content")
+        const name = $("meta[name=user-name]").attr("content")
+        const picture = $("meta[name=user-profile-pic]").attr("content")
+        this.userid = userID
+        this.picture = picture
+        this.name = name
+    },
 }
 </script>
 

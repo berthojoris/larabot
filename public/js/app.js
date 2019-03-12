@@ -1901,8 +1901,9 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     sendMessage: function sendMessage() {
       if (this.messagetext.trim().length < 1) return;
+      var picture = $("meta[name=user-profile-pic]").attr("content");
       this.chats.push({
-        image: this.profile,
+        image: picture,
         type: 'sent',
         message: this.messagetext
       });
@@ -1930,7 +1931,8 @@ __webpack_require__.r(__webpack_exports__);
       var userID = $("meta[name=user-id]").attr("content");
       axios.post('/api/chat/insert', {
         message: this.messagetext,
-        sender_id: userID
+        sender_id: userID,
+        receive_id: this.id
       }).then(function (response) {
         _this2.messagetext = '';
       }).catch(function (error) {
@@ -1989,7 +1991,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      picture: null,
+      userid: null,
+      name: null
+    };
+  },
+  mounted: function mounted() {
+    var userID = $("meta[name=user-id]").attr("content");
+    var name = $("meta[name=user-name]").attr("content");
+    var picture = $("meta[name=user-profile-pic]").attr("content");
+    this.userid = userID;
+    this.picture = picture;
+    this.name = name;
+  }
+});
 
 /***/ }),
 
@@ -48018,7 +48036,7 @@ var render = function() {
       ? _c("div", { staticClass: "contact-profile" }, [
           _c("img", { attrs: { src: _vm.img } }),
           _vm._v(" "),
-          _c("p", [_vm._v("Brian")]),
+          _c("p", [_vm._v(_vm._s(_vm.name))]),
           _vm._v(" "),
           _vm._m(0)
         ])
@@ -48143,94 +48161,96 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { attrs: { id: "profile" } }, [
+    _c("div", { staticClass: "wrap" }, [
+      _c("img", {
+        staticClass: "online",
+        attrs: { src: _vm.picture, id: "profile-img" }
+      }),
+      _vm._v(" "),
+      _c("p", [_vm._v(_vm._s(_vm.name))]),
+      _vm._v(" "),
+      _c("i", {
+        staticClass: "fa fa-chevron-down expand-button",
+        attrs: { "aria-hidden": "true" }
+      }),
+      _vm._v(" "),
+      _vm._m(0),
+      _vm._v(" "),
+      _vm._m(1)
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { attrs: { id: "profile" } }, [
-      _c("div", { staticClass: "wrap" }, [
-        _c("img", {
-          staticClass: "online",
-          attrs: { id: "profile-img", src: "images/man1.png", alt: "" }
-        }),
-        _vm._v(" "),
-        _c("p", [_vm._v("Bertho")]),
-        _vm._v(" "),
-        _c("i", {
-          staticClass: "fa fa-chevron-down expand-button",
-          attrs: { "aria-hidden": "true" }
-        }),
-        _vm._v(" "),
-        _c("div", { attrs: { id: "status-options" } }, [
-          _c("ul", [
-            _c(
-              "li",
-              { staticClass: "active", attrs: { id: "status-online" } },
-              [
-                _c("span", { staticClass: "status-circle" }),
-                _vm._v(" "),
-                _c("p", [_vm._v("Online")])
-              ]
-            ),
-            _vm._v(" "),
-            _c("li", { attrs: { id: "status-away" } }, [
-              _c("span", { staticClass: "status-circle" }),
-              _vm._v(" "),
-              _c("p", [_vm._v("Away")])
-            ]),
-            _vm._v(" "),
-            _c("li", { attrs: { id: "status-busy" } }, [
-              _c("span", { staticClass: "status-circle" }),
-              _vm._v(" "),
-              _c("p", [_vm._v("Busy")])
-            ]),
-            _vm._v(" "),
-            _c("li", { attrs: { id: "status-offline" } }, [
-              _c("span", { staticClass: "status-circle" }),
-              _vm._v(" "),
-              _c("p", [_vm._v("Offline")])
-            ])
-          ])
+    return _c("div", { attrs: { id: "status-options" } }, [
+      _c("ul", [
+        _c("li", { staticClass: "active", attrs: { id: "status-online" } }, [
+          _c("span", { staticClass: "status-circle" }),
+          _vm._v(" "),
+          _c("p", [_vm._v("Online")])
         ]),
         _vm._v(" "),
-        _c("div", { attrs: { id: "expanded" } }, [
-          _c("label", { attrs: { for: "twitter" } }, [
-            _c("i", {
-              staticClass: "fa fa-facebook fa-fw",
-              attrs: { "aria-hidden": "true" }
-            })
-          ]),
+        _c("li", { attrs: { id: "status-away" } }, [
+          _c("span", { staticClass: "status-circle" }),
           _vm._v(" "),
-          _c("input", {
-            attrs: { name: "twitter", type: "text", value: "mikeross" }
-          }),
+          _c("p", [_vm._v("Away")])
+        ]),
+        _vm._v(" "),
+        _c("li", { attrs: { id: "status-busy" } }, [
+          _c("span", { staticClass: "status-circle" }),
           _vm._v(" "),
-          _c("label", { attrs: { for: "twitter" } }, [
-            _c("i", {
-              staticClass: "fa fa-twitter fa-fw",
-              attrs: { "aria-hidden": "true" }
-            })
-          ]),
+          _c("p", [_vm._v("Busy")])
+        ]),
+        _vm._v(" "),
+        _c("li", { attrs: { id: "status-offline" } }, [
+          _c("span", { staticClass: "status-circle" }),
           _vm._v(" "),
-          _c("input", {
-            attrs: { name: "twitter", type: "text", value: "ross81" }
-          }),
-          _vm._v(" "),
-          _c("label", { attrs: { for: "twitter" } }, [
-            _c("i", {
-              staticClass: "fa fa-instagram fa-fw",
-              attrs: { "aria-hidden": "true" }
-            })
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            attrs: { name: "twitter", type: "text", value: "mike.ross" }
-          })
+          _c("p", [_vm._v("Offline")])
         ])
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { attrs: { id: "expanded" } }, [
+      _c("label", { attrs: { for: "twitter" } }, [
+        _c("i", {
+          staticClass: "fa fa-facebook fa-fw",
+          attrs: { "aria-hidden": "true" }
+        })
+      ]),
+      _vm._v(" "),
+      _c("input", {
+        attrs: { name: "twitter", type: "text", value: "mikeross" }
+      }),
+      _vm._v(" "),
+      _c("label", { attrs: { for: "twitter" } }, [
+        _c("i", {
+          staticClass: "fa fa-twitter fa-fw",
+          attrs: { "aria-hidden": "true" }
+        })
+      ]),
+      _vm._v(" "),
+      _c("input", {
+        attrs: { name: "twitter", type: "text", value: "ross81" }
+      }),
+      _vm._v(" "),
+      _c("label", { attrs: { for: "twitter" } }, [
+        _c("i", {
+          staticClass: "fa fa-instagram fa-fw",
+          attrs: { "aria-hidden": "true" }
+        })
+      ]),
+      _vm._v(" "),
+      _c("input", {
+        attrs: { name: "twitter", type: "text", value: "mike.ross" }
+      })
     ])
   }
 ]

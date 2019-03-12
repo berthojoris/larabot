@@ -13,7 +13,7 @@ class ChatController extends Controller
     public function list($senderID, $receiveID)
     {
         // "select * from `chat` where (`sender_id` = ? or `receive_id` = ?) and (`sender_id` = ? or `receive_id` = ?)"
-        
+
         $data = Chat::where(function($query) use ($senderID, $receiveID) {
 
             return $query->whereSenderId($senderID)->orWhere('receive_id', $senderID);
@@ -31,7 +31,7 @@ class ChatController extends Controller
     {
         $saved = Chat::create([
             'sender_id' => request('sender_id'),
-            'receive_id' => 2,
+            'receive_id' => request('receive_id'),
             'message' => request('message')
         ]);
 

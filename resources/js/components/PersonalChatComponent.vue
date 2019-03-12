@@ -7,7 +7,7 @@
 
     <div v-if="chats.length" class="contact-profile">
         <img :src="img">
-        <p>Brian</p>
+        <p>{{ name }}</p>
         <div class="social-media">
             <i class="fa fa-facebook" aria-hidden="true"></i>
             <i class="fa fa-twitter" aria-hidden="true"></i>
@@ -43,15 +43,16 @@ export default {
         }
     },
     watch: {
-        id: function(val){
+        id: function(val) {
             this.getChatList(val)
         }
     },
     methods: {
         sendMessage() {
             if (this.messagetext.trim().length < 1) return;
+            const picture = $("meta[name=user-profile-pic]").attr("content")
             this.chats.push({
-                image: this.profile,
+                image: picture,
                 type: 'sent',
                 message: this.messagetext
             })
@@ -81,7 +82,8 @@ export default {
 
             axios.post('/api/chat/insert', {
                 message: this.messagetext,
-                sender_id: userID
+                sender_id: userID,
+                receive_id: this.id
             })
             .then((response) => {
                 this.messagetext = ''
