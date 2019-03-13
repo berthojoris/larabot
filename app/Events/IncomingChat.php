@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -22,6 +23,6 @@ class IncomingChat implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return new PrivateChannel('push-chat');
+        return new Channel('push-chat');
     }
 }
