@@ -1802,8 +1802,9 @@ __webpack_require__.r(__webpack_exports__);
     //     let dataChat = e.pushchat;
     // })
 
-    window.Echo.private('pushchat').listen('IncomingChat', function (e) {
+    window.Echo.private('pushchat.' + this.id).listen('IncomingChat', function (e) {
       var dataChat = e.pushchat;
+      console.log(dataChat);
     });
   },
   methods: {

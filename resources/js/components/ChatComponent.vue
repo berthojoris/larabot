@@ -38,8 +38,9 @@ export default {
         // window.Echo.channel('push-chat').listen('IncomingChat', e => {
         //     let dataChat = e.pushchat;
         // })
-        window.Echo.private('pushchat').listen('IncomingChat', e => {
-            let dataChat = e.pushchat;
+        window.Echo.private('pushchat.'+this.id).listen('IncomingChat', e => {
+            let dataChat = e.pushchat
+            console.log(dataChat)
         })
     },
     methods: {
