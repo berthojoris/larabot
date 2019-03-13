@@ -19,7 +19,7 @@
         <comp-menu></comp-menu>
     </div>
 
-    <comp-personal-chat :coba="pusharr" :id="id" :img="image" :name="name"></comp-personal-chat>
+    <comp-personal-chat :pushdata="pusharr" :id="id" :img="image" :name="name"></comp-personal-chat>
 </div>
 </template>
 

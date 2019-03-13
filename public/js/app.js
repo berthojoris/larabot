@@ -1907,7 +1907,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['id', 'img', 'name', 'coba'],
+  props: ['id', 'img', 'name', 'pushdata'],
   data: function data() {
     return {
       messagetext: '',
@@ -1926,7 +1926,7 @@ __webpack_require__.r(__webpack_exports__);
     id: function id(val) {
       this.getChatList(val);
     },
-    coba: function coba(val) {
+    pushdata: function pushdata(val) {
       if (val.receive_id == this.idLogged) {
         this.chats.push({
           sender_id: val.sender_id,
@@ -1958,6 +1958,7 @@ __webpack_require__.r(__webpack_exports__);
         message: this.messagetext
       });
       this.emptyChat = false;
+      this.firstEmpty = false;
 
       if (!_.isEmpty(this.chats)) {
         this.$nextTick(function () {
@@ -48023,7 +48024,12 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("comp-personal-chat", {
-        attrs: { coba: _vm.pusharr, id: _vm.id, img: _vm.image, name: _vm.name }
+        attrs: {
+          pushdata: _vm.pusharr,
+          id: _vm.id,
+          img: _vm.image,
+          name: _vm.name
+        }
       })
     ],
     1

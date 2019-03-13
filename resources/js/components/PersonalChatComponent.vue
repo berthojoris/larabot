@@ -47,7 +47,7 @@
 
 <script>
 export default {
-    props: ['id', 'img', 'name', 'coba'],
+    props: ['id', 'img', 'name', 'pushdata'],
     data() {
         return {
             messagetext: '',
@@ -66,7 +66,7 @@ export default {
         id: function(val) {
             this.getChatList(val)
         },
-        coba: function(val) {
+        pushdata: function(val) {
             if(val.receive_id == this.idLogged) {
                 this.chats.push({
                     sender_id: val.sender_id,
@@ -97,6 +97,7 @@ export default {
                 message: this.messagetext
             })
             this.emptyChat = false
+            this.firstEmpty = false
             if(!_.isEmpty(this.chats)) {
                 this.$nextTick(() => {
                     VueScrollTo.scrollTo("div.messages ul li:last-child", 0, {
