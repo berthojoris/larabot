@@ -67,7 +67,5 @@ export default {
 </script>
 
 <style scoped>
-body {
-    overflow-y:hidden;
-}
+
 </style>

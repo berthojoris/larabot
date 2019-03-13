@@ -178,7 +178,6 @@ export default {
     margin-top: 40%;
     font-size: 25px;
     width: 100%;
-    padding: 10px;
     text-align: center;
 }
 </style>
