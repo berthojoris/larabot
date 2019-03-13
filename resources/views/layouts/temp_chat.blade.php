@@ -11,7 +11,7 @@
     <meta name="user-email" content="{{ auth()->user()->email }}">
     <meta name="user-name" content="{{ auth()->user()->name }}">
     <meta name="user-profile-pic" content="{{ auth()->user()->image }}">
-    <link href='{{ asset('css/fontchat.css') }}' rel='stylesheet' type='text/css'>
+    <link href='{{ asset('css/chatfont.css') }}' rel='stylesheet' type='text/css'>
     <link href='{{ asset('css/chatfontawesome.css') }}' rel='stylesheet' type='text/css'>
     <link href="{{ asset('css/chat.css') }}" rel="stylesheet">
     <link href="{{ asset('css/loader.css') }}" rel="stylesheet">
