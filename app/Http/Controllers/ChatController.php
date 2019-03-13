@@ -30,13 +30,14 @@ class ChatController extends Controller
 
     public function insert()
     {
+        $received = request('receive_id');
         $saved = Chat::create([
             'sender_id' => request('sender_id'),
-            'receive_id' => request('receive_id'),
+            'receive_id' => $received,
             'message' => request('message')
         ]);
 
-        IncomingChat::dispatch($saved);
+        IncomingChat::dispatch($saved, $received);
 
         return $saved;
     }
