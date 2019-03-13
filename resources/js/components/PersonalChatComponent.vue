@@ -1,7 +1,7 @@
 <template>
 <div class="content">
 
-    <div v-if="nochat" class="circonf-wrapper center">
+    <div v-if="emptyChat" class="circonf-wrapper center">
         <h3>Sorry there is no chat history with this user</h3>
     </div>
 
@@ -31,11 +31,11 @@
             </li>
         </ul>
     </div>
-    <div v-if="chats.length" class="message-input">
+    <div v-if="showChatText" class="message-input">
         <div class="wrap">
-            <input :disabled="loadStatus" type="text" @keyup.enter="sendMessage" v-model="messagetext" placeholder="Write your message..." />
+            <input type="text" @keyup.enter="sendMessage" v-model="messagetext" placeholder="Write your message..." />
             <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
-            <button :disabled="loadStatus" @click="sendMessage" class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+            <button @click="sendMessage" class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
         </div>
     </div>
 </div>
@@ -49,8 +49,9 @@ export default {
             messagetext: '',
             chats: [],
             loadStatus: false,
-            nochat: false,
-            idLogged: null
+            emptyChat: false,
+            idLogged: null,
+            showChatText: false
         }
     },
     mounted() {
@@ -59,6 +60,13 @@ export default {
     watch: {
         id: function(val) {
             this.getChatList(val)
+        },
+        chats: function() {
+            this.$nextTick(() => {
+                VueScrollTo.scrollTo("ul li:last-child", 0, {
+                    container: '.messages'
+                })
+            })
         }
     },
     methods: {
@@ -72,15 +80,14 @@ export default {
                 type: 'sent',
                 message: this.messagetext
             })
-            console.log(this.chats)
-            VueScrollTo.scrollTo("ul li:last-child", 0, {
-                container: '.messages'
-            })
+            
             this.saveChatToDB()
         },
         getChatList(receiverID) {
             this.loadStatus = true
-            this.nochat = false
+            this.emptyChat = false
+            this.showChatText = false
+
             const userID = $("meta[name=user-id]").attr("content")
             
             this.chats = []
@@ -89,13 +96,14 @@ export default {
                 this.loadStatus = false
                 let chatDB = response.data
                 this.chats = chatDB
+                this.showChatText = true
                 if(chatDB.length == 0 || chatDB === undefined) {
-                    this.nochat = true
+                    this.emptyChat = true
                 }
             })
             .catch((error) => {
                 this.loadStatus = false
-                this.nochat = false
+                this.emptyChat = false
                 console.log(error);
             })
             .then(function() {

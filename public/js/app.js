@@ -1900,8 +1900,9 @@ __webpack_require__.r(__webpack_exports__);
       messagetext: '',
       chats: [],
       loadStatus: false,
-      nochat: false,
-      idLogged: null
+      emptyChat: false,
+      idLogged: null,
+      showChatText: false
     };
   },
   mounted: function mounted() {
@@ -1910,6 +1911,13 @@ __webpack_require__.r(__webpack_exports__);
   watch: {
     id: function id(val) {
       this.getChatList(val);
+    },
+    chats: function chats() {
+      this.$nextTick(function () {
+        VueScrollTo.scrollTo("ul li:last-child", 0, {
+          container: '.messages'
+        });
+      });
     }
   },
   methods: {
@@ -1923,30 +1931,28 @@ __webpack_require__.r(__webpack_exports__);
         type: 'sent',
         message: this.messagetext
       });
-      console.log(this.chats);
-      VueScrollTo.scrollTo("ul li:last-child", 0, {
-        container: '.messages'
-      });
       this.saveChatToDB();
     },
     getChatList: function getChatList(receiverID) {
       var _this = this;
 
       this.loadStatus = true;
-      this.nochat = false;
+      this.emptyChat = false;
+      this.showChatText = false;
       var userID = $("meta[name=user-id]").attr("content");
       this.chats = [];
       axios.get('/api/chat/list/' + userID + '/' + receiverID).then(function (response) {
         _this.loadStatus = false;
         var chatDB = response.data;
         _this.chats = chatDB;
+        _this.showChatText = true;
 
         if (chatDB.length == 0 || chatDB === undefined) {
-          _this.nochat = true;
+          _this.emptyChat = true;
         }
       }).catch(function (error) {
         _this.loadStatus = false;
-        _this.nochat = false;
+        _this.emptyChat = false;
         console.log(error);
       }).then(function () {// always executed
       });
@@ -48049,7 +48055,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "content" }, [
-    _vm.nochat
+    _vm.emptyChat
       ? _c("div", { staticClass: "circonf-wrapper center" }, [
           _c("h3", [_vm._v("Sorry there is no chat history with this user")])
         ])
@@ -48124,7 +48130,7 @@ var render = function() {
         ])
       : _vm._e(),
     _vm._v(" "),
-    _vm.chats.length
+    _vm.showChatText
       ? _c("div", { staticClass: "message-input" }, [
           _c("div", { staticClass: "wrap" }, [
             _c("input", {
@@ -48136,11 +48142,7 @@ var render = function() {
                   expression: "messagetext"
                 }
               ],
-              attrs: {
-                disabled: _vm.loadStatus,
-                type: "text",
-                placeholder: "Write your message..."
-              },
+              attrs: { type: "text", placeholder: "Write your message..." },
               domProps: { value: _vm.messagetext },
               on: {
                 keyup: function($event) {
@@ -48168,11 +48170,7 @@ var render = function() {
             _vm._v(" "),
             _c(
               "button",
-              {
-                staticClass: "submit",
-                attrs: { disabled: _vm.loadStatus },
-                on: { click: _vm.sendMessage }
-              },
+              { staticClass: "submit", on: { click: _vm.sendMessage } },
               [
                 _c("i", {
                   staticClass: "fa fa-paper-plane",
