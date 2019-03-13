@@ -1916,7 +1916,8 @@ __webpack_require__.r(__webpack_exports__);
       emptyChat: false,
       idLogged: null,
       showChatText: false,
-      firstEmpty: true
+      firstEmpty: true,
+      alreadyOpen: false
     };
   },
   mounted: function mounted() {
@@ -1925,16 +1926,19 @@ __webpack_require__.r(__webpack_exports__);
   watch: {
     id: function id(val) {
       this.getChatList(val);
+      this.alreadyOpen = true;
     },
     pushdata: function pushdata(val) {
-      if (val.receive_id == this.idLogged) {
-        this.chats.push({
-          sender_id: val.sender_id,
-          sender_image: val.sender.image,
-          receive_image: val.receive.image,
-          type: 'replies',
-          message: val.message
-        });
+      if (this.alreadyOpen) {
+        if (val.receive_id == this.idLogged) {
+          this.chats.push({
+            sender_id: val.sender_id,
+            sender_image: val.sender.image,
+            receive_image: val.receive.image,
+            type: 'replies',
+            message: val.message
+          });
+        }
       }
 
       if (!_.isEmpty(this.chats)) {
