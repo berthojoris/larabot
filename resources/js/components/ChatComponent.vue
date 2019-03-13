@@ -19,7 +19,7 @@
         <comp-menu></comp-menu>
     </div>
 
-    <comp-personal-chat :id="id" :img="image" :name="name"></comp-personal-chat>
+    <comp-personal-chat :coba="pusharr" :id="id" :img="image" :name="name"></comp-personal-chat>
 </div>
 </template>
 
@@ -30,17 +30,18 @@ export default {
             userlist : [],
             id: null,
             image: null,
-            name: null
+            name: null,
+            idLogged: null,
+            pusharr: null
         }
     },
     mounted() {
         this.getUserList()
-        // window.Echo.channel('push-chat').listen('IncomingChat', e => {
-        //     let dataChat = e.pushchat;
-        // })
+        this.idLogged = $("meta[name=user-id]").attr("content")
+        var vue = this
         window.Echo.channel('pushchat').listen('IncomingChat', function (e) {
             let dataChat = e.pushchat
-            console.log(dataChat)
+            vue.pusharr = dataChat
         })
     },
     methods: {
@@ -66,5 +67,7 @@ export default {
 </script>
 
 <style scoped>
-
+body {
+    overflow-y:hidden;
+}
 </style>

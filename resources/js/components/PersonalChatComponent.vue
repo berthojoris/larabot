@@ -1,8 +1,12 @@
 <template>
 <div class="content">
 
-    <div v-if="emptyChat" class="circonf-wrapper center">
-        <h3>Sorry there is no chat history with this user</h3>
+    <div v-if="firstEmpty" class="centerText">
+        <p>Let yourself stay connected with people around you</p>
+    </div>
+
+    <div v-if="emptyChat" class="circonf-wrapper centerText">
+        <p>Sorry there is no chat history with this user</p>
     </div>
 
     <div class="item loading-5" v-if="loadStatus">
@@ -25,8 +29,8 @@
     <div v-if="chats.length" class="messages">
         <ul>
             <li v-for="(chat, index) in chats" :key="index" :class="{'sent': chat.sender_id == idLogged,  'replies': chat.sender_id != idLogged}">
-                <img :src="chat.sender_image" v-if="chat.sender_id == idLogged" hasil="sama">
-                <img :src="chat.sender_image" v-if="chat.sender_id != idLogged" hasil="tidak sama">
+                <img :src="chat.sender_image" v-if="chat.sender_id == idLogged">
+                <img :src="chat.sender_image" v-if="chat.sender_id != idLogged">
                 <p>{{ chat.message }}</p>
             </li>
         </ul>
@@ -43,7 +47,7 @@
 
 <script>
 export default {
-    props: ['id', 'img', 'name'],
+    props: ['id', 'img', 'name', 'coba'],
     data() {
         return {
             messagetext: '',
@@ -51,7 +55,8 @@ export default {
             loadStatus: false,
             emptyChat: false,
             idLogged: null,
-            showChatText: false
+            showChatText: false,
+            firstEmpty: true
         }
     },
     mounted() {
@@ -60,6 +65,24 @@ export default {
     watch: {
         id: function(val) {
             this.getChatList(val)
+        },
+        coba: function(val) {
+            if(val.sender_id != this.idLogged) {
+                this.chats.push({
+                    sender_id: val.sender_id,
+                    sender_image: val.sender.image,
+                    receive_image: val.receive.image,
+                    type: 'replies',
+                    message: val.message
+                })
+            }
+            if(!_.isEmpty(this.chats)) {
+                this.$nextTick(() => {
+                    VueScrollTo.scrollTo("div.messages ul li:last-child", 0, {
+                        container: '.messages'
+                    })
+                })
+            }
         }
     },
     methods: {
@@ -83,6 +106,9 @@ export default {
             }
             this.saveChatToDB()
         },
+        alertMsg() {
+            alert("yeah")
+        },
         getChatList(receiverID) {
             this.loadStatus = true
             this.emptyChat = false
@@ -99,8 +125,10 @@ export default {
                 this.showChatText = true
                 if(chatDB.length == 0 || chatDB === undefined) {
                     this.emptyChat = true
+                    this.firstEmpty = false
                 }
                 if(!_.isEmpty(this.chats)) {
+                    this.firstEmpty = false
                     this.$nextTick(() => {
                         VueScrollTo.scrollTo("div.messages ul li:last-child", 0, {
                             container: '.messages'
@@ -111,6 +139,7 @@ export default {
             .catch((error) => {
                 this.loadStatus = false
                 this.emptyChat = false
+                this.firstEmpty = false
                 console.log(error);
             })
             .then(function() {
@@ -142,6 +171,13 @@ export default {
     margin-left: 20%;
     width: 60%;
     border: 3px solid #73AD21;
+    padding: 10px;
+    text-align: center;
+}
+.centerText {
+    margin-top: 40%;
+    font-size: 25px;
+    width: 100%;
     padding: 10px;
     text-align: center;
 }

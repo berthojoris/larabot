@@ -38,9 +38,11 @@ class ChatController extends Controller
             'message' => request('message')
         ]);
 
-        IncomingChat::dispatch($saved);
+        $data = Chat::with('sender', 'receive')->whereId($saved->id)->first();
 
-        return $saved;
+        IncomingChat::dispatch($data);
+
+        return $data;
     }
 
     public function online($currentID)
