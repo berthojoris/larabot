@@ -23,3 +23,4 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/delete', 'ChatController@deleteall');
+Route::get('/randomchat', 'ChatController@randomChat');

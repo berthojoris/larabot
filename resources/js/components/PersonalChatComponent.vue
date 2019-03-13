@@ -61,16 +61,19 @@ export default {
         }
     },
     mounted() {
+        this.getRandomChat()
         this.idLogged = $("meta[name=user-id]").attr("content")
     },
     watch: {
         id: function(val) {
             this.getChatList(val)
             this.alreadyOpen = true
+            this.getRandomChat()
         },
         pushdata: function(val) {
             if(this.alreadyOpen) {
                 if(val.receive_id == this.idLogged) {
+                    this.emptyChat = false
                     this.chats.push({
                         sender_id: val.sender_id,
                         sender_image: val.sender.image,
@@ -111,7 +114,20 @@ export default {
             }
             this.saveChatToDB()
         },
+        getRandomChat() {
+            axios.get('/randomchat')
+            .then((response) => {
+                this.messagetext = response.data
+            })
+            .catch((error) => {
+
+            })
+            .then(function() {
+
+            });
+        },
         getChatList(receiverID) {
+            this.firstEmpty = false
             this.loadStatus = true
             this.emptyChat = false
             this.showChatText = false
@@ -157,10 +173,10 @@ export default {
                 receive_id: this.id
             })
             .then((response) => {
-                this.messagetext = ''
+                // this.messagetext = ''
             })
             .catch((error) => {
-                this.messagetext = ''
+                // this.messagetext = ''
             });
         }
     }

@@ -2,7 +2,7 @@
 <div @click="openChat(user.id, user.image, user.name)">
     <li @click="activate(user.id)" class="contact">
         <div class="wrap">
-            <span class="contact-status offline"></span>
+            <span class="contact-status online"></span>
             <img :src="user.image">
             <div class="meta">
                 <p class="name">{{ user.name }}</p>

@@ -55,4 +55,10 @@ class ChatController extends Controller
         Chat::truncate();
         return "Done";
     }
+
+    public function randomChat()
+    {
+        $faker = \Faker\Factory::create();
+        return $faker->paragraph();
+    }
 }
