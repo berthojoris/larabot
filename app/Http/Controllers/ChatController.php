@@ -49,4 +49,10 @@ class ChatController extends Controller
     {
         return UserListCollection::collection(User::where('id', '!=', $currentID)->get());
     }
+
+    public function deleteall()
+    {
+        Chat::truncate();
+        return "Done";
+    }
 }

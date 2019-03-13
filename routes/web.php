@@ -22,3 +22,4 @@ Route::get('user/online', 'ChatController@online');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/delete', 'ChatController@deleteall');
