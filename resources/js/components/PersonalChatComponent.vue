@@ -82,7 +82,7 @@ export default {
                 type: 'sent',
                 message: this.messagetext
             })
-            
+            this.emptyChat = false
             this.saveChatToDB()
         },
         getChatList(receiverID) {

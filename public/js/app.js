@@ -1933,6 +1933,7 @@ __webpack_require__.r(__webpack_exports__);
         type: 'sent',
         message: this.messagetext
       });
+      this.emptyChat = false;
       this.saveChatToDB();
     },
     getChatList: function getChatList(receiverID) {
