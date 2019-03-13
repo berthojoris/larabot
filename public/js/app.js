@@ -2038,13 +2038,17 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     saveChatToDB: function saveChatToDB() {
+      var _this3 = this;
+
       var userID = window.App.user.id;
       axios.post('/api/chat/insert', {
         message: this.messagetext,
         sender_id: userID,
         receive_id: this.id
-      }).then(function (response) {// this.messagetext = ''
-      }).catch(function (error) {// this.messagetext = ''
+      }).then(function (response) {
+        _this3.getRandomChat();
+      }).catch(function (error) {
+        _this3.getRandomChat();
       });
     }
   }

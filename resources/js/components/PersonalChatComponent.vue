@@ -177,10 +177,10 @@ export default {
                 receive_id: this.id
             })
             .then((response) => {
-                // this.messagetext = ''
+                this.getRandomChat()
             })
             .catch((error) => {
-                // this.messagetext = ''
+                this.getRandomChat()
             });
         }
     }
