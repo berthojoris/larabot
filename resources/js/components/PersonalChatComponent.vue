@@ -67,7 +67,7 @@ export default {
             this.getChatList(val)
         },
         coba: function(val) {
-            if(val.sender_id != this.idLogged) {
+            if(val.receive_id == this.idLogged) {
                 this.chats.push({
                     sender_id: val.sender_id,
                     sender_image: val.sender.image,
