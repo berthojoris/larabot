@@ -62,11 +62,13 @@ export default {
             this.getChatList(val)
         },
         chats: function() {
-            this.$nextTick(() => {
-                VueScrollTo.scrollTo("ul li:last-child", 0, {
-                    container: '.messages'
+            if(!_.isEmpty(this.chats)) {
+                this.$nextTick(() => {
+                    VueScrollTo.scrollTo("ul li:last-child", 0, {
+                        container: '.messages'
+                    })
                 })
-            })
+            }
         }
     },
     methods: {

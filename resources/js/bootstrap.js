@@ -45,15 +45,16 @@ if (token) {
  * allows your team to easily build robust real-time web applications.
  */
 
-import Echo from 'laravel-echo'
+ // key: process.env.MIX_PUSHER_APP_KEY,
 
-window.Pusher = require('pusher-js');
+// import Echo from 'laravel-echo'
 
-window.Echo = new Echo({
-    // key: process.env.MIX_PUSHER_APP_KEY,
-    broadcaster: 'pusher',
-    key: 'ANTRIAN_KEY',
-    wsHost: window.location.hostname,
-    wsPort: 1234,
-    disableStats: true,
-});
+// window.Pusher = require('pusher-js');
+
+// window.Echo = new Echo({
+//     broadcaster: 'pusher',
+//     key: 'ANTRIAN_KEY',
+//     wsHost: window.location.hostname,
+//     wsPort: 1234,
+//     disableStats: true,
+// });
