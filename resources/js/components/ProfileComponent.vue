@@ -46,12 +46,9 @@ export default {
         }
     },
     mounted() {
-        const userID = $("meta[name=user-id]").attr("content")
-        const name = $("meta[name=user-name]").attr("content")
-        const picture = $("meta[name=user-profile-pic]").attr("content")
-        this.userid = userID
-        this.picture = picture
-        this.name = name
+        this.userid = window.App.user.id
+        this.picture = window.App.user.image
+        this.name = window.App.user.name
     },
 }
 </script>

@@ -5,8 +5,8 @@
             <span class="contact-status online"></span>
             <img :src="user.image">
             <div class="meta">
-                <p class="name">{{ user.name }}</p>
-                <p class="preview">{{ user.message }}</p>
+                <p class="name" v-text="user.name"></p>
+                <p class="preview" v-text="this.quote"></p>
             </div>
         </div>
     </li>
@@ -18,7 +18,7 @@ export default {
     props: ['user'],
     data() {
         return {
-            
+            quote: 'Click to start chat'
         }
     },
     methods: {

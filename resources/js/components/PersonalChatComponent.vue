@@ -62,7 +62,7 @@ export default {
     },
     mounted() {
         this.getRandomChat()
-        this.idLogged = $("meta[name=user-id]").attr("content")
+        this.idLogged = window.App.user.id
     },
     watch: {
         id: function(val) {
@@ -74,6 +74,7 @@ export default {
             if(this.alreadyOpen) {
                 if(val.receive_id == this.idLogged) {
                     this.emptyChat = false
+
                     this.chats.push({
                         sender_id: val.sender_id,
                         sender_image: val.sender.image,
@@ -81,6 +82,7 @@ export default {
                         type: 'replies',
                         message: val.message
                     })
+
                 }
             }
             if(!_.isEmpty(this.chats)) {
@@ -95,7 +97,8 @@ export default {
     methods: {
         sendMessage() {
             if (this.messagetext.trim().length < 1) return;
-            const picture = $("meta[name=user-profile-pic]").attr("content")
+            const picture = window.App.user.image
+
             this.chats.push({
                 sender_id: this.idLogged,
                 sender_image: picture,
@@ -103,6 +106,7 @@ export default {
                 type: 'sent',
                 message: this.messagetext
             })
+
             this.emptyChat = false
             this.firstEmpty = false
             if(!_.isEmpty(this.chats)) {
@@ -132,7 +136,7 @@ export default {
             this.emptyChat = false
             this.showChatText = false
 
-            const userID = $("meta[name=user-id]").attr("content")
+            const userID = window.App.user.id
             
             this.chats = []
             axios.get('/api/chat/list/'+userID+'/'+receiverID)
@@ -165,7 +169,7 @@ export default {
             });
         },
         saveChatToDB() {
-            const userID = $("meta[name=user-id]").attr("content")
+            const userID = window.App.user.id
 
             axios.post('/api/chat/insert', {
                 message: this.messagetext,

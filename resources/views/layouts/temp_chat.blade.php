@@ -7,15 +7,12 @@
     <title>Chat Bot</title>
     <link rel="icon" href="{{ asset('favicon.ico') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="user-id" content="{{ auth()->user()->id }}">
-    <meta name="user-email" content="{{ auth()->user()->email }}">
-    <meta name="user-name" content="{{ auth()->user()->name }}">
-    <meta name="user-profile-pic" content="{{ auth()->user()->image }}">
     <link href='{{ asset('css/chatfont.css') }}' rel='stylesheet' type='text/css'>
     <link href='{{ asset('css/chatfontawesome.css') }}' rel='stylesheet' type='text/css'>
     <link href="{{ asset('css/chat.css') }}" rel="stylesheet">
     <link href="{{ asset('css/loader.css') }}" rel="stylesheet">
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script>window.App = <?= json_encode(['user' => auth()->user()]) ?></script>
     <style>
     #app {
         width: 100%;

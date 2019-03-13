@@ -32,32 +32,46 @@ export default {
             image: null,
             name: null,
             idLogged: null,
-            pusharr: null
+            pusharr: null,
+            participants: []
+        }
+    },
+    computed: {
+        channel() {
+            return window.Echo.join('online')
         }
     },
     mounted() {
         this.getUserList()
-        this.idLogged = $("meta[name=user-id]").attr("content")
-        var vue = this
-        window.Echo.channel('pushchat').listen('IncomingChat', function (e) {
-            let dataChat = e.pushchat
-            vue.pusharr = dataChat
-            console.log(dataChat)
-        })
+        this.idLogged = window.App.user.id
+
+        const vue = this
+
+        this.channel
+            .here(users => this.participants = users)
+            .joining(user => this.participants.push(user))
+            .leaving(user => this.participants.splice(this.participants.indexOf(user), 1))
+            .listen('OnlineStatus', function (e) {
+                vue.pusharr = e.pushchat
+            })
     },
     methods: {
+        filtered(arr) {
+            var check = _.remove(arr, function(data) {
+                return data.id == this.idLogged;
+            });
+        },
         openChatViaID(id, image, name) {
             this.id = id,
             this.image = image
             this.name = name
         },
         getUserList() {
-            const userID = $("meta[name=user-id]").attr("content")
+            const userID = window.App.user.id
 
             axios.get('/api/user/online/'+userID)
             .then((response) => {
-                let listUserDB = response.data
-                this.userlist = listUserDB
+                this.userlist = response.data
             })
             .catch((error) => {
                 console.log(error);

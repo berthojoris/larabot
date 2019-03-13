@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Chat;
 use App\User;
 use App\Events\IncomingChat;
+use App\Events\OnlineStatus;
 use Illuminate\Http\Request;
 use App\Http\Resources\ChatCollection;
 use App\Http\Resources\UserListCollection;
@@ -40,7 +41,7 @@ class ChatController extends Controller
 
         $data = Chat::with('sender', 'receive')->whereId($saved->id)->first();
 
-        IncomingChat::dispatch($data);
+        OnlineStatus::dispatch($data);
 
         return $data;
     }

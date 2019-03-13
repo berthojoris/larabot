@@ -1796,31 +1796,47 @@ __webpack_require__.r(__webpack_exports__);
       image: null,
       name: null,
       idLogged: null,
-      pusharr: null
+      pusharr: null,
+      participants: []
     };
   },
+  computed: {
+    channel: function channel() {
+      return window.Echo.join('online');
+    }
+  },
   mounted: function mounted() {
+    var _this = this;
+
     this.getUserList();
-    this.idLogged = $("meta[name=user-id]").attr("content");
+    this.idLogged = window.App.user.id;
     var vue = this;
-    window.Echo.channel('pushchat').listen('IncomingChat', function (e) {
-      var dataChat = e.pushchat;
-      vue.pusharr = dataChat;
-      console.log(dataChat);
+    this.channel.here(function (users) {
+      return _this.participants = users;
+    }).joining(function (user) {
+      return _this.participants.push(user);
+    }).leaving(function (user) {
+      return _this.participants.splice(_this.participants.indexOf(user), 1);
+    }).listen('OnlineStatus', function (e) {
+      vue.pusharr = e.pushchat;
     });
   },
   methods: {
+    filtered: function filtered(arr) {
+      var check = _.remove(arr, function (data) {
+        return data.id == this.idLogged;
+      });
+    },
     openChatViaID: function openChatViaID(id, image, name) {
       this.id = id, this.image = image;
       this.name = name;
     },
     getUserList: function getUserList() {
-      var _this = this;
+      var _this2 = this;
 
-      var userID = $("meta[name=user-id]").attr("content");
+      var userID = window.App.user.id;
       axios.get('/api/user/online/' + userID).then(function (response) {
-        var listUserDB = response.data;
-        _this.userlist = listUserDB;
+        _this2.userlist = response.data;
       }).catch(function (error) {
         console.log(error);
       });
@@ -1922,7 +1938,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.getRandomChat();
-    this.idLogged = $("meta[name=user-id]").attr("content");
+    this.idLogged = window.App.user.id;
   },
   watch: {
     id: function id(val) {
@@ -1956,7 +1972,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     sendMessage: function sendMessage() {
       if (this.messagetext.trim().length < 1) return;
-      var picture = $("meta[name=user-profile-pic]").attr("content");
+      var picture = window.App.user.image;
       this.chats.push({
         sender_id: this.idLogged,
         sender_image: picture,
@@ -1991,7 +2007,7 @@ __webpack_require__.r(__webpack_exports__);
       this.loadStatus = true;
       this.emptyChat = false;
       this.showChatText = false;
-      var userID = $("meta[name=user-id]").attr("content");
+      var userID = window.App.user.id;
       this.chats = [];
       axios.get('/api/chat/list/' + userID + '/' + receiverID).then(function (response) {
         _this2.loadStatus = false;
@@ -2022,7 +2038,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     saveChatToDB: function saveChatToDB() {
-      var userID = $("meta[name=user-id]").attr("content");
+      var userID = window.App.user.id;
       axios.post('/api/chat/insert', {
         message: this.messagetext,
         sender_id: userID,
@@ -2092,12 +2108,9 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    var userID = $("meta[name=user-id]").attr("content");
-    var name = $("meta[name=user-name]").attr("content");
-    var picture = $("meta[name=user-profile-pic]").attr("content");
-    this.userid = userID;
-    this.picture = picture;
-    this.name = name;
+    this.userid = window.App.user.id;
+    this.picture = window.App.user.image;
+    this.name = window.App.user.name;
   }
 });
 
@@ -2150,7 +2163,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
   data: function data() {
-    return {};
+    return {
+      quote: 'Click to start chat'
+    };
   },
   methods: {
     openChat: function openChat(id, image, name) {
@@ -48477,11 +48492,15 @@ var render = function() {
             _c("img", { attrs: { src: _vm.user.image } }),
             _vm._v(" "),
             _c("div", { staticClass: "meta" }, [
-              _c("p", { staticClass: "name" }, [_vm._v(_vm._s(_vm.user.name))]),
+              _c("p", {
+                staticClass: "name",
+                domProps: { textContent: _vm._s(_vm.user.name) }
+              }),
               _vm._v(" "),
-              _c("p", { staticClass: "preview" }, [
-                _vm._v(_vm._s(_vm.user.message))
-              ])
+              _c("p", {
+                staticClass: "preview",
+                domProps: { textContent: _vm._s(this.quote) }
+              })
             ])
           ])
         ]

@@ -10,7 +10,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class IncomingChat implements ShouldBroadcast
+class OnlineStatus implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -24,6 +24,6 @@ class IncomingChat implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return new Channel('pushchat');
+        return new PresenceChannel('online');
     }
 }
