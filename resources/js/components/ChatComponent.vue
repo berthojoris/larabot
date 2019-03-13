@@ -35,6 +35,10 @@ export default {
     },
     mounted() {
         this.getUserList()
+        window.Echo.channel('push-chat').listen('IncomingChat', e => {
+            let dataChat = e.pushchat;
+            console.log(dataChat)
+        })
     },
     methods: {
         openChatViaID(id, image, name) {

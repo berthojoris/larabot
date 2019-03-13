@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Chat;
 use App\User;
+use App\Events\IncomingChat;
 use Illuminate\Http\Request;
 use App\Http\Resources\ChatCollection;
 use App\Http\Resources\UserListCollection;
@@ -34,6 +35,8 @@ class ChatController extends Controller
             'receive_id' => request('receive_id'),
             'message' => request('message')
         ]);
+
+        event(new IncomingChat($saved));
 
         return $saved;
     }

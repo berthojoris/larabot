@@ -1799,6 +1799,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.getUserList();
+    window.Echo.channel('push-chat').listen('IncomingChat', function (e) {
+      var dataChat = e.pushchat;
+      console.log(dataChat);
+    });
   },
   methods: {
     openChatViaID: function openChatViaID(id, image, name) {
