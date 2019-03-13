@@ -60,15 +60,6 @@ export default {
     watch: {
         id: function(val) {
             this.getChatList(val)
-        },
-        chats: function() {
-            if(!_.isEmpty(this.chats)) {
-                this.$nextTick(() => {
-                    VueScrollTo.scrollTo("ul li:last-child", 0, {
-                        container: '.messages'
-                    })
-                })
-            }
         }
     },
     methods: {
@@ -83,6 +74,13 @@ export default {
                 message: this.messagetext
             })
             this.emptyChat = false
+            if(!_.isEmpty(this.chats)) {
+                this.$nextTick(() => {
+                    VueScrollTo.scrollTo("div.messages ul li:last-child", 0, {
+                        container: '.messages'
+                    })
+                })
+            }
             this.saveChatToDB()
         },
         getChatList(receiverID) {
@@ -101,6 +99,13 @@ export default {
                 this.showChatText = true
                 if(chatDB.length == 0 || chatDB === undefined) {
                     this.emptyChat = true
+                }
+                if(!_.isEmpty(this.chats)) {
+                    this.$nextTick(() => {
+                        VueScrollTo.scrollTo("div.messages ul li:last-child", 0, {
+                            container: '.messages'
+                        })
+                    })
                 }
             })
             .catch((error) => {
