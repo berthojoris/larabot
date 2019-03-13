@@ -1806,6 +1806,7 @@ __webpack_require__.r(__webpack_exports__);
     window.Echo.channel('pushchat').listen('IncomingChat', function (e) {
       var dataChat = e.pushchat;
       vue.pusharr = dataChat;
+      console.log(dataChat);
     });
   },
   methods: {
@@ -1967,9 +1968,6 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       this.saveChatToDB();
-    },
-    alertMsg: function alertMsg() {
-      alert("yeah");
     },
     getChatList: function getChatList(receiverID) {
       var _this = this;

@@ -106,9 +106,6 @@ export default {
             }
             this.saveChatToDB()
         },
-        alertMsg() {
-            alert("yeah")
-        },
         getChatList(receiverID) {
             this.loadStatus = true
             this.emptyChat = false

@@ -42,6 +42,7 @@ export default {
         window.Echo.channel('pushchat').listen('IncomingChat', function (e) {
             let dataChat = e.pushchat
             vue.pusharr = dataChat
+            console.log(dataChat)
         })
     },
     methods: {
