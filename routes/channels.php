@@ -11,6 +11,6 @@
 |
 */
 
-Broadcast::channel('pushchat.{id}', function ($user, $id) {
+Broadcast::channel('pushchat', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });

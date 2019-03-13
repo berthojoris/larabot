@@ -1801,6 +1801,11 @@ __webpack_require__.r(__webpack_exports__);
     this.getUserList(); // window.Echo.channel('push-chat').listen('IncomingChat', e => {
     //     let dataChat = e.pushchat;
     // })
+
+    window.Echo.channel('pushchat').listen('IncomingChat', function (e) {
+      var dataChat = e.pushchat;
+      console.log(dataChat);
+    });
   },
   methods: {
     openChatViaID: function openChatViaID(id, image, name) {
@@ -1909,10 +1914,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.idLogged = $("meta[name=user-id]").attr("content");
-    window.Echo.private('pushchat.' + this.id).listen('IncomingChat', function (e) {
-      var dataChat = e.pushchat;
-      console.log(dataChat);
-    });
   },
   watch: {
     id: function id(val) {

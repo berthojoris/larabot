@@ -38,6 +38,10 @@ export default {
         // window.Echo.channel('push-chat').listen('IncomingChat', e => {
         //     let dataChat = e.pushchat;
         // })
+        window.Echo.channel('pushchat').listen('IncomingChat', function (e) {
+            let dataChat = e.pushchat
+            console.log(dataChat)
+        })
     },
     methods: {
         openChatViaID(id, image, name) {

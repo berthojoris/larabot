@@ -56,10 +56,6 @@ export default {
     },
     mounted() {
         this.idLogged = $("meta[name=user-id]").attr("content")
-        window.Echo.private('pushchat.'+this.id).listen('IncomingChat', e => {
-            let dataChat = e.pushchat
-            console.log(dataChat)
-        })
     },
     watch: {
         id: function(val) {
