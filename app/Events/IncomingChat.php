@@ -16,9 +16,9 @@ class IncomingChat implements ShouldBroadcast
 
     public $pushchat;
 
-    public function __construct($pushchat)
+    public function __construct($data)
     {
-        $this->pushchat = $pushchat;
+        $this->pushchat = $data;
     }
 
     public function broadcastOn()

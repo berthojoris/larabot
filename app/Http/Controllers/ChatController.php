@@ -36,7 +36,7 @@ class ChatController extends Controller
             'message' => request('message')
         ]);
 
-        event(new IncomingChat($saved));
+        IncomingChat::dispatch($saved);
 
         return $saved;
     }
