@@ -25,12 +25,6 @@ class TelegramController extends Controller
 
     public function sendmsg()
     {
-        // $client = new \GuzzleHttp\Client();
-        // $res = $client->request('POST', "https://api.telegram.org/bot707434480:AAGsDoc4tSudDB1F4nWKGXYKDyQxHi4tL7A/sendMessage", [
-        //     'chat_id' => '@berthojoris',
-        //     'text' => 'Hai Bertho'
-        // ]);
-        // return json_decode($res->getBody(), true);
         $response = Telegram::sendMessage([
             'chat_id' => '@berthojoris', 
             'text' => 'Hai Bertho'
