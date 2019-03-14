@@ -10,7 +10,10 @@
                 <comp-user-list 
                     v-for="(user, index) in participants" 
                     :key="index" 
-                    :user="user" 
+                    :user="user"
+                    :senderID="senderID"
+                    :receiveID="receiveID"
+                    :message="message"
                     @openChatNow="openChatViaID">
                 </comp-user-list>
             </ul>
@@ -19,7 +22,14 @@
         <comp-menu></comp-menu>
     </div>
 
-    <comp-personal-chat :pushdata="pusharr" :id="id" :img="image" :name="name"></comp-personal-chat>
+    <comp-personal-chat 
+        :pushdata="pusharr" 
+        :id="id"
+        :img="image"
+        :name="name"
+        @lastMsgSent="lastMsgProc">
+    </comp-personal-chat>
+
 </div>
 </template>
 
@@ -34,7 +44,10 @@ export default {
             idLogged: null,
             pusharr: null,
             participants: [],
-            toRemove: []
+            toRemove: [],
+            senderID: null,
+            receiveID: null,
+            message: null
         }
     },
     computed: {
@@ -60,10 +73,10 @@ export default {
             })
     },
     methods: {
-        filtered(arr) {
-            var check = _.remove(arr, function(data) {
-                return data.id == this.idLogged;
-            })
+        lastMsgProc(sender, receive, message) {
+            this.senderID = sender,
+            this.receiveID = receive
+            this.message = message
         },
         openChatViaID(id, image, name) {
             this.id = id,

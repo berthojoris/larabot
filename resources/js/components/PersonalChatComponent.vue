@@ -69,8 +69,9 @@ export default {
             this.getChatList(val)
         },
         pushdata: function(val) {
-            console.log(val)
             if(this.alreadyOpen) {
+                this.whenChatReady()
+                
                 this.chats.push({
                     sender_id: val.sender_id,
                     sender_image: val.sender.image,
@@ -134,7 +135,11 @@ export default {
             this.saveChatToDB()
         },
         getRandomChat() {
-            this.messagetext = RandomWords({ exactly: 15, join: ' ' })
+            this.messagetext = this.upperFirst()
+        },
+        upperFirst() {
+            var str = RandomWords({ exactly: 15, join: ' ' })
+            return str.charAt(0).toUpperCase() + str.slice(1)
         },
         getChatList(receiverID) {
             const userID = window.App.user.id
@@ -168,6 +173,8 @@ export default {
         },
         saveChatToDB() {
             const userID = window.App.user.id
+
+            this.$emit('lastMsgSent', userID, this.id, this.messagetext)
 
             axios.post('/api/chat/insert', {
                 message: this.messagetext,

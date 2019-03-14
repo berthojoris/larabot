@@ -1788,6 +1788,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1798,7 +1808,10 @@ __webpack_require__.r(__webpack_exports__);
       idLogged: null,
       pusharr: null,
       participants: [],
-      toRemove: []
+      toRemove: [],
+      senderID: null,
+      receiveID: null,
+      message: null
     };
   },
   computed: {
@@ -1827,10 +1840,9 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
-    filtered: function filtered(arr) {
-      var check = _.remove(arr, function (data) {
-        return data.id == this.idLogged;
-      });
+    lastMsgProc: function lastMsgProc(sender, receive, message) {
+      this.senderID = sender, this.receiveID = receive;
+      this.message = message;
     },
     openChatViaID: function openChatViaID(id, image, name) {
       this.id = id, this.image = image;
@@ -1950,9 +1962,8 @@ __webpack_require__.r(__webpack_exports__);
       this.getChatList(val);
     },
     pushdata: function pushdata(val) {
-      console.log(val);
-
       if (this.alreadyOpen) {
+        this.whenChatReady();
         this.chats.push({
           sender_id: val.sender_id,
           sender_image: val.sender.image,
@@ -2016,10 +2027,14 @@ __webpack_require__.r(__webpack_exports__);
       this.saveChatToDB();
     },
     getRandomChat: function getRandomChat() {
-      this.messagetext = RandomWords({
+      this.messagetext = this.upperFirst();
+    },
+    upperFirst: function upperFirst() {
+      var str = RandomWords({
         exactly: 15,
         join: ' '
       });
+      return str.charAt(0).toUpperCase() + str.slice(1);
     },
     getChatList: function getChatList(receiverID) {
       var _this = this;
@@ -2052,6 +2067,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       var userID = window.App.user.id;
+      this.$emit('lastMsgSent', userID, this.id, this.messagetext);
       axios.post('/api/chat/insert', {
         message: this.messagetext,
         sender_id: userID,
@@ -2176,11 +2192,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user'],
+  props: ['user', 'senderID', 'receiveID', 'message'],
   data: function data() {
     return {
-      quote: 'Click to start chat'
+      lastChat: 'Click to start chat'
     };
+  },
+  watch: {
+    message: function message() {
+      this.lastChat = this.message;
+    }
   },
   methods: {
     openChat: function openChat(id, image, name) {
@@ -50106,7 +50127,12 @@ var render = function() {
               _vm._l(_vm.participants, function(user, index) {
                 return _c("comp-user-list", {
                   key: index,
-                  attrs: { user: user },
+                  attrs: {
+                    user: user,
+                    senderID: _vm.senderID,
+                    receiveID: _vm.receiveID,
+                    message: _vm.message
+                  },
                   on: { openChatNow: _vm.openChatViaID }
                 })
               }),
@@ -50125,7 +50151,8 @@ var render = function() {
           id: _vm.id,
           img: _vm.image,
           name: _vm.name
-        }
+        },
+        on: { lastMsgSent: _vm.lastMsgProc }
       })
     ],
     1
@@ -50569,7 +50596,8 @@ var render = function() {
               _vm._v(" "),
               _c("p", {
                 staticClass: "preview",
-                domProps: { textContent: _vm._s(this.quote) }
+                attrs: { id: _vm.user.id },
+                domProps: { textContent: _vm._s(this.lastChat) }
               })
             ])
           ])

@@ -6,7 +6,7 @@
             <img :src="user.image">
             <div class="meta">
                 <p class="name" v-text="user.name"></p>
-                <p class="preview" v-text="this.quote"></p>
+                <p class="preview" :id="user.id" v-text="this.lastChat"></p>
             </div>
         </div>
     </li>
@@ -15,10 +15,15 @@
 
 <script>
 export default {
-    props: ['user'],
+    props: ['user', 'senderID', 'receiveID', 'message'],
     data() {
         return {
-            quote: 'Click to start chat'
+            lastChat: 'Click to start chat'
+        }
+    },
+    watch: {
+        message: function() {
+            this.lastChat = this.message
         }
     },
     methods: {
