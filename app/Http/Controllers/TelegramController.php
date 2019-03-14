@@ -27,6 +27,6 @@ class TelegramController extends Controller
         ]);
         $messageId = $response->getMessageId();
 
-        return $response;
+        return $messageId;
     }
 }

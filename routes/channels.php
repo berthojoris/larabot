@@ -24,7 +24,6 @@ Broadcast::channel('onlyloggeduser', function ($user) {
 // Allow channel access only for authenticated user and return list user
 Broadcast::channel('online', function ($user) {
     if (auth()->check()) {
-        logger($user->toArray());
         return $user->toArray();
     }
     // return ['name' => $user->name];
