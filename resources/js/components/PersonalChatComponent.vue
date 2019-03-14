@@ -134,16 +134,7 @@ export default {
             this.saveChatToDB()
         },
         getRandomChat() {
-            axios.get('/randomchat')
-            .then((response) => {
-                this.messagetext = response.data
-            })
-            .catch((error) => {
-
-            })
-            .then(function() {
-
-            });
+            this.messagetext = RandomWords({ exactly: 15, join: ' ' })
         },
         getChatList(receiverID) {
             const userID = window.App.user.id

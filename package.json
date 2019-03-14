@@ -25,6 +25,7 @@
     "dependencies": {
         "laravel-echo": "^1.5.3",
         "pusher-js": "^4.4.0",
+        "random-words": "^1.1.0",
         "toastr": "^2.1.4",
         "vue-scrollto": "^2.14.0",
         "vue-template-compiler": "^2.6.8",

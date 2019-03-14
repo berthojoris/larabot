@@ -11,6 +11,7 @@ try {
     window.Popper = require('popper.js').default;
     window.$ = window.jQuery = require('jquery');
     window.VueScrollTo = require('vue-scrollto');
+    window.RandomWords = require('random-words');
 
     require('bootstrap');
 } catch (e) {}
