@@ -1,5 +1,7 @@
 <?php
 
+use Telegram\Bot\Laravel\Facades\Telegram;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,3 +29,12 @@ Route::get('/randomchat', 'ChatController@randomChat');
 //TELEGRAM
 Route::get('/me', 'TelegramController@me');
 Route::get('/sendmsg', 'TelegramController@sendmsg');
+Route::post('/707434480:AAGsDoc4tSudDB1F4nWKGXYKDyQxHi4tL7A/webhook', function () {
+    $update = Telegram::commandsHandler(true);
+	
+	// Commands handler method returns an Update object.
+	// So you can further process $update object 
+	// to however you want.
+	
+    return 'ok';
+});
