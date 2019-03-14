@@ -1983,7 +1983,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       } else {
         this.chats = [];
-        this.whenNoChat();
+        this.whenFirstInit();
       }
 
       if (!_.isEmpty(this.chats)) {
@@ -1996,6 +1996,16 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    whenFirstInit: function whenFirstInit() {
+      this.firstEmpty = true;
+      this.emptyChat = false;
+      this.typeChatHere = false;
+      this.loadStatus = false;
+      this.alreadyOpen = false;
+      this.$nextTick(function () {
+        $("div.wrap span.contact-status").removeClass().addClass('contact-status online');
+      });
+    },
     whenLoading: function whenLoading() {
       this.firstEmpty = false;
       this.emptyChat = false;

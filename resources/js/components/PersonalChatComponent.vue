@@ -84,7 +84,7 @@ export default {
                 }
             } else {
                 this.chats = []
-                this.whenNoChat()
+                this.whenFirstInit()
             }
             if(!_.isEmpty(this.chats)) {
                 this.$nextTick(() => {
@@ -96,6 +96,16 @@ export default {
         }
     },
     methods: {
+        whenFirstInit() {
+            this.firstEmpty = true
+            this.emptyChat = false
+            this.typeChatHere = false
+            this.loadStatus = false
+            this.alreadyOpen = false
+            this.$nextTick(() => {
+                $("div.wrap span.contact-status").removeClass().addClass('contact-status online')
+            })
+        },
         whenLoading() {
             this.firstEmpty = false
             this.emptyChat = false
