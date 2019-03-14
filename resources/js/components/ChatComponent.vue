@@ -69,6 +69,9 @@ export default {
             .listen('OnlineStatus', function (e) {
                 if(e.type == 'clean') {
                     vue.pusharr = null
+                    vue.$nextTick(() => {
+                        $("li.contact").removeClass().addClass('contact')
+                    })
                 } else {
                     vue.pusharr = e.pushchat
                 }
@@ -82,6 +85,7 @@ export default {
             this.id = id,
             this.image = image
             this.name = name
+            console.log("SAMPE DI PARENT")
         },
         chatWithID(sentid) {
             this.idToSend = sentid

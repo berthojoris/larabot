@@ -1836,6 +1836,9 @@ __webpack_require__.r(__webpack_exports__);
     }).listen('OnlineStatus', function (e) {
       if (e.type == 'clean') {
         vue.pusharr = null;
+        vue.$nextTick(function () {
+          $("li.contact").removeClass().addClass('contact');
+        });
       } else {
         vue.pusharr = e.pushchat;
       }
@@ -1848,6 +1851,7 @@ __webpack_require__.r(__webpack_exports__);
     openChatViaID: function openChatViaID(id, image, name) {
       this.id = id, this.image = image;
       this.name = name;
+      console.log("SAMPE DI PARENT");
     },
     chatWithID: function chatWithID(sentid) {
       this.idToSend = sentid;
@@ -1964,6 +1968,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     id: function id(val) {
+      console.log("SAMPE DI CHILD");
       this.getChatList(val);
     },
     pushdata: function pushdata(val) {

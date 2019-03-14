@@ -67,6 +67,7 @@ export default {
     },
     watch: {
         id: function(val) {
+            console.log("SAMPE DI CHILD")
             this.getChatList(val)
         },
         pushdata: function(val) {
