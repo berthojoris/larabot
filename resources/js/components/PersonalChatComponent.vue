@@ -147,7 +147,6 @@ export default {
 
             if(!_.isEmpty(this.chats)) {
                 $("span#"+this.id).removeClass().addClass('contact-status online')
-                $("p.preview").removeClass().addClass('contact-status online')
 
                 if(this.messagetext.length > 10) {
                     var limitStr = this.messagetext.substring(0, 32)+" ..."
