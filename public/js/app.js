@@ -1993,6 +1993,7 @@ __webpack_require__.r(__webpack_exports__);
           VueScrollTo.scrollTo("div.messages ul li:last-child", 0, {
             container: '.messages'
           });
+          $("span#" + val.sender_id).removeClass().addClass('contact-status online');
         });
       }
     }
