@@ -15,7 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/me', 'TelegramController@me');
 Route::view('/chat', 'chat')->middleware('auth');
 Route::get('user/online', 'ChatController@online');
 
@@ -24,3 +23,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/delete', 'ChatController@deleteall');
 Route::get('/randomchat', 'ChatController@randomChat');
+
+//TELEGRAM
+Route::get('/me', 'TelegramController@me');
+Route::get('/sendmsg', 'TelegramController@sendmsg');
