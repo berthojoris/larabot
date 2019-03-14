@@ -1931,7 +1931,7 @@ __webpack_require__.r(__webpack_exports__);
       loadStatus: false,
       emptyChat: false,
       idLogged: null,
-      showChatText: false,
+      typeChatHere: false,
       firstEmpty: true,
       alreadyOpen: false
     };
@@ -1943,21 +1943,18 @@ __webpack_require__.r(__webpack_exports__);
   watch: {
     id: function id(val) {
       this.getChatList(val);
-      this.alreadyOpen = true;
-      this.getRandomChat();
     },
     pushdata: function pushdata(val) {
+      console.log(val);
+
       if (this.alreadyOpen) {
-        if (val.receive_id == this.idLogged) {
-          this.emptyChat = false;
-          this.chats.push({
-            sender_id: val.sender_id,
-            sender_image: val.sender.image,
-            receive_image: val.receive.image,
-            type: 'replies',
-            message: val.message
-          });
-        }
+        this.chats.push({
+          sender_id: val.sender_id,
+          sender_image: val.sender.image,
+          receive_image: val.receive.image,
+          type: 'replies',
+          message: val.message
+        });
       }
 
       if (!_.isEmpty(this.chats)) {
@@ -1970,8 +1967,30 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    whenLoading: function whenLoading() {
+      this.firstEmpty = false;
+      this.emptyChat = false;
+      this.typeChatHere = false;
+      this.loadStatus = true;
+      this.alreadyOpen = true;
+    },
+    whenNoChat: function whenNoChat() {
+      this.firstEmpty = false;
+      this.loadStatus = false;
+      this.emptyChat = true;
+      this.typeChatHere = true;
+      this.alreadyOpen = true;
+    },
+    whenChatReady: function whenChatReady() {
+      this.firstEmpty = false;
+      this.loadStatus = false;
+      this.emptyChat = false;
+      this.typeChatHere = true;
+      this.alreadyOpen = true;
+    },
     sendMessage: function sendMessage() {
       if (this.messagetext.trim().length < 1) return;
+      this.whenChatReady();
       var picture = window.App.user.image;
       this.chats.push({
         sender_id: this.idLogged,
@@ -1980,8 +1999,6 @@ __webpack_require__.r(__webpack_exports__);
         type: 'sent',
         message: this.messagetext
       });
-      this.emptyChat = false;
-      this.firstEmpty = false;
 
       if (!_.isEmpty(this.chats)) {
         this.$nextTick(function () {
@@ -2003,37 +2020,27 @@ __webpack_require__.r(__webpack_exports__);
     getChatList: function getChatList(receiverID) {
       var _this2 = this;
 
-      this.firstEmpty = false;
-      this.loadStatus = true;
-      this.emptyChat = false;
-      this.showChatText = false;
       var userID = window.App.user.id;
       this.chats = [];
+      this.whenLoading();
       axios.get('/api/chat/list/' + userID + '/' + receiverID).then(function (response) {
         _this2.loadStatus = false;
         var chatDB = response.data;
         _this2.chats = chatDB;
-        _this2.showChatText = true;
-
-        if (chatDB.length == 0 || chatDB === undefined) {
-          _this2.emptyChat = true;
-          _this2.firstEmpty = false;
-        }
 
         if (!_.isEmpty(_this2.chats)) {
-          _this2.firstEmpty = false;
+          _this2.whenChatReady();
 
           _this2.$nextTick(function () {
             VueScrollTo.scrollTo("div.messages ul li:last-child", 0, {
               container: '.messages'
             });
           });
+        } else {
+          _this2.whenNoChat();
         }
       }).catch(function (error) {
-        _this2.loadStatus = false;
-        _this2.emptyChat = false;
-        _this2.firstEmpty = false;
-        console.log(error);
+        _this2.whenNoChat();
       }).then(function () {// always executed
       });
     },
@@ -48216,7 +48223,7 @@ var render = function() {
         ])
       : _vm._e(),
     _vm._v(" "),
-    _vm.showChatText
+    _vm.typeChatHere
       ? _c("div", { staticClass: "message-input" }, [
           _c("div", { staticClass: "wrap" }, [
             _c("input", {

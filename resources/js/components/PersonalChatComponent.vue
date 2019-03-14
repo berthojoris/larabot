@@ -35,7 +35,7 @@
             </li>
         </ul>
     </div>
-    <div v-if="showChatText" class="message-input">
+    <div v-if="typeChatHere" class="message-input">
         <div class="wrap">
             <input type="text" @keyup.enter="sendMessage" v-model="messagetext" placeholder="Write your message..." />
             <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
@@ -55,7 +55,7 @@ export default {
             loadStatus: false,
             emptyChat: false,
             idLogged: null,
-            showChatText: false,
+            typeChatHere: false,
             firstEmpty: true,
             alreadyOpen: false
         }
@@ -67,23 +67,17 @@ export default {
     watch: {
         id: function(val) {
             this.getChatList(val)
-            this.alreadyOpen = true
-            this.getRandomChat()
         },
         pushdata: function(val) {
+            console.log(val)
             if(this.alreadyOpen) {
-                if(val.receive_id == this.idLogged) {
-                    this.emptyChat = false
-
-                    this.chats.push({
-                        sender_id: val.sender_id,
-                        sender_image: val.sender.image,
-                        receive_image: val.receive.image,
-                        type: 'replies',
-                        message: val.message
-                    })
-
-                }
+                this.chats.push({
+                    sender_id: val.sender_id,
+                    sender_image: val.sender.image,
+                    receive_image: val.receive.image,
+                    type: 'replies',
+                    message: val.message
+                })
             }
             if(!_.isEmpty(this.chats)) {
                 this.$nextTick(() => {
@@ -95,8 +89,31 @@ export default {
         }
     },
     methods: {
+        whenLoading() {
+            this.firstEmpty = false
+            this.emptyChat = false
+            this.typeChatHere = false
+            this.loadStatus = true
+            this.alreadyOpen = true
+        },
+        whenNoChat() {
+            this.firstEmpty = false
+            this.loadStatus = false
+            this.emptyChat = true
+            this.typeChatHere = true
+            this.alreadyOpen = true
+        },
+        whenChatReady() {
+            this.firstEmpty = false
+            this.loadStatus = false
+            this.emptyChat = false
+            this.typeChatHere = true
+            this.alreadyOpen = true
+        },
         sendMessage() {
             if (this.messagetext.trim().length < 1) return;
+            this.whenChatReady()
+
             const picture = window.App.user.image
 
             this.chats.push({
@@ -107,8 +124,6 @@ export default {
                 message: this.messagetext
             })
 
-            this.emptyChat = false
-            this.firstEmpty = false
             if(!_.isEmpty(this.chats)) {
                 this.$nextTick(() => {
                     VueScrollTo.scrollTo("div.messages ul li:last-child", 0, {
@@ -131,38 +146,30 @@ export default {
             });
         },
         getChatList(receiverID) {
-            this.firstEmpty = false
-            this.loadStatus = true
-            this.emptyChat = false
-            this.showChatText = false
-
             const userID = window.App.user.id
-            
             this.chats = []
+
+            this.whenLoading()
+
             axios.get('/api/chat/list/'+userID+'/'+receiverID)
             .then((response) => {
                 this.loadStatus = false
                 let chatDB = response.data
                 this.chats = chatDB
-                this.showChatText = true
-                if(chatDB.length == 0 || chatDB === undefined) {
-                    this.emptyChat = true
-                    this.firstEmpty = false
-                }
+
                 if(!_.isEmpty(this.chats)) {
-                    this.firstEmpty = false
+                    this.whenChatReady()
                     this.$nextTick(() => {
                         VueScrollTo.scrollTo("div.messages ul li:last-child", 0, {
                             container: '.messages'
                         })
                     })
+                } else {
+                    this.whenNoChat()
                 }
             })
             .catch((error) => {
-                this.loadStatus = false
-                this.emptyChat = false
-                this.firstEmpty = false
-                console.log(error);
+                this.whenNoChat()
             })
             .then(function() {
                 // always executed
