@@ -2,7 +2,7 @@
 <div class="content">
 
     <div v-if="firstEmpty" class="centerText">
-        <p>Let yourself stay connected with people around you</p>
+        <p>"Stay connected with people around you"</p>
     </div>
 
     <div v-if="emptyChat" class="circonf-wrapper centerText">
@@ -57,7 +57,8 @@ export default {
             idLogged: null,
             typeChatHere: false,
             firstEmpty: true,
-            alreadyOpen: false
+            alreadyOpen: false,
+            userOpenedChat: null
         }
     },
     mounted() {
@@ -71,7 +72,7 @@ export default {
         pushdata: function(val) {
             if(this.alreadyOpen) {
                 this.whenChatReady()
-                
+
                 this.chats.push({
                     sender_id: val.sender_id,
                     sender_image: val.sender.image,
@@ -145,6 +146,8 @@ export default {
             const userID = window.App.user.id
             this.chats = []
 
+            this.$emit('chatWith', receiverID)
+
             this.whenLoading()
 
             axios.get('/api/chat/list/'+userID+'/'+receiverID)
@@ -168,13 +171,11 @@ export default {
                 this.whenNoChat()
             })
             .then(function() {
-                // always executed
+                
             });
         },
         saveChatToDB() {
             const userID = window.App.user.id
-
-            this.$emit('lastMsgSent', userID, this.id, this.messagetext)
 
             axios.post('/api/chat/insert', {
                 message: this.messagetext,

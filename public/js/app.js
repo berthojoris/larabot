@@ -1797,7 +1797,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1809,9 +1808,8 @@ __webpack_require__.r(__webpack_exports__);
       pusharr: null,
       participants: [],
       toRemove: [],
-      senderID: null,
-      receiveID: null,
-      message: null
+      incomingMsgIcon: 'active',
+      idToSend: null
     };
   },
   computed: {
@@ -1840,13 +1838,13 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
-    lastMsgProc: function lastMsgProc(sender, receive, message) {
-      this.senderID = sender, this.receiveID = receive;
-      this.message = message;
-    },
     openChatViaID: function openChatViaID(id, image, name) {
       this.id = id, this.image = image;
       this.name = name;
+    },
+    chatWithID: function chatWithID(sentid) {
+      this.idToSend = sentid;
+      console.log(this.idToSend);
     },
     getUserList: function getUserList() {
       var _this2 = this;
@@ -1950,7 +1948,8 @@ __webpack_require__.r(__webpack_exports__);
       idLogged: null,
       typeChatHere: false,
       firstEmpty: true,
-      alreadyOpen: false
+      alreadyOpen: false,
+      userOpenedChat: null
     };
   },
   mounted: function mounted() {
@@ -2041,6 +2040,7 @@ __webpack_require__.r(__webpack_exports__);
 
       var userID = window.App.user.id;
       this.chats = [];
+      this.$emit('chatWith', receiverID);
       this.whenLoading();
       axios.get('/api/chat/list/' + userID + '/' + receiverID).then(function (response) {
         _this.loadStatus = false;
@@ -2060,14 +2060,12 @@ __webpack_require__.r(__webpack_exports__);
         }
       }).catch(function (error) {
         _this.whenNoChat();
-      }).then(function () {// always executed
-      });
+      }).then(function () {});
     },
     saveChatToDB: function saveChatToDB() {
       var _this2 = this;
 
       var userID = window.App.user.id;
-      this.$emit('lastMsgSent', userID, this.id, this.messagetext);
       axios.post('/api/chat/insert', {
         message: this.messagetext,
         sender_id: userID,
@@ -2192,15 +2190,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'senderID', 'receiveID', 'message'],
+  props: ['user', 'senderID', 'receiveID', 'message', 'pushdata', 'idToSend'],
   data: function data() {
     return {
+      online: true,
       lastChat: 'Click to start chat'
     };
   },
   watch: {
+    idToSend: function idToSend() {
+      var _this = this;
+
+      this.$nextTick(function () {
+        $("span#" + _this.idToSend).removeClass().addClass('contact-status online');
+      });
+    },
     message: function message() {
       this.lastChat = this.message;
+    },
+    pushdata: function pushdata(val) {
+      this.$nextTick(function () {
+        if (val.receive_id == window.App.user.id) {
+          $("span#" + val.sender_id).removeClass().addClass('contact-status busy');
+        }
+      });
     }
   },
   methods: {
@@ -50129,9 +50142,8 @@ var render = function() {
                   key: index,
                   attrs: {
                     user: user,
-                    senderID: _vm.senderID,
-                    receiveID: _vm.receiveID,
-                    message: _vm.message
+                    idToSend: _vm.idToSend,
+                    pushdata: _vm.pusharr
                   },
                   on: { openChatNow: _vm.openChatViaID }
                 })
@@ -50152,7 +50164,7 @@ var render = function() {
           img: _vm.image,
           name: _vm.name
         },
-        on: { lastMsgSent: _vm.lastMsgProc }
+        on: { chatWith: _vm.chatWithID }
       })
     ],
     1
@@ -50232,9 +50244,7 @@ var render = function() {
   return _c("div", { staticClass: "content" }, [
     _vm.firstEmpty
       ? _c("div", { staticClass: "centerText" }, [
-          _c("p", [
-            _vm._v("Let yourself stay connected with people around you")
-          ])
+          _c("p", [_vm._v('"Stay connected with people around you"')])
         ])
       : _vm._e(),
     _vm._v(" "),
@@ -50584,7 +50594,10 @@ var render = function() {
         },
         [
           _c("div", { staticClass: "wrap" }, [
-            _c("span", { staticClass: "contact-status online" }),
+            _c("span", {
+              staticClass: "contact-status online",
+              attrs: { at: "", id: _vm.user.id }
+            }),
             _vm._v(" "),
             _c("img", { attrs: { src: _vm.user.image } }),
             _vm._v(" "),

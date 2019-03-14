@@ -11,9 +11,8 @@
                     v-for="(user, index) in participants" 
                     :key="index" 
                     :user="user"
-                    :senderID="senderID"
-                    :receiveID="receiveID"
-                    :message="message"
+                    :idToSend="idToSend"
+                    :pushdata="pusharr"
                     @openChatNow="openChatViaID">
                 </comp-user-list>
             </ul>
@@ -27,7 +26,7 @@
         :id="id"
         :img="image"
         :name="name"
-        @lastMsgSent="lastMsgProc">
+        @chatWith="chatWithID">
     </comp-personal-chat>
 
 </div>
@@ -45,9 +44,8 @@ export default {
             pusharr: null,
             participants: [],
             toRemove: [],
-            senderID: null,
-            receiveID: null,
-            message: null
+            incomingMsgIcon: 'active',
+            idToSend: null
         }
     },
     computed: {
@@ -73,15 +71,14 @@ export default {
             })
     },
     methods: {
-        lastMsgProc(sender, receive, message) {
-            this.senderID = sender,
-            this.receiveID = receive
-            this.message = message
-        },
         openChatViaID(id, image, name) {
             this.id = id,
             this.image = image
             this.name = name
+        },
+        chatWithID(sentid) {
+            this.idToSend = sentid
+            console.log(this.idToSend)
         },
         getUserList() {
             const userID = window.App.user.id
