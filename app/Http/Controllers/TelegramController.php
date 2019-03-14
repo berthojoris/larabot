@@ -18,11 +18,12 @@ class TelegramController extends Controller
         dd($response);
     }
 
-    public function sendmsg($username)
+    public function sendmsg()
     {
+        $botID = 678595741;
         $response = Telegram::sendMessage([
-            'chat_id' => $username, 
-            'text' => 'Hai Bertho'
+            'chat_id' => $botID, 
+            'text' => 'Hai gaes..'
         ]);
         $messageId = $response->getMessageId();
 
