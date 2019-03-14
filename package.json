@@ -27,6 +27,7 @@
         "pusher-js": "^4.4.0",
         "random-words": "^1.1.0",
         "toastr": "^2.1.4",
+        "underscore": "^1.9.1",
         "vue-scrollto": "^2.14.0",
         "vue-template-compiler": "^2.6.8",
         "vuex": "^3.1.0",

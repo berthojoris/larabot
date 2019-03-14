@@ -8,7 +8,7 @@
         <div id="contacts">
             <ul>
                 <comp-user-list 
-                    v-for="(user, index) in userlist" 
+                    v-for="(user, index) in participants" 
                     :key="index" 
                     :user="user" 
                     @openChatNow="openChatViaID">
@@ -33,7 +33,8 @@ export default {
             name: null,
             idLogged: null,
             pusharr: null,
-            participants: []
+            participants: [],
+            toRemove: []
         }
     },
     computed: {
@@ -45,10 +46,13 @@ export default {
         this.getUserList()
         this.idLogged = window.App.user.id
 
-        const vue = this
+         var vue = this
 
         this.channel
-            .here(users => this.participants = users)
+            .here(users => {
+                var notMe = __.without(users, __.findWhere(users, {id: window.App.user.id}));
+                this.participants = notMe
+            })
             .joining(user => this.participants.push(user))
             .leaving(user => this.participants.splice(this.participants.indexOf(user), 1))
             .listen('OnlineStatus', function (e) {
@@ -59,7 +63,7 @@ export default {
         filtered(arr) {
             var check = _.remove(arr, function(data) {
                 return data.id == this.idLogged;
-            });
+            })
         },
         openChatViaID(id, image, name) {
             this.id = id,

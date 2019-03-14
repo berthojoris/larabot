@@ -12,6 +12,7 @@ try {
     window.$ = window.jQuery = require('jquery');
     window.VueScrollTo = require('vue-scrollto');
     window.RandomWords = require('random-words');
+    window.__ = require('underscore');
 
     require('bootstrap');
 } catch (e) {}
