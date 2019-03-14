@@ -41,7 +41,7 @@ class ChatController extends Controller
 
         $data = Chat::with('sender', 'receive')->whereId($saved->id)->first();
 
-        OnlineStatus::dispatch($data);
+        OnlineStatus::dispatch($data, 'insert');
 
         return $data;
     }
@@ -54,6 +54,7 @@ class ChatController extends Controller
     public function deleteall()
     {
         Chat::truncate();
+        OnlineStatus::dispatch(null, 'clean');
         return "Done";
     }
 

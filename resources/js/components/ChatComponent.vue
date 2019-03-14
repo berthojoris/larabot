@@ -1,7 +1,7 @@
 <template>
 <div id="frame">
     <div id="sidepanel">
-        <comp-profile></comp-profile>
+        <comp-profile @del="clean"></comp-profile>
         
         <comp-search></comp-search>
         
@@ -67,10 +67,20 @@ export default {
             .joining(user => this.participants.push(user))
             .leaving(user => this.participants.splice(this.participants.indexOf(user), 1))
             .listen('OnlineStatus', function (e) {
-                vue.pusharr = e.pushchat
+                if(e.type == 'clean') {
+                    vue.pusharr = null
+                    console.log("JIKA DELETE")
+                    console.log("==============")
+                    console.log(vue.pusharr)
+                } else {
+                    vue.pusharr = e.pushchat
+                }
             })
     },
     methods: {
+        clean() {
+            this.pusharr = null
+        },
         openChatViaID(id, image, name) {
             this.id = id,
             this.image = image
@@ -78,7 +88,6 @@ export default {
         },
         chatWithID(sentid) {
             this.idToSend = sentid
-            console.log(this.idToSend)
         },
         getUserList() {
             const userID = window.App.user.id

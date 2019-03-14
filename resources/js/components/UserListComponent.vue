@@ -32,11 +32,13 @@ export default {
             this.lastChat = this.message
         },
         pushdata: function(val) {
-            this.$nextTick(() => {
-                if(val.receive_id == window.App.user.id) {
-                    $("span#"+val.sender_id).removeClass().addClass('contact-status busy')
-                }
-            })
+            if(!_.isEmpty(val)) {
+                this.$nextTick(() => {
+                    if(val.receive_id == window.App.user.id) {
+                        $("span#"+val.sender_id).removeClass().addClass('contact-status busy')
+                    }
+                })
+            }
         }
     },
     methods: {

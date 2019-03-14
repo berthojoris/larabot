@@ -1,7 +1,7 @@
 <template>
 <div id="profile">
     <div class="wrap">
-        <img :src="picture" id="profile-img" class="online">
+        <img :src="picture" id="profile-img" class="online" @click="truncate">
         <p>{{ name }}</p>
         <i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
         <div id="status-options">
@@ -50,6 +50,11 @@ export default {
         this.picture = window.App.user.image
         this.name = window.App.user.name
     },
+    methods: {
+        truncate: function() {
+            this.$emit('del')
+        }
+    }
 }
 </script>
 

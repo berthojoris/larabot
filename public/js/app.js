@@ -1834,17 +1834,26 @@ __webpack_require__.r(__webpack_exports__);
     }).leaving(function (user) {
       return _this.participants.splice(_this.participants.indexOf(user), 1);
     }).listen('OnlineStatus', function (e) {
-      vue.pusharr = e.pushchat;
+      if (e.type == 'clean') {
+        vue.pusharr = null;
+        console.log("JIKA DELETE");
+        console.log("==============");
+        console.log(vue.pusharr);
+      } else {
+        vue.pusharr = e.pushchat;
+      }
     });
   },
   methods: {
+    clean: function clean() {
+      this.pusharr = null;
+    },
     openChatViaID: function openChatViaID(id, image, name) {
       this.id = id, this.image = image;
       this.name = name;
     },
     chatWithID: function chatWithID(sentid) {
       this.idToSend = sentid;
-      console.log(this.idToSend);
     },
     getUserList: function getUserList() {
       var _this2 = this;
@@ -1961,15 +1970,20 @@ __webpack_require__.r(__webpack_exports__);
       this.getChatList(val);
     },
     pushdata: function pushdata(val) {
-      if (this.alreadyOpen) {
-        this.whenChatReady();
-        this.chats.push({
-          sender_id: val.sender_id,
-          sender_image: val.sender.image,
-          receive_image: val.receive.image,
-          type: 'replies',
-          message: val.message
-        });
+      if (!_.isEmpty(val)) {
+        if (this.alreadyOpen) {
+          this.whenChatReady();
+          this.chats.push({
+            sender_id: val.sender_id,
+            sender_image: val.sender.image,
+            receive_image: val.receive.image,
+            type: 'replies',
+            message: val.message
+          });
+        }
+      } else {
+        this.chats = [];
+        this.whenNoChat();
       }
 
       if (!_.isEmpty(this.chats)) {
@@ -2140,6 +2154,11 @@ __webpack_require__.r(__webpack_exports__);
     this.userid = window.App.user.id;
     this.picture = window.App.user.image;
     this.name = window.App.user.name;
+  },
+  methods: {
+    truncate: function truncate() {
+      this.$emit('del');
+    }
   }
 });
 
@@ -2209,11 +2228,13 @@ __webpack_require__.r(__webpack_exports__);
       this.lastChat = this.message;
     },
     pushdata: function pushdata(val) {
-      this.$nextTick(function () {
-        if (val.receive_id == window.App.user.id) {
-          $("span#" + val.sender_id).removeClass().addClass('contact-status busy');
-        }
-      });
+      if (!_.isEmpty(val)) {
+        this.$nextTick(function () {
+          if (val.receive_id == window.App.user.id) {
+            $("span#" + val.sender_id).removeClass().addClass('contact-status busy');
+          }
+        });
+      }
     }
   },
   methods: {
@@ -50130,7 +50151,7 @@ var render = function() {
         "div",
         { attrs: { id: "sidepanel" } },
         [
-          _c("comp-profile"),
+          _c("comp-profile", { on: { del: _vm.clean } }),
           _vm._v(" "),
           _c("comp-search"),
           _vm._v(" "),
@@ -50420,7 +50441,8 @@ var render = function() {
     _c("div", { staticClass: "wrap" }, [
       _c("img", {
         staticClass: "online",
-        attrs: { src: _vm.picture, id: "profile-img" }
+        attrs: { src: _vm.picture, id: "profile-img" },
+        on: { click: _vm.truncate }
       }),
       _vm._v(" "),
       _c("p", [_vm._v(_vm._s(_vm.name))]),

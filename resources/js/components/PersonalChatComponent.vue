@@ -70,16 +70,21 @@ export default {
             this.getChatList(val)
         },
         pushdata: function(val) {
-            if(this.alreadyOpen) {
-                this.whenChatReady()
+            if(!_.isEmpty(val)) {
+                if(this.alreadyOpen) {
+                    this.whenChatReady()
 
-                this.chats.push({
-                    sender_id: val.sender_id,
-                    sender_image: val.sender.image,
-                    receive_image: val.receive.image,
-                    type: 'replies',
-                    message: val.message
-                })
+                    this.chats.push({
+                        sender_id: val.sender_id,
+                        sender_image: val.sender.image,
+                        receive_image: val.receive.image,
+                        type: 'replies',
+                        message: val.message
+                    })
+                }
+            } else {
+                this.chats = []
+                this.whenNoChat()
             }
             if(!_.isEmpty(this.chats)) {
                 this.$nextTick(() => {
