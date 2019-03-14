@@ -2039,6 +2039,15 @@ __webpack_require__.r(__webpack_exports__);
 
       if (!_.isEmpty(this.chats)) {
         $("span#" + this.id).removeClass().addClass('contact-status online');
+        $("p.preview").removeClass().addClass('contact-status online');
+
+        if (this.messagetext.length > 10) {
+          var limitStr = this.messagetext.substring(0, 32) + " ...";
+        } else {
+          var limitStr = this.messagetext;
+        }
+
+        $("div.meta").find("p#" + this.id).empty().html(limitStr);
         this.$nextTick(function () {
           VueScrollTo.scrollTo("div.messages ul li:last-child", 0, {
             container: '.messages'
