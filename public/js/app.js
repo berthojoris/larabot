@@ -2040,6 +2040,7 @@ __webpack_require__.r(__webpack_exports__);
       });
 
       if (!_.isEmpty(this.chats)) {
+        $("span#" + this.id).removeClass().addClass('contact-status online');
         this.$nextTick(function () {
           VueScrollTo.scrollTo("div.messages ul li:last-child", 0, {
             container: '.messages'
