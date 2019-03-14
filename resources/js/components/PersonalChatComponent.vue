@@ -99,7 +99,7 @@ export default {
         whenFirstInit() {
             this.firstEmpty = true
             this.emptyChat = false
-            this.typeChatHere = false
+            this.typeChatHere = true
             this.loadStatus = false
             this.alreadyOpen = false
             this.$nextTick(() => {
@@ -130,6 +130,8 @@ export default {
         sendMessage() {
             if (this.messagetext.trim().length < 1) return;
             this.whenChatReady()
+
+            $("span#"+this.id).removeClass().addClass('contact-status online')
 
             const picture = window.App.user.image
 

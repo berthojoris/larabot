@@ -69,9 +69,6 @@ export default {
             .listen('OnlineStatus', function (e) {
                 if(e.type == 'clean') {
                     vue.pusharr = null
-                    console.log("JIKA DELETE")
-                    console.log("==============")
-                    console.log(vue.pusharr)
                 } else {
                     vue.pusharr = e.pushchat
                 }

@@ -1836,9 +1836,6 @@ __webpack_require__.r(__webpack_exports__);
     }).listen('OnlineStatus', function (e) {
       if (e.type == 'clean') {
         vue.pusharr = null;
-        console.log("JIKA DELETE");
-        console.log("==============");
-        console.log(vue.pusharr);
       } else {
         vue.pusharr = e.pushchat;
       }
@@ -1999,7 +1996,7 @@ __webpack_require__.r(__webpack_exports__);
     whenFirstInit: function whenFirstInit() {
       this.firstEmpty = true;
       this.emptyChat = false;
-      this.typeChatHere = false;
+      this.typeChatHere = true;
       this.loadStatus = false;
       this.alreadyOpen = false;
       this.$nextTick(function () {
@@ -2030,6 +2027,7 @@ __webpack_require__.r(__webpack_exports__);
     sendMessage: function sendMessage() {
       if (this.messagetext.trim().length < 1) return;
       this.whenChatReady();
+      $("span#" + this.id).removeClass().addClass('contact-status online');
       var picture = window.App.user.image;
       this.chats.push({
         sender_id: this.idLogged,
