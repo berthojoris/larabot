@@ -26,4 +26,4 @@ Route::get('/randomchat', 'ChatController@randomChat');
 
 //TELEGRAM
 Route::get('/me', 'TelegramController@me');
-Route::get('/sendmsg', 'TelegramController@sendmsg');
+Route::get('/sendmsg/{username}', 'TelegramController@sendmsg');

@@ -9,11 +9,6 @@ class TelegramController extends Controller
 {
     public function me()
     {
-        // $env = env('TELEGRAM_BOT_TOKEN');
-        // $client = new \GuzzleHttp\Client();
-        // $res = $client->request('GET', "https://api.telegram.org/bot707434480:AAGsDoc4tSudDB1F4nWKGXYKDyQxHi4tL7A/getMe");
-        // return json_decode($res->getBody(), true);
-
         $response = Telegram::getMe();
 
         $botId = $response->getId();
@@ -23,10 +18,10 @@ class TelegramController extends Controller
         dd($response);
     }
 
-    public function sendmsg()
+    public function sendmsg($username)
     {
         $response = Telegram::sendMessage([
-            'chat_id' => '@berthojoris', 
+            'chat_id' => $username, 
             'text' => 'Hai Bertho'
         ]);
         $messageId = $response->getMessageId();
