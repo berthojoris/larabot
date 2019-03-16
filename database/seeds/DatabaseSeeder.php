@@ -53,25 +53,7 @@ class DatabaseSeeder extends Seeder
         ];
         User::insert($data);
 
-        $chat = [
-            [
-                'sender_id' => 1,
-                'receive_id' => 2,
-                'message' => 'Pa kabar masbro...Lama gak liat ne. Gw baru dikabarin sama anak2 kemaren sore',
-            ],
-            [
-                'sender_id' => 1,
-                'receive_id' => 2,
-                'message' => 'Eh btw besok anak2 ajakin ngumpul tuh. Gmna? Ikut gak? Anak2 mau pada ngumpul di bandung',
-            ],
-            [
-                'sender_id' => 2,
-                'receive_id' => 1,
-                'message' => 'Siap 86 gan..Ane ikut. Nanti besok ketemuan di rest area 20 aja ya',
-            ],
-        ];
-        Chat::insert($chat);
-
         $this->call(NewsTableSeeder::class);
+        $this->call(BillingTableSeed::class);
     }
 }

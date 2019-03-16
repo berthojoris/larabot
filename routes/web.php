@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
 /*
@@ -15,6 +16,10 @@ use Telegram\Bot\Laravel\Facades\Telegram;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/carbon', function () {
+    return Carbon::now();
 });
 
 Route::view('/chat', 'chat')->middleware('auth');
