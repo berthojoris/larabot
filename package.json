@@ -24,6 +24,7 @@
     },
     "dependencies": {
         "laravel-echo": "^1.5.3",
+        "localStorage": "^1.0.4",
         "pusher-js": "^4.4.0",
         "random-words": "^1.1.0",
         "toastr": "^2.1.4",
