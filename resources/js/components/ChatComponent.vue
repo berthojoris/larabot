@@ -65,13 +65,13 @@ export default {
                 this.participants = notMe
             })
             .joining(user => this.participants.push(user))
-            .leaving(user => this.participants.splice(this.participants.indexOf(user), 1))
+            .leaving(user => {
+                this.participants.splice(this.participants.indexOf(user), 1)
+                this.id = null
+            })
             .listen('OnlineStatus', function (e) {
                 if(e.type == 'clean') {
-                    vue.pusharr = null
-                    vue.$nextTick(() => {
-                        $("li.contact").removeClass().addClass('contact')
-                    })
+                    location.reload()
                 } else {
                     vue.pusharr = e.pushchat
                 }
@@ -79,7 +79,13 @@ export default {
     },
     methods: {
         clean() {
-            this.pusharr = null
+            axios.get('/delete')
+            .then((response) => {
+                location.reload()
+            })
+            .catch((error) => {
+                alert("Error delete data")
+            })
         },
         openChatViaID(id, image, name) {
             this.id = id,
@@ -99,7 +105,7 @@ export default {
             })
             .catch((error) => {
                 console.log(error);
-            });
+            })
         }
     }
 }

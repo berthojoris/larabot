@@ -1832,13 +1832,12 @@ __webpack_require__.r(__webpack_exports__);
     }).joining(function (user) {
       return _this.participants.push(user);
     }).leaving(function (user) {
-      return _this.participants.splice(_this.participants.indexOf(user), 1);
+      _this.participants.splice(_this.participants.indexOf(user), 1);
+
+      _this.id = null;
     }).listen('OnlineStatus', function (e) {
       if (e.type == 'clean') {
-        vue.pusharr = null;
-        vue.$nextTick(function () {
-          $("li.contact").removeClass().addClass('contact');
-        });
+        location.reload();
       } else {
         vue.pusharr = e.pushchat;
       }
@@ -1846,7 +1845,11 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     clean: function clean() {
-      this.pusharr = null;
+      axios.get('/delete').then(function (response) {
+        location.reload();
+      }).catch(function (error) {
+        alert("Error delete data");
+      });
     },
     openChatViaID: function openChatViaID(id, image, name) {
       this.id = id, this.image = image;
@@ -1958,8 +1961,7 @@ __webpack_require__.r(__webpack_exports__);
       idLogged: null,
       typeChatHere: false,
       firstEmpty: true,
-      alreadyOpen: false,
-      userOpenedChat: null
+      alreadyOpen: false
     };
   },
   mounted: function mounted() {
@@ -1982,7 +1984,6 @@ __webpack_require__.r(__webpack_exports__);
             type: 'replies',
             message: val.message
           });
-          console.log(val.sender_id);
         }
       } else {
         this.chats = [];

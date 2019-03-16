@@ -57,8 +57,7 @@ export default {
             idLogged: null,
             typeChatHere: false,
             firstEmpty: true,
-            alreadyOpen: false,
-            userOpenedChat: null
+            alreadyOpen: false
         }
     },
     mounted() {
@@ -82,7 +81,6 @@ export default {
                         type: 'replies',
                         message: val.message
                     })
-                    console.log(val.sender_id)
                 }
             } else {
                 this.chats = []
