@@ -61,7 +61,7 @@ export default {
 
         this.channel
             .here(users => {
-                var notMe = __.without(users, __.findWhere(users, {id: window.App.user.id}));
+                var notMe = __.without(users, __.findWhere(users, {id: window.App.user.id}))
                 this.participants = notMe
             })
             .joining(user => this.participants.push(user))
@@ -84,7 +84,7 @@ export default {
                 location.reload()
             })
             .catch((error) => {
-                alert("Error delete data")
+                toastr.error("Error when delete data. Please reload page manual")
             })
         },
         openChatViaID(id, image, name) {

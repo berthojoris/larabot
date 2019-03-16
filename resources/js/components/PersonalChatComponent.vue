@@ -130,6 +130,12 @@ export default {
         },
         sendMessage() {
             if (this.messagetext.trim().length < 1) return;
+
+            if(this.id == null) {
+                toastr.warning("Select the user before starting the conversation")
+                return
+            }
+
             this.whenChatReady()
 
             $("span#" + this.id).removeClass().addClass('contact-status online')
@@ -206,7 +212,6 @@ export default {
         },
         saveChatToDB() {
             const userID = window.App.user.id
-
             axios.post('/api/chat/insert', {
                     message: this.messagetext,
                     sender_id: userID,

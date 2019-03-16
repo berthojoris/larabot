@@ -13,6 +13,7 @@ try {
     window.VueScrollTo = require('vue-scrollto');
     window.RandomWords = require('random-words');
     window.__ = require('underscore');
+    window.toastr = require('toastr');
 
     require('bootstrap');
 } catch (e) {}
@@ -26,6 +27,23 @@ try {
 window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+window.toastr.options = {
+    "closeButton": true,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+}
 
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
