@@ -1982,6 +1982,7 @@ __webpack_require__.r(__webpack_exports__);
             type: 'replies',
             message: val.message
           });
+          console.log(val.sender_id);
         }
       } else {
         this.chats = [];

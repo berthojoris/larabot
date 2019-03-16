@@ -66,13 +66,13 @@ export default {
         this.idLogged = window.App.user.id
     },
     watch: {
-        id: function(val) {
+        id: function (val) {
             console.log("SAMPE DI CHILD")
             this.getChatList(val)
         },
-        pushdata: function(val) {
-            if(!_.isEmpty(val)) {
-                if(this.alreadyOpen) {
+        pushdata: function (val) {
+            if (!_.isEmpty(val)) {
+                if (this.alreadyOpen) {
                     this.whenChatReady()
 
                     this.chats.push({
@@ -82,17 +82,18 @@ export default {
                         type: 'replies',
                         message: val.message
                     })
+                    console.log(val.sender_id)
                 }
             } else {
                 this.chats = []
                 this.whenFirstInit()
             }
-            if(!_.isEmpty(this.chats)) {
+            if (!_.isEmpty(this.chats)) {
                 this.$nextTick(() => {
                     VueScrollTo.scrollTo("div.messages ul li:last-child", 0, {
                         container: '.messages'
                     })
-                    $("span#"+val.sender_id).removeClass().addClass('contact-status online')
+                    $("span#" + val.sender_id).removeClass().addClass('contact-status online')
                 })
             }
         }
@@ -133,7 +134,7 @@ export default {
             if (this.messagetext.trim().length < 1) return;
             this.whenChatReady()
 
-            $("span#"+this.id).removeClass().addClass('contact-status online')
+            $("span#" + this.id).removeClass().addClass('contact-status online')
 
             const picture = window.App.user.image
 
@@ -145,16 +146,16 @@ export default {
                 message: this.messagetext
             })
 
-            if(!_.isEmpty(this.chats)) {
-                $("span#"+this.id).removeClass().addClass('contact-status online')
+            if (!_.isEmpty(this.chats)) {
+                $("span#" + this.id).removeClass().addClass('contact-status online')
 
-                if(this.messagetext.length > 10) {
-                    var limitStr = this.messagetext.substring(0, 32)+" ..."
+                if (this.messagetext.length > 10) {
+                    var limitStr = this.messagetext.substring(0, 32) + " ..."
                 } else {
                     var limitStr = this.messagetext
                 }
 
-                $("div.meta").find("p#"+this.id).empty().html(limitStr)
+                $("div.meta").find("p#" + this.id).empty().html(limitStr)
                 this.$nextTick(() => {
                     VueScrollTo.scrollTo("div.messages ul li:last-child", 0, {
                         container: '.messages'
@@ -167,7 +168,10 @@ export default {
             this.messagetext = this.upperFirst()
         },
         upperFirst() {
-            var str = RandomWords({ exactly: 15, join: ' ' })
+            var str = RandomWords({
+                exactly: 15,
+                join: ' '
+            })
             return str.charAt(0).toUpperCase() + str.slice(1)
         },
         getChatList(receiverID) {
@@ -178,44 +182,44 @@ export default {
 
             this.whenLoading()
 
-            axios.get('/api/chat/list/'+userID+'/'+receiverID)
-            .then((response) => {
-                this.loadStatus = false
-                let chatDB = response.data
-                this.chats = chatDB
+            axios.get('/api/chat/list/' + userID + '/' + receiverID)
+                .then((response) => {
+                    this.loadStatus = false
+                    let chatDB = response.data
+                    this.chats = chatDB
 
-                if(!_.isEmpty(this.chats)) {
-                    this.whenChatReady()
-                    this.$nextTick(() => {
-                        VueScrollTo.scrollTo("div.messages ul li:last-child", 0, {
-                            container: '.messages'
+                    if (!_.isEmpty(this.chats)) {
+                        this.whenChatReady()
+                        this.$nextTick(() => {
+                            VueScrollTo.scrollTo("div.messages ul li:last-child", 0, {
+                                container: '.messages'
+                            })
                         })
-                    })
-                } else {
+                    } else {
+                        this.whenNoChat()
+                    }
+                })
+                .catch((error) => {
                     this.whenNoChat()
-                }
-            })
-            .catch((error) => {
-                this.whenNoChat()
-            })
-            .then(function() {
-                
-            });
+                })
+                .then(function () {
+
+                });
         },
         saveChatToDB() {
             const userID = window.App.user.id
 
             axios.post('/api/chat/insert', {
-                message: this.messagetext,
-                sender_id: userID,
-                receive_id: this.id
-            })
-            .then((response) => {
-                this.getRandomChat()
-            })
-            .catch((error) => {
-                this.getRandomChat()
-            });
+                    message: this.messagetext,
+                    sender_id: userID,
+                    receive_id: this.id
+                })
+                .then((response) => {
+                    this.getRandomChat()
+                })
+                .catch((error) => {
+                    this.getRandomChat()
+                });
         }
     }
 }
@@ -230,6 +234,7 @@ export default {
     padding: 10px;
     text-align: center;
 }
+
 .centerText {
     margin-top: 40%;
     font-size: 25px;
