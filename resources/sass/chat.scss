@@ -666,4 +666,7 @@ body {
  #frame .content .message-input .wrap button:focus {
     outline: none;
  }
+ @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,300');
+ @import 'chatfontawesome';
+ @import 'loader';
  @import 'toastr';
