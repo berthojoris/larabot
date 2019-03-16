@@ -19,7 +19,13 @@ Route::get('/', function () {
 });
 
 Route::get('/carbon', function () {
-    return Carbon::now();
+    $datetime = Carbon::now();
+    $output = $datetime->toDateTimeString();
+
+    $dt = Carbon::create($output);
+    $fiveDays = $dt->addDays(2)->toDateTimeString();
+
+    return $fiveDays;
 });
 
 Route::view('/chat', 'chat')->middleware('auth');
