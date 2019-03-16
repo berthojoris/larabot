@@ -71,5 +71,7 @@ class DatabaseSeeder extends Seeder
             ],
         ];
         Chat::insert($chat);
+
+        $this->call(NewsTableSeeder::class);
     }
 }
