@@ -97,6 +97,9 @@ export default {
         }
     },
     methods: {
+        tagPeers() {
+            this.$emit('typeNow', window.App.user.name)
+        },
         whenFirstInit() {
             this.firstEmpty = true
             this.emptyChat = false

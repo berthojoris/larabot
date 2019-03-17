@@ -1791,12 +1791,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1809,7 +1803,9 @@ __webpack_require__.r(__webpack_exports__);
       participants: [],
       toRemove: [],
       incomingMsgIcon: 'active',
-      idToSend: null
+      idToSend: null,
+      activePeer: false,
+      typingTimer: false
     };
   },
   computed: {
@@ -1817,11 +1813,9 @@ __webpack_require__.r(__webpack_exports__);
       return window.Echo.join('online');
     }
   },
-  mounted: function mounted() {
+  created: function created() {
     var _this = this;
 
-    this.getUserList();
-    this.idLogged = window.App.user.id;
     var vue = this;
     this.channel.here(function (users) {
       var notMe = __.without(users, __.findWhere(users, {
@@ -1841,9 +1835,30 @@ __webpack_require__.r(__webpack_exports__);
       } else {
         vue.pusharr = e.pushchat;
       }
-    });
+    }).listenForWhisper('typing', this.whisperAction);
+  },
+  mounted: function mounted() {
+    this.getUserList();
+    this.idLogged = window.App.user.id;
   },
   methods: {
+    listenType: function listenType() {
+      this.channel.whisper('typing', {
+        name: window.App.user.name
+      });
+      console.log("listenType");
+    },
+    whisperAction: function whisperAction(e) {
+      var _this2 = this;
+
+      console.log("whisperAction");
+      console.log(e);
+      this.activePeer = e;
+      if (this.typingTimer) clearTimeout(this.typingTimer);
+      this.typingTimer = setTimeout(function () {
+        return _this2.activePeer = false;
+      }, 3000);
+    },
     clean: function clean() {
       axios.get('/delete').then(function (response) {
         location.reload();
@@ -1860,11 +1875,11 @@ __webpack_require__.r(__webpack_exports__);
       this.idToSend = sentid;
     },
     getUserList: function getUserList() {
-      var _this2 = this;
+      var _this3 = this;
 
       var userID = window.App.user.id;
       axios.get('/api/user/online/' + userID).then(function (response) {
-        _this2.userlist = response.data;
+        _this3.userlist = response.data;
       }).catch(function (error) {
         console.log(error);
       });
@@ -2001,6 +2016,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    tagPeers: function tagPeers() {
+      this.$emit('typeNow', window.App.user.name);
+    },
     whenFirstInit: function whenFirstInit() {
       this.firstEmpty = true;
       this.emptyChat = false;
@@ -50666,7 +50684,22 @@ var render = function() {
         [
           _c("comp-profile", { on: { del: _vm.clean } }),
           _vm._v(" "),
-          _c("comp-search"),
+          _c("div", { attrs: { id: "search" } }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("input", {
+              attrs: { type: "text", placeholder: "Search contacts..." },
+              on: { keydown: _vm.listenType }
+            })
+          ]),
+          _vm._v(" "),
+          _vm.activePeer
+            ? _c("span", {
+                domProps: {
+                  textContent: _vm._s(_vm.activePeer.name + " is typing...")
+                }
+              })
+            : _vm._e(),
           _vm._v(" "),
           _c("div", { attrs: { id: "contacts" } }, [
             _c(
@@ -50704,7 +50737,16 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "" } }, [
+      _c("i", { staticClass: "fa fa-search", attrs: { "aria-hidden": "true" } })
+    ])
+  }
+]
 render._withStripped = true
 
 
