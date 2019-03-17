@@ -5,7 +5,7 @@
 
         <div id="search">
             <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
-            <input type="text" placeholder="Search contacts..." @keydown="listenType"/>
+            <input type="text" placeholder="Search contacts..."/>
         </div>
 
         <span v-if="activePeer" v-text="activePeer.name + ' is typing...'"></span>
@@ -20,7 +20,7 @@
         <comp-menu></comp-menu>
     </div>
 
-    <comp-personal-chat :pushdata="pusharr" :id="id" :img="image" :name="name" @chatWith="chatWithID">
+    <comp-personal-chat :pushdata="pusharr" :id="id" :img="image" :name="name" @chatWith="chatWithID" @typeNow="listenType">
     </comp-personal-chat>
 
 </div>
@@ -80,7 +80,6 @@ export default {
     methods: {
         listenType() {
             this.channel.whisper('typing',{ name: window.App.user.name })
-            console.log("listenType")
         },
         whisperAction(e) {
             console.log("whisperAction")

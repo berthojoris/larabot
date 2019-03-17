@@ -37,7 +37,7 @@
     </div>
     <div v-if="typeChatHere" class="message-input">
         <div class="wrap">
-            <input type="text" @keyup.enter="sendMessage" v-model="messagetext" placeholder="Write your message..." />
+            <input type="text" @keydown="tagPeers" @keyup.enter="sendMessage" v-model="messagetext" placeholder="Write your message..." />
             <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
             <button @click="sendMessage" class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
         </div>

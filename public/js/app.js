@@ -1846,7 +1846,6 @@ __webpack_require__.r(__webpack_exports__);
       this.channel.whisper('typing', {
         name: window.App.user.name
       });
-      console.log("listenType");
     },
     whisperAction: function whisperAction(e) {
       var _this2 = this;
@@ -50684,14 +50683,7 @@ var render = function() {
         [
           _c("comp-profile", { on: { del: _vm.clean } }),
           _vm._v(" "),
-          _c("div", { attrs: { id: "search" } }, [
-            _vm._m(0),
-            _vm._v(" "),
-            _c("input", {
-              attrs: { type: "text", placeholder: "Search contacts..." },
-              on: { keydown: _vm.listenType }
-            })
-          ]),
+          _vm._m(0),
           _vm._v(" "),
           _vm.activePeer
             ? _c("span", {
@@ -50731,7 +50723,7 @@ var render = function() {
           img: _vm.image,
           name: _vm.name
         },
-        on: { chatWith: _vm.chatWithID }
+        on: { chatWith: _vm.chatWithID, typeNow: _vm.listenType }
       })
     ],
     1
@@ -50742,8 +50734,17 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("label", { attrs: { for: "" } }, [
-      _c("i", { staticClass: "fa fa-search", attrs: { "aria-hidden": "true" } })
+    return _c("div", { attrs: { id: "search" } }, [
+      _c("label", { attrs: { for: "" } }, [
+        _c("i", {
+          staticClass: "fa fa-search",
+          attrs: { "aria-hidden": "true" }
+        })
+      ]),
+      _vm._v(" "),
+      _c("input", {
+        attrs: { type: "text", placeholder: "Search contacts..." }
+      })
     ])
   }
 ]
@@ -50910,6 +50911,7 @@ var render = function() {
               attrs: { type: "text", placeholder: "Write your message..." },
               domProps: { value: _vm.messagetext },
               on: {
+                keydown: _vm.tagPeers,
                 keyup: function($event) {
                   if (
                     !$event.type.indexOf("key") &&
