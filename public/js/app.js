@@ -1978,8 +1978,7 @@ __webpack_require__.r(__webpack_exports__);
       typeChatHere: false,
       firstEmpty: true,
       alreadyOpen: false,
-      activePeer: false,
-      isActive: false
+      activePeer: false
     };
   },
   mounted: function mounted() {
@@ -1988,7 +1987,6 @@ __webpack_require__.r(__webpack_exports__);
   watch: {
     typeIndi: function typeIndi() {
       this.activePeer = this.typeIndi;
-      this.isActive = this.typeIndi;
     },
     id: function id(val) {
       console.log("SAMPE DI CHILD");
@@ -50914,7 +50912,7 @@ var render = function() {
           _c("div", [
             _c("img", { attrs: { src: _vm.img } }),
             _vm._v(" "),
-            _c("p", { class: { nameUp: _vm.isActive } }, [
+            _c("p", { class: { nameUp: _vm.activePeer } }, [
               _vm._v(_vm._s(_vm.name))
             ]),
             _vm._v(" "),
