@@ -8,6 +8,7 @@
     <link rel="icon" href="{{ asset('favicon.ico') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="{{ asset('css/chat.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/chatfont.css') }}" rel="stylesheet">
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script>window.App = <?= json_encode(['user' => auth()->user()]) ?></script>
     <style>

@@ -1855,7 +1855,7 @@ __webpack_require__.r(__webpack_exports__);
       if (this.typingTimer) clearTimeout(this.typingTimer);
       this.typingTimer = setTimeout(function () {
         return _this2.typingIndicator = false;
-      }, 100);
+      }, 1000);
     },
     clean: function clean() {
       axios.get('/delete').then(function (response) {
@@ -1978,7 +1978,8 @@ __webpack_require__.r(__webpack_exports__);
       typeChatHere: false,
       firstEmpty: true,
       alreadyOpen: false,
-      activePeer: false
+      activePeer: false,
+      isActive: false
     };
   },
   mounted: function mounted() {
@@ -1987,6 +1988,7 @@ __webpack_require__.r(__webpack_exports__);
   watch: {
     typeIndi: function typeIndi() {
       this.activePeer = this.typeIndi;
+      this.isActive = this.typeIndi;
     },
     id: function id(val) {
       console.log("SAMPE DI CHILD");
@@ -6767,7 +6769,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.center[data-v-298d7b6c] {\r\n    margin-top: 40%;\r\n    margin-left: 20%;\r\n    width: 60%;\r\n    border: 3px solid #73AD21;\r\n    padding: 10px;\r\n    text-align: center;\n}\n.centerText[data-v-298d7b6c] {\r\n    margin-top: 40%;\r\n    font-size: 25px;\r\n    width: 100%;\r\n    text-align: center;\n}\n.typeIndicator[data-v-298d7b6c] {\r\n    position: absolute; \r\n    left: 62px; \r\n    top: 11px; \r\n    font-size: 12px; \r\n    font-style: italic;\n}\r\n", ""]);
+exports.push([module.i, "\n.center[data-v-298d7b6c] {\r\n    margin-top: 40%;\r\n    margin-left: 20%;\r\n    width: 60%;\r\n    border: 3px solid #73AD21;\r\n    padding: 10px;\r\n    text-align: center;\n}\n.centerText[data-v-298d7b6c] {\r\n    margin-top: 40%;\r\n    font-size: 25px;\r\n    width: 100%;\r\n    text-align: center;\n}\n.typeIndicator[data-v-298d7b6c] {\r\n    position: absolute; \r\n    left: 62px; \r\n    top: 11px; \r\n    font-size: 12px; \r\n    font-style: italic;\n}\n.nameUp[data-v-298d7b6c] {\r\n    margin-top: -5px;\n}\r\n", ""]);
 
 // exports
 
@@ -50912,7 +50914,7 @@ var render = function() {
           _c("div", [
             _c("img", { attrs: { src: _vm.img } }),
             _vm._v(" "),
-            _c("p", { staticStyle: { "margin-top": "-5px" } }, [
+            _c("p", { class: { nameUp: _vm.isActive } }, [
               _vm._v(_vm._s(_vm.name))
             ]),
             _vm._v(" "),

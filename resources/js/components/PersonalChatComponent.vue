@@ -20,7 +20,7 @@
     <div v-if="chats.length" class="contact-profile">
         <div>
             <img :src="img">
-             <p style="margin-top: -5px;">{{ name }}</p>
+             <p v-bind:class="{ nameUp: isActive }">{{ name }}</p>
              <div v-if="activePeer" class="typeIndicator"> Is Typing ...</div>
         </div>
         <div class="social-media">
@@ -61,7 +61,8 @@ export default {
             typeChatHere: false,
             firstEmpty: true,
             alreadyOpen: false,
-            activePeer: false
+            activePeer: false,
+            isActive: false
         }
     },
     mounted() {
@@ -70,6 +71,7 @@ export default {
     watch: {
         typeIndi: function() {
             this.activePeer = this.typeIndi
+            this.isActive = this.typeIndi
         },
         id: function (val) {
             console.log("SAMPE DI CHILD")
@@ -259,5 +261,8 @@ export default {
     top: 11px; 
     font-size: 12px; 
     font-style: italic;
+}
+.nameUp {
+    margin-top: -5px;
 }
 </style>

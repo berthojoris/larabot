@@ -87,7 +87,7 @@ export default {
             if (this.typingTimer) clearTimeout(this.typingTimer);
             this.typingTimer = setTimeout(
                 () => this.typingIndicator = false,
-                100
+                1000
             );
         },
         clean() {
