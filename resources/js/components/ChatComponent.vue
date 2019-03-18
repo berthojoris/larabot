@@ -8,11 +8,11 @@
             <input type="text" placeholder="Search contacts..."/>
         </div>
 
-        <span v-if="activePeer" v-text="activePeer.name + ' is typing...'"></span>
+        <!-- <span v-if="activePeer" v-text="activePeer.name + ' is typing...'"></span> -->
 
         <div id="contacts">
             <ul>
-                <comp-user-list v-for="(user, index) in participants" :key="index" :user="user" :idToSend="idToSend" :pushdata="pusharr" @openChatNow="openChatViaID">
+                <comp-user-list v-for="(user, index) in participants" :key="index" :user="user" :idToSend="idToSend" :pushdata="pusharr" @openChatNow="openChatViaID" :typeIndi="typingIndicator">
                 </comp-user-list>
             </ul>
         </div>
@@ -20,7 +20,7 @@
         <comp-menu></comp-menu>
     </div>
 
-    <comp-personal-chat :pushdata="pusharr" :id="id" :img="image" :name="name" @chatWith="chatWithID" @typeNow="listenType">
+    <comp-personal-chat :pushdata="pusharr" :id="id" :img="image" :name="name" @chatWith="chatWithID" @typeNow="listenType" :typeIndi="typingIndicator">
     </comp-personal-chat>
 
 </div>
@@ -41,7 +41,8 @@ export default {
             incomingMsgIcon: 'active',
             idToSend: null,
             activePeer: false,
-            typingTimer: false
+            typingTimer: false,
+            typingIndicator: false
         }
     },
     computed: {
@@ -82,14 +83,11 @@ export default {
             this.channel.whisper('typing',{ name: window.App.user.name })
         },
         whisperAction(e) {
-            console.log("whisperAction")
-            console.log(e)
-
-            this.activePeer = e;
+            this.typingIndicator = e;
             if (this.typingTimer) clearTimeout(this.typingTimer);
             this.typingTimer = setTimeout(
-                () => this.activePeer = false,
-                3000
+                () => this.typingIndicator = false,
+                100
             );
         },
         clean() {

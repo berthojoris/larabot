@@ -5,7 +5,10 @@
             <span at :id="user.id" class="contact-status online"></span>
             <img :src="user.image">
             <div class="meta">
-                <p class="name" v-text="user.name"></p>
+                <div >
+                    <p class="name" v-text="user.name" style="display: inline-block;"></p>
+                    <p v-if="activePeer" class="typingNotif" id="typingNotif"> is typing...</p>
+                </div>
                 <p class="preview" :id="user.id" v-text="this.lastChat"></p>
             </div>
         </div>
@@ -15,14 +18,18 @@
 
 <script>
 export default {
-    props: ['user', 'senderID', 'receiveID', 'message', 'pushdata', 'idToSend'],
+    props: ['user', 'senderID', 'receiveID', 'message', 'pushdata', 'idToSend', 'typeIndi'],
     data() {
         return {
             online: true,
-            lastChat: 'Click to start chat'
+            lastChat: 'Click to start chat',
+            activePeer: false
         }
     },
     watch: {
+        typeIndi: function() {
+            this.activePeer = this.typeIndi
+        },
         idToSend: function() {
             this.$nextTick(() => {
                 $("span#"+this.idToSend).removeClass().addClass('contact-status online')
@@ -56,5 +63,9 @@ export default {
 </script>
 
 <style scoped>
-
+.typingNotif {
+    display: inline-block;
+    font-style: italic;
+    color: greenyellow;
+}
 </style>

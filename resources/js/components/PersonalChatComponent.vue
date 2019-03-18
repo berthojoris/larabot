@@ -18,8 +18,11 @@
     </div>
 
     <div v-if="chats.length" class="contact-profile">
-        <img :src="img">
-        <p>{{ name }}</p>
+        <div>
+            <img :src="img">
+             <p style="margin-top: -5px;">{{ name }}</p>
+             <div v-if="activePeer" class="typeIndicator"> Is Typing ...</div>
+        </div>
         <div class="social-media">
             <i class="fa fa-facebook" aria-hidden="true"></i>
             <i class="fa fa-twitter" aria-hidden="true"></i>
@@ -47,7 +50,7 @@
 
 <script>
 export default {
-    props: ['id', 'img', 'name', 'pushdata'],
+    props: ['id', 'img', 'name', 'pushdata', 'typeIndi'],
     data() {
         return {
             messagetext: '',
@@ -57,14 +60,17 @@ export default {
             idLogged: null,
             typeChatHere: false,
             firstEmpty: true,
-            alreadyOpen: false
+            alreadyOpen: false,
+            activePeer: false
         }
     },
     mounted() {
-        this.getRandomChat()
         this.idLogged = window.App.user.id
     },
     watch: {
+        typeIndi: function() {
+            this.activePeer = this.typeIndi
+        },
         id: function (val) {
             console.log("SAMPE DI CHILD")
             this.getChatList(val)
@@ -221,10 +227,10 @@ export default {
                     receive_id: this.id
                 })
                 .then((response) => {
-                    this.getRandomChat()
+                    this.messagetext = ''
                 })
                 .catch((error) => {
-                    this.getRandomChat()
+                    
                 });
         }
     }
@@ -246,5 +252,12 @@ export default {
     font-size: 25px;
     width: 100%;
     text-align: center;
+}
+.typeIndicator {
+    position: absolute; 
+    left: 62px; 
+    top: 11px; 
+    font-size: 12px; 
+    font-style: italic;
 }
 </style>
