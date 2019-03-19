@@ -325,7 +325,7 @@ body {
  }
  #frame #sidepanel #contacts {
     height: calc(100% - 177px);
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
  }
  @media screen and (max-width: 735px) {
