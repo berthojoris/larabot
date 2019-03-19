@@ -1,3 +1,4 @@
+// https://stackoverflow.com/questions/51766297/how-to-show-laravel-vue-js-errors
 class ErrorBag {
     constructor(errors = {}) {
         this.setErrors(errors);

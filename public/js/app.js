@@ -63922,6 +63922,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+// https://stackoverflow.com/questions/51766297/how-to-show-laravel-vue-js-errors
 var ErrorBag =
 /*#__PURE__*/
 function () {
