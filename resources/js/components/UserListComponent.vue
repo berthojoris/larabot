@@ -23,7 +23,8 @@ export default {
         return {
             online: true,
             lastChat: 'Click to start chat',
-            activePeer: false
+            activePeer: false,
+            chatStatus: false
         }
     },
     watch: {
@@ -42,7 +43,9 @@ export default {
             if(!_.isEmpty(val)) {
                 this.$nextTick(() => {
                     if(val.receive_id == window.App.user.id) {
-                        $("span#"+val.sender_id).removeClass().addClass('contact-status busy')
+                        if(!this.chatStatus) {
+                            $("span#"+val.sender_id).removeClass().addClass('contact-status busy')
+                        }
                     }
                 })
             }
@@ -51,6 +54,7 @@ export default {
     methods: {
         openChat: function(id, image, name) {
             this.$emit('openChatNow', id, image, name)
+            this.chatStatus = true
         },
         activate: function(id) {
             $('body').on('click', 'li', function() {
