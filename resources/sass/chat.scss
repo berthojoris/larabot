@@ -621,6 +621,7 @@ body {
     bottom: 0;
     width: 100%;
     z-index: 99;
+    margin-bottom: 2px;
  }
  #frame .content .message-input .wrap {
     position: relative;
@@ -631,7 +632,7 @@ body {
     border: none;
     width: calc(100% - 90px);
     padding: 11px 32px 10px 8px;
-    font-size: 0.8em;
+    font-size: 1em;
     color: #32465a;
  }
  @media screen and (max-width: 735px) {
