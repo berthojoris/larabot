@@ -8,16 +8,12 @@
             <input type="text" placeholder="Search contacts..."/>
         </div>
 
-        <!-- <span v-if="activePeer" v-text="activePeer.name + ' is typing...'"></span> -->
-
         <div id="contacts">
             <ul>
                 <comp-user-list v-for="(user, index) in participants" :key="index" :user="user" :idToSend="idToSend" :pushdata="pusharr" @openChatNow="openChatViaID" :typeIndi="typingIndicator">
                 </comp-user-list>
             </ul>
         </div>
-
-        <comp-menu></comp-menu>
     </div>
 
     <comp-personal-chat :pushdata="pusharr" :id="id" :img="image" :name="name" @chatWith="chatWithID" @typeNow="listenType" :typeIndi="typingIndicator">
