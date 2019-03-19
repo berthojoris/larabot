@@ -23,6 +23,7 @@
 </template>
 
 <script>
+
 export default {
     data() {
         return {
@@ -97,9 +98,8 @@ export default {
         },
         openChatViaID(id, image, name) {
             this.id = id,
-                this.image = image
+            this.image = image
             this.name = name
-            console.log("SAMPE DI PARENT")
         },
         chatWithID(sentid) {
             this.idToSend = sentid

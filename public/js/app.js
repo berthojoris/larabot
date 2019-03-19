@@ -1863,7 +1863,6 @@ __webpack_require__.r(__webpack_exports__);
     openChatViaID: function openChatViaID(id, image, name) {
       this.id = id, this.image = image;
       this.name = name;
-      console.log("SAMPE DI PARENT");
     },
     chatWithID: function chatWithID(sentid) {
       this.idToSend = sentid;
@@ -1912,6 +1911,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ErrorBag__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ErrorBag */ "./resources/js/ErrorBag.js");
 //
 //
 //
@@ -1962,6 +1962,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['id', 'img', 'name', 'pushdata', 'typeIndi'],
   data: function data() {
@@ -1974,7 +1976,8 @@ __webpack_require__.r(__webpack_exports__);
       typeChatHere: false,
       firstEmpty: true,
       alreadyOpen: false,
-      activePeer: false
+      activePeer: false,
+      errors: new _ErrorBag__WEBPACK_IMPORTED_MODULE_0__["default"]()
     };
   },
   mounted: function mounted() {
@@ -1985,7 +1988,6 @@ __webpack_require__.r(__webpack_exports__);
       this.activePeer = this.typeIndi;
     },
     id: function id(val) {
-      console.log("SAMPE DI CHILD");
       this.getChatList(val);
     },
     pushdata: function pushdata(val) {
@@ -2135,7 +2137,17 @@ __webpack_require__.r(__webpack_exports__);
         receive_id: this.id
       }).then(function (response) {
         _this2.messagetext = '';
-      }).catch(function (error) {});
+
+        _this2.errors.clearAll();
+      }).catch(function (error) {
+        if (error.response.status == 422) {
+          var errorsCollection = error.response.data.errors;
+
+          _this2.errors.setErrors(errorsCollection);
+
+          toastr.error(_this2.errors.first('message'));
+        }
+      });
     }
   }
 });
@@ -50965,6 +50977,7 @@ var render = function() {
                   expression: "messagetext"
                 }
               ],
+              ref: "writemsg",
               attrs: { type: "text", placeholder: "Write your message..." },
               domProps: { value: _vm.messagetext },
               on: {
@@ -63891,6 +63904,81 @@ module.exports = function(module) {
 	return module;
 };
 
+
+/***/ }),
+
+/***/ "./resources/js/ErrorBag.js":
+/*!**********************************!*\
+  !*** ./resources/js/ErrorBag.js ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var ErrorBag =
+/*#__PURE__*/
+function () {
+  function ErrorBag() {
+    var errors = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    _classCallCheck(this, ErrorBag);
+
+    this.setErrors(errors);
+  }
+
+  _createClass(ErrorBag, [{
+    key: "hasErrors",
+    value: function hasErrors() {
+      return !!this.keys.length;
+    }
+  }, {
+    key: "hasError",
+    value: function hasError(key) {
+      return this.keys.indexOf(key) > -1;
+    }
+  }, {
+    key: "firstKey",
+    value: function firstKey() {
+      return this.keys[0];
+    }
+  }, {
+    key: "first",
+    value: function first(key) {
+      return this.errors[key] ? this.errors[key][0] : undefined;
+    }
+  }, {
+    key: "setErrors",
+    value: function setErrors(errors) {
+      this.errors = errors;
+    }
+  }, {
+    key: "clearAll",
+    value: function clearAll() {
+      this.setErrors({});
+    }
+  }, {
+    key: "clear",
+    value: function clear(key) {
+      return delete this.errors[key];
+    }
+  }, {
+    key: "keys",
+    get: function get() {
+      return Object.keys(this.errors);
+    }
+  }]);
+
+  return ErrorBag;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (ErrorBag);
 
 /***/ }),
 

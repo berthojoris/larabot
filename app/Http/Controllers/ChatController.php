@@ -29,13 +29,17 @@ class ChatController extends Controller
         return ChatCollection::collection($data);
     }
 
-    public function insert()
+    public function insert(Request $request)
     {
-        $received = request('receive_id');
+        $request->validate([
+            'sender_id' => 'required',
+            'receive_id' => 'required',
+            'message' => 'required'
+        ]);
         
         $saved = Chat::create([
             'sender_id' => request('sender_id'),
-            'receive_id' => $received,
+            'receive_id' => request('receive_id'),
             'message' => request('message')
         ]);
 

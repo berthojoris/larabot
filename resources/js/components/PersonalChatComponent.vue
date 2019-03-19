@@ -39,8 +39,9 @@
         </ul>
     </div>
     <div v-if="typeChatHere" class="message-input">
+        <!-- <div class="invalid-feedback" v-if="errors.hasError('message')" >{{ errors.first('message') }}</div> -->
         <div class="wrap">
-            <input type="text" @keydown="tagPeers" @keyup.enter="sendMessage" v-model="messagetext" placeholder="Write your message..." />
+            <input ref="writemsg" type="text" @keydown="tagPeers" @keyup.enter="sendMessage" v-model="messagetext" placeholder="Write your message..." />
             <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
             <button @click="sendMessage" class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
         </div>
@@ -49,6 +50,8 @@
 </template>
 
 <script>
+import ErrorBag from '../ErrorBag'
+
 export default {
     props: ['id', 'img', 'name', 'pushdata', 'typeIndi'],
     data() {
@@ -61,7 +64,8 @@ export default {
             typeChatHere: false,
             firstEmpty: true,
             alreadyOpen: false,
-            activePeer: false
+            activePeer: false,
+            errors: new ErrorBag
         }
     },
     mounted() {
@@ -72,7 +76,6 @@ export default {
             this.activePeer = this.typeIndi
         },
         id: function (val) {
-            console.log("SAMPE DI CHILD")
             this.getChatList(val)
         },
         pushdata: function (val) {
@@ -222,16 +225,21 @@ export default {
         saveChatToDB() {
             const userID = window.App.user.id
             axios.post('/api/chat/insert', {
-                    message: this.messagetext,
-                    sender_id: userID,
-                    receive_id: this.id
-                })
-                .then((response) => {
-                    this.messagetext = ''
-                })
-                .catch((error) => {
-                    
-                });
+                message: this.messagetext,
+                sender_id: userID,
+                receive_id: this.id
+            })
+            .then((response) => {
+                this.messagetext = ''
+                this.errors.clearAll()
+            })
+            .catch((error) => {
+                if (error.response.status == 422) {
+                    const errorsCollection = error.response.data.errors
+                    this.errors.setErrors(errorsCollection)
+                    toastr.error(this.errors.first('message'))
+                }
+            });
         }
     }
 }
