@@ -6797,7 +6797,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.center[data-v-298d7b6c] {\r\n    margin-top: 40%;\r\n    margin-left: 20%;\r\n    width: 60%;\r\n    border: 3px solid #73AD21;\r\n    padding: 10px;\r\n    text-align: center;\n}\n.centerText[data-v-298d7b6c] {\r\n    margin-top: 40%;\r\n    font-size: 25px;\r\n    width: 100%;\r\n    text-align: center;\n}\n.typeIndicator[data-v-298d7b6c] {\r\n    position: absolute; \r\n    left: 62px; \r\n    top: 11px; \r\n    font-size: 12px; \r\n    font-style: italic;\n}\n.nameUp[data-v-298d7b6c] {\r\n    margin-top: -5px;\n}\n.showhide[data-v-298d7b6c] {\r\n    display: none;\n}\r\n", ""]);
+exports.push([module.i, "\n.center[data-v-298d7b6c] {\r\n    margin-top: 40%;\r\n    margin-left: 20%;\r\n    width: 60%;\r\n    border: 3px solid #73AD21;\r\n    padding: 10px;\r\n    text-align: center;\n}\n.centerText[data-v-298d7b6c] {\r\n    margin-top: 40%;\r\n    font-size: 25px;\r\n    width: 100%;\r\n    text-align: center;\n}\n.typeIndicator[data-v-298d7b6c] {\r\n    position: absolute; \r\n    left: 62px; \r\n    top: 11px; \r\n    font-size: 12px;\n}\n.nameUp[data-v-298d7b6c] {\r\n    margin-top: -5px;\n}\n.showhide[data-v-298d7b6c] {\r\n    display: none;\n}\r\n", ""]);
 
 // exports
 
@@ -50944,7 +50944,7 @@ var render = function() {
             _c("p", { staticClass: "normal" }, [_vm._v(_vm._s(_vm.name))]),
             _vm._v(" "),
             _c("div", { staticClass: "typeIndicator showhide" }, [
-              _vm._v(" Is Typing ...")
+              _vm._v(" is Typing ...")
             ])
           ]),
           _vm._v(" "),

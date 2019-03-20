@@ -21,7 +21,7 @@
         <div>
             <img :src="img">
              <p class="normal">{{ name }}</p>
-             <div class="typeIndicator showhide"> Is Typing ...</div>
+             <div class="typeIndicator showhide"> is Typing ...</div>
         </div>
         <div class="social-media">
             <i class="fa fa-facebook" aria-hidden="true"></i>
@@ -272,8 +272,7 @@ export default {
     position: absolute; 
     left: 62px; 
     top: 11px; 
-    font-size: 12px; 
-    font-style: italic;
+    font-size: 12px;
 }
 .nameUp {
     margin-top: -5px;
