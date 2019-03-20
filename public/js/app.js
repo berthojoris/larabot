@@ -1802,7 +1802,9 @@ __webpack_require__.r(__webpack_exports__);
       idToSend: null,
       activePeer: false,
       typingTimer: false,
-      typingIndicator: false
+      typingIndicator: null,
+      whisperTyping: null,
+      whisperReading: null
     };
   },
   computed: {
@@ -1839,18 +1841,18 @@ __webpack_require__.r(__webpack_exports__);
     this.idLogged = window.App.user.id;
   },
   methods: {
-    listenType: function listenType() {
-      this.channel.whisper('typing', {
-        name: window.App.user.name
-      });
+    listenType: function listenType(typingID, typingWithID) {
+      var datax = [typingID, window.App.user.name, typingWithID, 'show'];
+      this.channel.whisper('typing', datax);
     },
     whisperAction: function whisperAction(e) {
       var _this2 = this;
 
+      var dataWhisper = [e[0], window.App.user.name, e[2], 'hide'];
       this.typingIndicator = e;
       if (this.typingTimer) clearTimeout(this.typingTimer);
       this.typingTimer = setTimeout(function () {
-        return _this2.typingIndicator = false;
+        return _this2.typingIndicator = dataWhisper;
       }, 1000);
     },
     clean: function clean() {
@@ -1962,7 +1964,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['id', 'img', 'name', 'pushdata', 'typeIndi'],
@@ -1985,7 +1986,15 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     typeIndi: function typeIndi() {
-      this.activePeer = this.typeIndi;
+      if (this.typeIndi[3] == 'hide') {
+        $(".typeIndicator").removeClass().addClass("typeIndicator showhide");
+        $(".nameUp").removeClass().addClass("normal");
+      } else {
+        if (this.typeIndi[2] == window.App.user.id) {
+          $(".typeIndicator").removeClass().addClass("typeIndicator");
+          $(".normal").removeClass().addClass("nameUp");
+        }
+      }
     },
     id: function id(val) {
       this.getChatList(val);
@@ -2019,7 +2028,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     tagPeers: function tagPeers() {
-      this.$emit('typeNow', window.App.user.name);
+      this.$emit('typeNow', window.App.user.id, this.id);
     },
     whenFirstInit: function whenFirstInit() {
       this.firstEmpty = true;
@@ -2280,9 +2289,16 @@ __webpack_require__.r(__webpack_exports__);
       chatStatus: false
     };
   },
+  mounted: function mounted() {},
   watch: {
     typeIndi: function typeIndi() {
-      this.activePeer = this.typeIndi;
+      if (this.typeIndi[3] == 'hide') {
+        $("ul#listUser").find("div#" + this.typeIndi[0]).find(".typingNotif").removeClass().addClass("typingNotif showhide");
+      } else {
+        if (this.typeIndi[2] == window.App.user.id) {
+          $("ul#listUser").find("div#" + this.typeIndi[0]).find(".typingNotif").removeClass().addClass("typingNotif");
+        }
+      }
     },
     idToSend: function idToSend() {
       var _this = this;
@@ -6781,7 +6797,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.center[data-v-298d7b6c] {\r\n    margin-top: 40%;\r\n    margin-left: 20%;\r\n    width: 60%;\r\n    border: 3px solid #73AD21;\r\n    padding: 10px;\r\n    text-align: center;\n}\n.centerText[data-v-298d7b6c] {\r\n    margin-top: 40%;\r\n    font-size: 25px;\r\n    width: 100%;\r\n    text-align: center;\n}\n.typeIndicator[data-v-298d7b6c] {\r\n    position: absolute; \r\n    left: 62px; \r\n    top: 11px; \r\n    font-size: 12px; \r\n    font-style: italic;\n}\n.nameUp[data-v-298d7b6c] {\r\n    margin-top: -5px;\n}\r\n", ""]);
+exports.push([module.i, "\n.center[data-v-298d7b6c] {\r\n    margin-top: 40%;\r\n    margin-left: 20%;\r\n    width: 60%;\r\n    border: 3px solid #73AD21;\r\n    padding: 10px;\r\n    text-align: center;\n}\n.centerText[data-v-298d7b6c] {\r\n    margin-top: 40%;\r\n    font-size: 25px;\r\n    width: 100%;\r\n    text-align: center;\n}\n.typeIndicator[data-v-298d7b6c] {\r\n    position: absolute; \r\n    left: 62px; \r\n    top: 11px; \r\n    font-size: 12px; \r\n    font-style: italic;\n}\n.nameUp[data-v-298d7b6c] {\r\n    margin-top: -5px;\n}\n.showhide[data-v-298d7b6c] {\r\n    display: none;\n}\r\n", ""]);
 
 // exports
 
@@ -6800,7 +6816,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.typingNotif[data-v-22f71719] {\r\n    display: inline-block;\r\n    font-style: italic;\r\n    color: greenyellow;\n}\r\n", ""]);
+exports.push([module.i, "\n.typingNotif[data-v-22f71719] {\r\n    display: inline-block;\r\n    font-style: italic;\r\n    color: greenyellow;\n}\n.showhide[data-v-22f71719] {\r\n    display: none;\n}\r\n", ""]);
 
 // exports
 
@@ -50761,6 +50777,7 @@ var render = function() {
           _c("div", { attrs: { id: "contacts" } }, [
             _c(
               "ul",
+              { attrs: { id: "listUser" } },
               _vm._l(_vm.participants, function(user, index) {
                 return _c("comp-user-list", {
                   key: index,
@@ -50924,15 +50941,11 @@ var render = function() {
           _c("div", [
             _c("img", { attrs: { src: _vm.img } }),
             _vm._v(" "),
-            _c("p", { class: { nameUp: _vm.activePeer } }, [
-              _vm._v(_vm._s(_vm.name))
-            ]),
+            _c("p", { staticClass: "normal" }, [_vm._v(_vm._s(_vm.name))]),
             _vm._v(" "),
-            _vm.activePeer
-              ? _c("div", { staticClass: "typeIndicator" }, [
-                  _vm._v(" Is Typing ...")
-                ])
-              : _vm._e()
+            _c("div", { staticClass: "typeIndicator showhide" }, [
+              _vm._v(" Is Typing ...")
+            ])
           ]),
           _vm._v(" "),
           _vm._m(0)
@@ -51251,29 +51264,22 @@ var render = function() {
           _c("div", { staticClass: "wrap" }, [
             _c("span", {
               staticClass: "contact-status online",
-              attrs: { at: "", id: _vm.user.id }
+              attrs: { id: _vm.user.id }
             }),
             _vm._v(" "),
             _c("img", { attrs: { src: _vm.user.image } }),
             _vm._v(" "),
             _c("div", { staticClass: "meta" }, [
-              _c("div", [
+              _c("div", { attrs: { id: _vm.user.id } }, [
                 _c("p", {
                   staticClass: "name",
                   staticStyle: { display: "inline-block" },
                   domProps: { textContent: _vm._s(_vm.user.name) }
                 }),
                 _vm._v(" "),
-                _vm.activePeer
-                  ? _c(
-                      "p",
-                      {
-                        staticClass: "typingNotif",
-                        attrs: { id: "typingNotif" }
-                      },
-                      [_vm._v(" is typing...")]
-                    )
-                  : _vm._e()
+                _c("p", { staticClass: "typingNotif showhide" }, [
+                  _vm._v(" is typing...")
+                ])
               ]),
               _vm._v(" "),
               _c("p", {

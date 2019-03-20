@@ -2,12 +2,12 @@
 <div @click="openChat(user.id, user.image, user.name)">
     <li @click="activate(user.id)" class="contact">
         <div class="wrap">
-            <span at :id="user.id" class="contact-status online"></span>
+            <span :id="user.id" class="contact-status online"></span>
             <img :src="user.image">
             <div class="meta">
-                <div >
+                <div :id="user.id">
                     <p class="name" v-text="user.name" style="display: inline-block;"></p>
-                    <p v-if="activePeer" class="typingNotif" id="typingNotif"> is typing...</p>
+                    <p class="typingNotif showhide"> is typing...</p>
                 </div>
                 <p class="preview" :id="user.id" v-text="this.lastChat"></p>
             </div>
@@ -27,9 +27,18 @@ export default {
             chatStatus: false
         }
     },
+    mounted() {
+        
+    },
     watch: {
         typeIndi: function() {
-            this.activePeer = this.typeIndi
+            if(this.typeIndi[3] == 'hide') {
+                $("ul#listUser").find("div#"+this.typeIndi[0]).find(".typingNotif").removeClass().addClass("typingNotif showhide")
+            } else {
+                if(this.typeIndi[2] == window.App.user.id) {
+                    $("ul#listUser").find("div#"+this.typeIndi[0]).find(".typingNotif").removeClass().addClass("typingNotif")
+                }
+            }
         },
         idToSend: function() {
             this.$nextTick(() => {
@@ -71,5 +80,8 @@ export default {
     display: inline-block;
     font-style: italic;
     color: greenyellow;
+}
+.showhide {
+    display: none;
 }
 </style>

@@ -20,8 +20,8 @@
     <div v-if="chats.length" class="contact-profile">
         <div>
             <img :src="img">
-             <p v-bind:class="{ nameUp: activePeer }">{{ name }}</p>
-             <div v-if="activePeer" class="typeIndicator"> Is Typing ...</div>
+             <p class="normal">{{ name }}</p>
+             <div class="typeIndicator showhide"> Is Typing ...</div>
         </div>
         <div class="social-media">
             <i class="fa fa-facebook" aria-hidden="true"></i>
@@ -39,7 +39,6 @@
         </ul>
     </div>
     <div v-if="typeChatHere" class="message-input">
-        <!-- <div class="invalid-feedback" v-if="errors.hasError('message')" >{{ errors.first('message') }}</div> -->
         <div class="wrap">
             <input ref="writemsg" type="text" @keydown="tagPeers" @keyup.enter="sendMessage" v-model="messagetext" placeholder="Write your message..." />
             <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
@@ -73,7 +72,15 @@ export default {
     },
     watch: {
         typeIndi: function() {
-            this.activePeer = this.typeIndi
+            if(this.typeIndi[3] == 'hide') {
+                $(".typeIndicator").removeClass().addClass("typeIndicator showhide")
+                $(".nameUp").removeClass().addClass("normal")
+            } else {
+                if(this.typeIndi[2] == window.App.user.id) {
+                    $(".typeIndicator").removeClass().addClass("typeIndicator")
+                    $(".normal").removeClass().addClass("nameUp")
+                }
+            }
         },
         id: function (val) {
             this.getChatList(val)
@@ -107,7 +114,7 @@ export default {
     },
     methods: {
         tagPeers() {
-            this.$emit('typeNow', window.App.user.name)
+            this.$emit('typeNow', window.App.user.id, this.id)
         },
         whenFirstInit() {
             this.firstEmpty = true
@@ -270,5 +277,8 @@ export default {
 }
 .nameUp {
     margin-top: -5px;
+}
+.showhide {
+    display: none;
 }
 </style>

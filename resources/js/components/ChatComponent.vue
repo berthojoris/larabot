@@ -9,7 +9,7 @@
         </div>
 
         <div id="contacts">
-            <ul>
+            <ul id="listUser">
                 <comp-user-list v-for="(user, index) in participants" :key="index" :user="user" :idToSend="idToSend" :pushdata="pusharr" @openChatNow="openChatViaID" :typeIndi="typingIndicator">
                 </comp-user-list>
             </ul>
@@ -39,7 +39,9 @@ export default {
             idToSend: null,
             activePeer: false,
             typingTimer: false,
-            typingIndicator: false
+            typingIndicator: null,
+            whisperTyping: null,
+            whisperReading: null
         }
     },
     computed: {
@@ -76,16 +78,16 @@ export default {
         this.idLogged = window.App.user.id
     },
     methods: {
-        listenType() {
-            this.channel.whisper('typing',{ name: window.App.user.name })
+        listenType(typingID, typingWithID) {
+            var datax = [typingID, window.App.user.name, typingWithID, 'show'];
+            this.channel.whisper('typing', datax)
         },
         whisperAction(e) {
+            var dataWhisper = [e[0], window.App.user.name, e[2], 'hide'];
+
             this.typingIndicator = e;
-            if (this.typingTimer) clearTimeout(this.typingTimer);
-            this.typingTimer = setTimeout(
-                () => this.typingIndicator = false,
-                1000
-            );
+            if (this.typingTimer) clearTimeout(this.typingTimer)
+            this.typingTimer = setTimeout(() => this.typingIndicator = dataWhisper, 1000)
         },
         clean() {
             axios.get('/delete')
