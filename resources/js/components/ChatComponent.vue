@@ -14,6 +14,8 @@
                 </comp-user-list>
             </ul>
         </div>
+
+        <comp-menu></comp-menu>
     </div>
 
     <comp-personal-chat :pushdata="pusharr" :id="id" :img="image" :name="name" @chatWith="chatWithID" @typeNow="listenType" :typeIndi="typingIndicator">

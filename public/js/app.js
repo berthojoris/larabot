@@ -1787,6 +1787,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1893,6 +1895,12 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -50792,7 +50800,9 @@ var render = function() {
               }),
               1
             )
-          ])
+          ]),
+          _vm._v(" "),
+          _c("comp-menu")
         ],
         1
       ),
@@ -50859,16 +50869,16 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { attrs: { id: "bottom-bar" } }, [
-      _c("button", { attrs: { id: "addcontact" } }, [
+      _c("button", { attrs: { id: "createGroupChat" } }, [
         _c("i", {
           staticClass: "fa fa-user-plus fa-fw",
           attrs: { "aria-hidden": "true" }
         }),
         _vm._v(" "),
-        _c("span", [_vm._v("Add contact")])
+        _c("span", [_vm._v("Group Invite")])
       ]),
       _vm._v(" "),
-      _c("button", { attrs: { id: "settings" } }, [
+      _c("button", { attrs: { id: "accountSetting" } }, [
         _c("i", {
           staticClass: "fa fa-cog fa-fw",
           attrs: { "aria-hidden": "true" }

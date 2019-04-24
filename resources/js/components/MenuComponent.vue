@@ -1,7 +1,13 @@
 <template>
 <div id="bottom-bar">
-    <button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add contact</span></button>
-    <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
+    <button id="createGroupChat">
+        <i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>
+        <span>Group Invite</span>
+    </button>
+    <button id="accountSetting">
+        <i class="fa fa-cog fa-fw" aria-hidden="true"></i> 
+        <span>Settings</span>
+    </button>
 </div>
 </template>
 
