@@ -1,8 +1,10 @@
 <template>
 <div id="bottom-bar">
-    <button id="createGroupChat">
+    <button id="createGroupChat"
+        class="btn green"
+        @click="$modal.show('demo-login')">
         <i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>
-        <span>Group Invite</span>
+        Group Invite
     </button>
     <button id="accountSetting">
         <i class="fa fa-cog fa-fw" aria-hidden="true"></i> 
@@ -13,7 +15,9 @@
 
 <script>
 export default {
-    
+    mounted() {
+        
+    },
 }
 </script>
 

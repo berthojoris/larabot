@@ -21,11 +21,14 @@
     <comp-personal-chat :pushdata="pusharr" :id="id" :img="image" :name="name" @chatWith="chatWithID" @typeNow="listenType" :typeIndi="typingIndicator">
     </comp-personal-chat>
 
+    <b-modal id="modal-1" title="Notification">
+        <p class="my-4">Hello from modal!</p>
+    </b-modal>
+
 </div>
 </template>
 
 <script>
-
 export default {
     data() {
         return {
@@ -76,6 +79,7 @@ export default {
             .listenForWhisper('typing', this.whisperAction);
     },
     mounted() {
+        this.$bvModal.show('modal-1')
         this.getUserList()
         this.idLogged = window.App.user.id
     },
@@ -123,6 +127,13 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+@import 'node_modules/bootstrap/scss/bootstrap';
+@import 'node_modules/bootstrap-vue/src/index.scss';
+// .modal-footer {
+//     padding: 7px;
+// }
+// .modal-header {
+//     padding: 10px;
+// }
 </style>

@@ -8,8 +8,9 @@
                 <div :id="user.id">
                     <p class="name" v-text="user.name" style="display: inline-block;"></p>
                     <p class="typingNotif showhide"> is typing...</p>
+                    <p class="preview" :id="user.id" v-text="this.lastChat"></p>
                 </div>
-                <p class="preview" :id="user.id" v-text="this.lastChat"></p>
+               
             </div>
         </div>
     </li>
@@ -80,6 +81,7 @@ export default {
     display: inline-block;
     font-style: italic;
     color: greenyellow;
+    margin-bottom: 0px;
 }
 .showhide {
     display: none;
