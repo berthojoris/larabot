@@ -349,6 +349,7 @@
   border: none;
   background: #32465a;
   color: #f5f5f5;
+  width: 100%;
 }
 
 #frame #sidepanel #search input:focus {
@@ -499,6 +500,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   transition: 1s all ease;
+  margin-top: -18px;
 }
 
 #frame #sidepanel #contacts ul li.contact .wrap .meta .preview span {
@@ -515,6 +517,7 @@
   position: absolute;
   width: 100%;
   bottom: 0;
+  line-height: 30px;
 }
 
 #frame #sidepanel #bottom-bar button {
@@ -527,6 +530,7 @@
   cursor: pointer;
   font-size: 0.85em;
   font-family: "proxima-nova", "Source Sans Pro", sans-serif;
+  line-height: 30px;
 }
 
 @media screen and (max-width: 735px) {
@@ -731,10 +735,26 @@
   font-family: "proxima-nova", "Source Sans Pro", sans-serif;
   float: left;
   border: none;
-  width: calc(100% - 90px);
+  width: calc(100%);
   padding: 11px 32px 10px 8px;
   font-size: 1em;
   color: #32465a;
+  position: absolute;
+  height: 50px;
+}
+
+@media (min-width: 320px) and (max-width: 480px) {
+  #frame .content .message-input .wrap input {
+    font-family: "proxima-nova", "Source Sans Pro", sans-serif;
+    float: left;
+    border: none;
+    width: calc(100%);
+    padding: 11px 32px 10px 8px;
+    font-size: 1em;
+    color: #32465a;
+    position: absolute;
+    height: 50px;
+  }
 }
 
 @media screen and (max-width: 735px) {
@@ -777,6 +797,7 @@
   cursor: pointer;
   background: #32465a;
   color: #f5f5f5;
+  position: relative;
 }
 
 @media screen and (max-width: 735px) {

@@ -14,7 +14,7 @@ try {
     window.RandomWords = require('random-words');
     window.__ = require('underscore');
     window.toastr = require('toastr');
-    require('bootstrap');
+    // require('bootstrap');
 } catch (e) {}
 
 /**

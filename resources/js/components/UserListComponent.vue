@@ -5,7 +5,7 @@
             <span :id="user.id" class="contact-status online"></span>
             <img :src="user.image">
             <div class="meta">
-                <div :id="user.id">
+                <div :id="user.id" class="mtop">
                     <p class="name" v-text="user.name" style="display: inline-block;"></p>
                     <p class="typingNotif showhide"> is typing...</p>
                     <p class="preview" :id="user.id" v-text="this.lastChat"></p>
@@ -85,5 +85,8 @@ export default {
 }
 .showhide {
     display: none;
+}
+.mtop {
+    margin-top: -8px;
 }
 </style>
