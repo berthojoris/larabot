@@ -639,6 +639,7 @@
   max-height: calc(100% - 100px);
   overflow-y: auto;
   overflow-x: hidden;
+  width: 100%;
 }
 
 @media screen and (max-width: 735px) {
@@ -689,7 +690,7 @@
 }
 
 #frame .content .messages ul li img {
-  width: 22px;
+  width: 40px;
   border-radius: 50%;
   float: left;
 }
