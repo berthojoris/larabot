@@ -2,7 +2,7 @@
 <div id="bottom-bar">
     <button id="createGroupChat"
         class="btn green"
-        @click="$modal.show('demo-login')">
+        @click="showModal">
         <i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>
         Group Invite
     </button>
@@ -15,13 +15,14 @@
 
 <script>
 export default {
+    methods: {
+        showModal() {
+            
+        }
+    },
     mounted() {
         
     },
 }
 </script>
-
-<style scoped>
-
-</style>
 

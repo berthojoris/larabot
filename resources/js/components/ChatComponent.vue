@@ -15,14 +15,30 @@
             </ul>
         </div>
 
-        <comp-menu></comp-menu>
+        <div id="bottom-bar">
+            <button id="createGroupChat"
+                @click="showModal">
+                <i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>
+                Group Invite
+            </button>
+            <button id="accountSetting">
+                <i class="fa fa-cog fa-fw" aria-hidden="true"></i> 
+                <span>Settings</span>
+            </button>
+        </div>
     </div>
 
     <comp-personal-chat :pushdata="pusharr" :id="id" :img="image" :name="name" @chatWith="chatWithID" @typeNow="listenType" :typeIndi="typingIndicator">
     </comp-personal-chat>
 
-    <b-modal id="modal-1" title="Notification">
-        <p class="my-4">Hello from modal!</p>
+    <b-modal ref="my-modal" hide-footer title="Sent Invitation" @shown="focusMyElement">
+        <b-form inline>
+            <label class="sr-only" for="email">Email</label>
+            <b-input-group prepend="@" class="mb-2 mr-sm-2 mb-sm-0">
+                <b-input id="email" name="email" ref="email" placeholder="Invite by email" autocomplete="off"></b-input>
+            </b-input-group>
+            <b-button id="findUser" variant="info">Invite</b-button>
+        </b-form>
     </b-modal>
 
 </div>
@@ -79,11 +95,24 @@ export default {
             .listenForWhisper('typing', this.whisperAction);
     },
     mounted() {
-        this.$bvModal.show('modal-1')
         this.getUserList()
         this.idLogged = window.App.user.id
     },
     methods: {
+        focusMyElement(e) {
+            this.$refs.email.focus()
+        },
+        showModal() {
+            this.$refs['my-modal'].show()
+        },
+        hideModal() {
+            this.$refs['my-modal'].hide()
+        },
+        toggleModal() {
+            // We pass the ID of the button that we want to return focus to
+            // when the modal has hidden
+            this.$refs['my-modal'].toggle('#toggle-btn')
+        },
         listenType(typingID, typingWithID) {
             var datax = [typingID, window.App.user.name, typingWithID, 'show'];
             this.channel.whisper('typing', datax)
@@ -135,5 +164,8 @@ export default {
 }
 .modal-header {
     padding: 10px;
+}
+.form-inline .input-group, .form-inline .custom-select {
+    width: 84%;
 }
 </style>
