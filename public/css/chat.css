@@ -76,7 +76,7 @@
   -webkit-transform: scaleY(-1);
   transform: scaleY(-1);
   -webkit-filter: FlipH;
-          filter: FlipH;
+  filter: FlipH;
   -ms-filter: "FlipH";
 }
 
@@ -637,6 +637,7 @@
   height: auto;
   min-height: calc(100% - 100px);
   max-height: calc(100% - 100px);
+  position: absolute;
   overflow-y: auto;
   overflow-x: hidden;
   width: 100%;
@@ -754,7 +755,7 @@
     font-size: 1em;
     color: #32465a;
     position: absolute;
-    height: 50px;
+    height: 60px;
   }
 }
 
@@ -780,6 +781,20 @@
 }
 
 @media screen and (max-width: 735px) {
+  #frame .content .message-input .wrap .attachment {
+    margin-top: 17px;
+    right: 65px;
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1280px) {
+  #frame .content .message-input .wrap .attachment {
+    margin-top: 17px;
+    right: 65px;
+  }
+}
+
+@media (min-width: 1281px) {
   #frame .content .message-input .wrap .attachment {
     margin-top: 17px;
     right: 65px;
@@ -827,7 +842,7 @@
   border-radius: 50%;
   border: 4px solid silver;
   -webkit-animation: circ-anim 0.7s linear infinite;
-          animation: circ-anim 0.7s linear infinite;
+  animation: circ-anim 0.7s linear infinite;
 }
 
 .circonf-1 {
@@ -902,24 +917,24 @@
 @-webkit-keyframes circ-anim {
   from {
     -webkit-transform: rotate(0);
-            transform: rotate(0);
+    transform: rotate(0);
   }
 
   to {
     -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
 @keyframes circ-anim {
   from {
     -webkit-transform: rotate(0);
-            transform: rotate(0);
+    transform: rotate(0);
   }
 
   to {
     -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
@@ -930,11 +945,11 @@
   stroke-dashoffset: -3.14em;
   stroke-dasharray: 3.14em;
   -webkit-animation: loading1 1.4s cubic-bezier(0.42, 0, 0.29, 1) infinite;
-          animation: loading1 1.4s cubic-bezier(0.42, 0, 0.29, 1) infinite;
+  animation: loading1 1.4s cubic-bezier(0.42, 0, 0.29, 1) infinite;
   -webkit-transform: rotate(-90deg);
-          transform: rotate(-90deg);
+  transform: rotate(-90deg);
   -webkit-transform-origin: 50%;
-          transform-origin: 50%;
+  transform-origin: 50%;
   position: relative;
 }
 
@@ -973,13 +988,13 @@
 .loading-2 .spinner {
   display: inline-block;
   -webkit-animation-name: anim-spinner;
-          animation-name: anim-spinner;
+  animation-name: anim-spinner;
   -webkit-animation-duration: 0.7s;
-          animation-duration: 0.7s;
+  animation-duration: 0.7s;
   -webkit-animation-iteration-count: infinite;
-          animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
   -webkit-animation-timing-function: linear;
-          animation-timing-function: linear;
+  animation-timing-function: linear;
 }
 
 .loading-2 .spinner .circle {
@@ -990,7 +1005,7 @@
 
 .loading-2 .spinner .circle-inner {
   -webkit-transform: rotate(45deg);
-          transform: rotate(45deg);
+  transform: rotate(45deg);
   border-radius: 50%;
   border: 0.25em solid black;
   border-right: 0.25em solid transparent;
@@ -998,96 +1013,96 @@
   width: 100%;
   height: 200%;
   -webkit-animation-name: anim-circle-1;
-          animation-name: anim-circle-1;
+  animation-name: anim-circle-1;
   -webkit-animation-duration: 0.7s;
-          animation-duration: 0.7s;
+  animation-duration: 0.7s;
   -webkit-animation-iteration-count: infinite;
-          animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
   -webkit-animation-direction: alternate;
-          animation-direction: alternate;
+  animation-direction: alternate;
   -webkit-animation-timing-function: cubic-bezier(0.25, 0.1, 0.5, 1);
-          animation-timing-function: cubic-bezier(0.25, 0.1, 0.5, 1);
+  animation-timing-function: cubic-bezier(0.25, 0.1, 0.5, 1);
 }
 
 .loading-2 .spinner .circle-2 {
   -webkit-transform: rotate(180deg);
-          transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 
 .loading-2 .spinner .circle-2 .circle-inner {
   -webkit-animation-name: anim-circle-2;
-          animation-name: anim-circle-2;
+  animation-name: anim-circle-2;
 }
 
 @-webkit-keyframes anim-circle-1 {
   from {
     -webkit-transform: rotate(60deg);
-            transform: rotate(60deg);
+    transform: rotate(60deg);
   }
 
   to {
     -webkit-transform: rotate(205deg);
-            transform: rotate(205deg);
+    transform: rotate(205deg);
   }
 }
 
 @keyframes anim-circle-1 {
   from {
     -webkit-transform: rotate(60deg);
-            transform: rotate(60deg);
+    transform: rotate(60deg);
   }
 
   to {
     -webkit-transform: rotate(205deg);
-            transform: rotate(205deg);
+    transform: rotate(205deg);
   }
 }
 
 @-webkit-keyframes anim-circle-2 {
   from {
     -webkit-transform: rotate(30deg);
-            transform: rotate(30deg);
+    transform: rotate(30deg);
   }
 
   to {
     -webkit-transform: rotate(-115deg);
-            transform: rotate(-115deg);
+    transform: rotate(-115deg);
   }
 }
 
 @keyframes anim-circle-2 {
   from {
     -webkit-transform: rotate(30deg);
-            transform: rotate(30deg);
+    transform: rotate(30deg);
   }
 
   to {
     -webkit-transform: rotate(-115deg);
-            transform: rotate(-115deg);
+    transform: rotate(-115deg);
   }
 }
 
 @-webkit-keyframes anim-spinner {
   from {
     -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
+    transform: rotate(0deg);
   }
 
   to {
     -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
 @keyframes anim-spinner {
   from {
     -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
+    transform: rotate(0deg);
   }
 
   to {
     -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
@@ -1119,24 +1134,24 @@
 @-webkit-keyframes rotate {
   from {
     -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
+    transform: rotate(0deg);
   }
 
   to {
     -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
 @keyframes rotate {
   from {
     -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
+    transform: rotate(0deg);
   }
 
   to {
     -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
@@ -1147,7 +1162,7 @@
   margin: 2em;
   border-radius: 50%;
   -webkit-animation: circ-anim 0.9s linear infinite;
-          animation: circ-anim 0.9s linear infinite;
+  animation: circ-anim 0.9s linear infinite;
   box-shadow: 0.6em 0 0 0 #333, -0.3333333333em -0.5em 0 0 #333, -0.3333333333em 0.5em 0 0 #333;
 }
 
@@ -1175,18 +1190,18 @@
   stroke-dashoffset: -2.669em;
   stroke-dasharray: 2.669em;
   -webkit-animation: loading5 1.4s linear infinite, color1 10s linear infinite;
-          animation: loading5 1.4s linear infinite, color1 10s linear infinite;
+  animation: loading5 1.4s linear infinite, color1 10s linear infinite;
   -webkit-transform: rotate(-90deg);
-          transform: rotate(-90deg);
+  transform: rotate(-90deg);
   -webkit-transform-origin: 50%;
-          transform-origin: 50%;
+  transform-origin: 50%;
   position: relative;
 }
 
 @-webkit-keyframes loading5 {
   0% {
     -webkit-transform: rotate(-90deg);
-            transform: rotate(-90deg);
+    transform: rotate(-90deg);
     stroke-dashoffset: 2.669em;
   }
 
@@ -1196,7 +1211,7 @@
 
   100% {
     -webkit-transform: rotate(270deg);
-            transform: rotate(270deg);
+    transform: rotate(270deg);
     stroke-dashoffset: -2.669em;
   }
 }
@@ -1204,7 +1219,7 @@
 @keyframes loading5 {
   0% {
     -webkit-transform: rotate(-90deg);
-            transform: rotate(-90deg);
+    transform: rotate(-90deg);
     stroke-dashoffset: 2.669em;
   }
 
@@ -1214,7 +1229,7 @@
 
   100% {
     -webkit-transform: rotate(270deg);
-            transform: rotate(270deg);
+    transform: rotate(270deg);
     stroke-dashoffset: -2.669em;
   }
 }
@@ -1326,10 +1341,10 @@
 }
 
 /*
- * Note that this is toastr v2.1.3, the "latest" version in url has no more maintenance,
- * please go to https://cdnjs.com/libraries/toastr.js and pick a certain version you want to use,
- * make sure you copy the url from the website since the url may change between versions.
- * */
+* Note that this is toastr v2.1.3, the "latest" version in url has no more maintenance,
+* please go to https://cdnjs.com/libraries/toastr.js and pick a certain version you want to use,
+* make sure you copy the url from the website since the url may change between versions.
+* */
 
 .toast-title {
   font-weight: 700;

@@ -130,10 +130,10 @@ export default {
 <style lang="scss">
 @import 'node_modules/bootstrap/scss/bootstrap';
 @import 'node_modules/bootstrap-vue/src/index.scss';
-// .modal-footer {
-//     padding: 7px;
-// }
-// .modal-header {
-//     padding: 10px;
-// }
+.modal-footer {
+    padding: 7px;
+}
+.modal-header {
+    padding: 10px;
+}
 </style>
