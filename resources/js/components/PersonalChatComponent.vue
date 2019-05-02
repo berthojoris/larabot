@@ -69,6 +69,7 @@ export default {
     },
     mounted() {
         this.idLogged = window.App.user.id
+        this.getRandomChat()
     },
     watch: {
         typeIndi: function() {
@@ -110,6 +111,7 @@ export default {
                     $("span#" + val.sender_id).removeClass().addClass('contact-status online')
                 })
             }
+            this.getRandomChat()
         }
     },
     methods: {
@@ -192,7 +194,7 @@ export default {
         },
         upperFirst() {
             var str = RandomWords({
-                exactly: 15,
+                exactly: 10,
                 join: ' '
             })
             return str.charAt(0).toUpperCase() + str.slice(1)
@@ -237,7 +239,7 @@ export default {
                 receive_id: this.id
             })
             .then((response) => {
-                this.messagetext = ''
+                this.getRandomChat()
                 this.errors.clearAll()
             })
             .catch((error) => {

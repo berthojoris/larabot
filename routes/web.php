@@ -49,3 +49,4 @@ Route::post('/707434480:AAGsDoc4tSudDB1F4nWKGXYKDyQxHi4tL7A/webhook', function (
 	
     return 'ok';
 });
+Route::post('group/create', 'GroupController@createGroup');

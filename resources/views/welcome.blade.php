@@ -70,7 +70,7 @@
             @auth
             <a href="{{ url('/home') }}">Home</a>
             @if (auth()->user()->email == 'bertho@gmail.com')
-            <a class="nav-link" href="{{ url('chat') }}">Admin Chat</a>
+            <a class="nav-link" href="{{ url('chat') }}">Chat</a>
             @endif
             @else
             <a href="{{ route('login') }}">Login</a>

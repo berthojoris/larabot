@@ -2,7 +2,8 @@
 <div @click="openChat(user.id, user.image, user.name)">
     <li @click="activate(user.id)" class="contact">
         <div class="wrap">
-            <span :id="user.id" class="contact-status online"></span>
+            <span v-if="user.online_status === 'ONLINE'" :id="user.id" class="contact-status online"></span>
+            <span v-else :id="user.id" class="contact-status busy"></span>
             <img :src="user.image">
             <div class="meta">
                 <div :id="user.id" class="mtop">
@@ -10,7 +11,6 @@
                     <p class="typingNotif showhide"> is typing...</p>
                     <p class="preview" :id="user.id" v-text="this.lastChat"></p>
                 </div>
-               
             </div>
         </div>
     </li>
