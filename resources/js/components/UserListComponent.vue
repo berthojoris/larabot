@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import {mapGetters, mapActions} from "vuex"
 export default {
     props: ['user', 'senderID', 'receiveID', 'message', 'pushdata', 'idToSend', 'typeIndi'],
     data() {
@@ -42,9 +43,7 @@ export default {
             }
         },
         idToSend: function() {
-            this.$nextTick(() => {
-                // $("span#"+this.idToSend).removeClass().addClass('contact-status online')
-            })
+
         },
         message: function() {
             this.lastChat = this.message
@@ -62,7 +61,14 @@ export default {
         }
     },
     methods: {
+        ...mapGetters([
+            "getReceiver"
+        ]),
+        ...mapActions([
+            "openChatWith"
+        ]),
         openChat: function(id, image, name) {
+            this.openChatWith(id)
             this.$emit('openChatNow', id, image, name)
             this.chatStatus = true
         },

@@ -123,9 +123,6 @@ export default {
             this.typeChatHere = true
             this.loadStatus = false
             this.alreadyOpen = false
-            this.$nextTick(() => {
-                $("div.wrap span.contact-status").removeClass().addClass('contact-status online')
-            })
         },
         whenLoading() {
             this.firstEmpty = false

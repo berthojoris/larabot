@@ -9,6 +9,8 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+import store from './store';
+
 // import VModal from 'vue-js-modal'
 import BootstrapVue from 'bootstrap-vue'
 Vue.use(BootstrapVue)
@@ -40,4 +42,5 @@ Vue.component('comp-menu', require('./components/MenuComponent.vue').default);
 
 const app = new Vue({
     el: '#app',
+    store
 });
