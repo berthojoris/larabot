@@ -94,16 +94,19 @@ export default {
         var vue = this
 
         this.channel
-            .here(users => {
-                var notMe = __.without(users, __.findWhere(users, {
-                    id: window.App.user.id
-                }))
-                this.participants = notMe
+            // .here(users => {
+            //     var notMe = __.without(users, __.findWhere(users, {
+            //         id: window.App.user.id
+            //     }))
+            //     this.participants = notMe
+            // })
+            .joining(user => {
+                console.log("JOIN");
+                console.log(user);
             })
-            .joining(user => this.participants.push(user))
             .leaving(user => {
-                this.participants.splice(this.participants.indexOf(user), 1)
-                this.id = null
+                console.log("LEAVE");
+                console.log(user);
             })
             .listen('OnlineStatus', function (e) {
                 if (e.type == 'clean') {

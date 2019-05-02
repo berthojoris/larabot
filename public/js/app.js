@@ -1855,21 +1855,19 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    var _this = this;
-
     var vue = this;
-    this.channel.here(function (users) {
-      var notMe = __.without(users, __.findWhere(users, {
-        id: window.App.user.id
-      }));
-
-      _this.participants = notMe;
-    }).joining(function (user) {
-      return _this.participants.push(user);
+    this.channel // .here(users => {
+    //     var notMe = __.without(users, __.findWhere(users, {
+    //         id: window.App.user.id
+    //     }))
+    //     this.participants = notMe
+    // })
+    .joining(function (user) {
+      console.log("JOIN");
+      console.log(user);
     }).leaving(function (user) {
-      _this.participants.splice(_this.participants.indexOf(user), 1);
-
-      _this.id = null;
+      console.log("LEAVE");
+      console.log(user);
     }).listen('OnlineStatus', function (e) {
       if (e.type == 'clean') {
         location.reload();
@@ -1894,13 +1892,13 @@ __webpack_require__.r(__webpack_exports__);
       this.channel.whisper('typing', datax);
     },
     whisperAction: function whisperAction(e) {
-      var _this2 = this;
+      var _this = this;
 
       var dataWhisper = [e[0], window.App.user.name, e[2], 'hide'];
       this.typingIndicator = e;
       if (this.typingTimer) clearTimeout(this.typingTimer);
       this.typingTimer = setTimeout(function () {
-        return _this2.typingIndicator = dataWhisper;
+        return _this.typingIndicator = dataWhisper;
       }, 1000);
     },
     clean: function clean() {
@@ -1918,17 +1916,17 @@ __webpack_require__.r(__webpack_exports__);
       this.idToSend = sentid;
     },
     getUserList: function getUserList() {
-      var _this3 = this;
+      var _this2 = this;
 
       var userID = window.App.user.id;
       axios.get('/api/user/online/' + userID).then(function (response) {
-        _this3.userlist = response.data;
+        _this2.userlist = response.data;
       })["catch"](function (error) {
         console.log(error);
       });
     },
     createGroup: function createGroup() {
-      var _this4 = this;
+      var _this3 = this;
 
       if (this.group_name.trim().length < 1) return;
       var nama = this.group_name;
@@ -1936,7 +1934,7 @@ __webpack_require__.r(__webpack_exports__);
         group_name: nama
       }).then(function (response) {
         if (response.status == 201) {
-          _this4.group_name = '';
+          _this3.group_name = '';
         }
       })["catch"](function (error) {
         console.log(error);
