@@ -93,26 +93,26 @@ export default {
     created() {
         var vue = this
 
-        // this.channel
-        //     .here(users => {
-        //         var notMe = __.without(users, __.findWhere(users, {
-        //             id: window.App.user.id
-        //         }))
-        //         this.participants = notMe
-        //     })
-        //     .joining(user => this.participants.push(user))
-        //     .leaving(user => {
-        //         this.participants.splice(this.participants.indexOf(user), 1)
-        //         this.id = null
-        //     })
-        //     .listen('OnlineStatus', function (e) {
-        //         if (e.type == 'clean') {
-        //             location.reload()
-        //         } else {
-        //             vue.pusharr = e.pushchat
-        //         }
-        //     })
-        //     .listenForWhisper('typing', this.whisperAction);
+        this.channel
+            .here(users => {
+                var notMe = __.without(users, __.findWhere(users, {
+                    id: window.App.user.id
+                }))
+                this.participants = notMe
+            })
+            .joining(user => this.participants.push(user))
+            .leaving(user => {
+                this.participants.splice(this.participants.indexOf(user), 1)
+                this.id = null
+            })
+            .listen('OnlineStatus', function (e) {
+                if (e.type == 'clean') {
+                    location.reload()
+                } else {
+                    vue.pusharr = e.pushchat
+                }
+            })
+            .listenForWhisper('typing', this.whisperAction);
     },
     mounted() {
         this.getUserList()

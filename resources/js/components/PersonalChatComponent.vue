@@ -108,7 +108,6 @@ export default {
                     VueScrollTo.scrollTo("div.messages ul li:last-child", 0, {
                         container: '.messages'
                     })
-                    $("span#" + val.sender_id).removeClass().addClass('contact-status online')
                 })
             }
             this.getRandomChat()
@@ -159,8 +158,6 @@ export default {
 
             this.whenChatReady()
 
-            $("span#" + this.id).removeClass().addClass('contact-status online')
-
             const picture = window.App.user.image
 
             this.chats.push({
@@ -172,7 +169,6 @@ export default {
             })
 
             if (!_.isEmpty(this.chats)) {
-                $("span#" + this.id).removeClass().addClass('contact-status online')
 
                 if (this.messagetext.length > 10) {
                     var limitStr = this.messagetext.substring(0, 32) + " ..."

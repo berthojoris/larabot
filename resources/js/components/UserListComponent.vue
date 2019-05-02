@@ -43,7 +43,7 @@ export default {
         },
         idToSend: function() {
             this.$nextTick(() => {
-                $("span#"+this.idToSend).removeClass().addClass('contact-status online')
+                // $("span#"+this.idToSend).removeClass().addClass('contact-status online')
             })
         },
         message: function() {

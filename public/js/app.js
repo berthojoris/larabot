@@ -1855,26 +1855,28 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    var vue = this; // this.channel
-    //     .here(users => {
-    //         var notMe = __.without(users, __.findWhere(users, {
-    //             id: window.App.user.id
-    //         }))
-    //         this.participants = notMe
-    //     })
-    //     .joining(user => this.participants.push(user))
-    //     .leaving(user => {
-    //         this.participants.splice(this.participants.indexOf(user), 1)
-    //         this.id = null
-    //     })
-    //     .listen('OnlineStatus', function (e) {
-    //         if (e.type == 'clean') {
-    //             location.reload()
-    //         } else {
-    //             vue.pusharr = e.pushchat
-    //         }
-    //     })
-    //     .listenForWhisper('typing', this.whisperAction);
+    var _this = this;
+
+    var vue = this;
+    this.channel.here(function (users) {
+      var notMe = __.without(users, __.findWhere(users, {
+        id: window.App.user.id
+      }));
+
+      _this.participants = notMe;
+    }).joining(function (user) {
+      return _this.participants.push(user);
+    }).leaving(function (user) {
+      _this.participants.splice(_this.participants.indexOf(user), 1);
+
+      _this.id = null;
+    }).listen('OnlineStatus', function (e) {
+      if (e.type == 'clean') {
+        location.reload();
+      } else {
+        vue.pusharr = e.pushchat;
+      }
+    }).listenForWhisper('typing', this.whisperAction);
   },
   mounted: function mounted() {
     this.getUserList();
@@ -1892,13 +1894,13 @@ __webpack_require__.r(__webpack_exports__);
       this.channel.whisper('typing', datax);
     },
     whisperAction: function whisperAction(e) {
-      var _this = this;
+      var _this2 = this;
 
       var dataWhisper = [e[0], window.App.user.name, e[2], 'hide'];
       this.typingIndicator = e;
       if (this.typingTimer) clearTimeout(this.typingTimer);
       this.typingTimer = setTimeout(function () {
-        return _this.typingIndicator = dataWhisper;
+        return _this2.typingIndicator = dataWhisper;
       }, 1000);
     },
     clean: function clean() {
@@ -1916,17 +1918,17 @@ __webpack_require__.r(__webpack_exports__);
       this.idToSend = sentid;
     },
     getUserList: function getUserList() {
-      var _this2 = this;
+      var _this3 = this;
 
       var userID = window.App.user.id;
       axios.get('/api/user/online/' + userID).then(function (response) {
-        _this2.userlist = response.data;
+        _this3.userlist = response.data;
       })["catch"](function (error) {
         console.log(error);
       });
     },
     createGroup: function createGroup() {
-      var _this3 = this;
+      var _this4 = this;
 
       if (this.group_name.trim().length < 1) return;
       var nama = this.group_name;
@@ -1934,7 +1936,7 @@ __webpack_require__.r(__webpack_exports__);
         group_name: nama
       }).then(function (response) {
         if (response.status == 201) {
-          _this3.group_name = '';
+          _this4.group_name = '';
         }
       })["catch"](function (error) {
         console.log(error);
@@ -2093,7 +2095,6 @@ __webpack_require__.r(__webpack_exports__);
           VueScrollTo.scrollTo("div.messages ul li:last-child", 0, {
             container: '.messages'
           });
-          $("span#" + val.sender_id).removeClass().addClass('contact-status online');
         });
       }
 
@@ -2144,7 +2145,6 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       this.whenChatReady();
-      $("span#" + this.id).removeClass().addClass('contact-status online');
       var picture = window.App.user.image;
       this.chats.push({
         sender_id: this.idLogged,
@@ -2155,8 +2155,6 @@ __webpack_require__.r(__webpack_exports__);
       });
 
       if (!_.isEmpty(this.chats)) {
-        $("span#" + this.id).removeClass().addClass('contact-status online');
-
         if (this.messagetext.length > 10) {
           var limitStr = this.messagetext.substring(0, 32) + " ...";
         } else {
@@ -2376,22 +2374,19 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     idToSend: function idToSend() {
-      var _this = this;
-
-      this.$nextTick(function () {
-        $("span#" + _this.idToSend).removeClass().addClass('contact-status online');
+      this.$nextTick(function () {// $("span#"+this.idToSend).removeClass().addClass('contact-status online')
       });
     },
     message: function message() {
       this.lastChat = this.message;
     },
     pushdata: function pushdata(val) {
-      var _this2 = this;
+      var _this = this;
 
       if (!_.isEmpty(val)) {
         this.$nextTick(function () {
           if (val.receive_id == window.App.user.id) {
-            if (!_this2.chatStatus) {
+            if (!_this.chatStatus) {
               $("span#" + val.sender_id).removeClass().addClass('contact-status busy');
             }
           }
