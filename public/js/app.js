@@ -2062,14 +2062,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       typeChatHere: false
     };
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(["getChatHistory", "getLoadingMessage", "getEmptyMessage", "getOpenChatStatus", "getTypingMessage"])),
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(["getPersonalData", "getChatHistory", "getLoadingMessage", "getEmptyMessage", "getOpenChatStatus", "getTypingMessage", "getRandomString"])),
   mounted: function mounted() {
-    this.idLogged = window.App.user.id;
+    this.messagetext = this.getRandomString;
   },
-  watch: {},
-  methods: {
-    sendMessage: function sendMessage() {}
-  }
+  watch: {
+    getChatHistory: function getChatHistory() {
+      this.chats = this.getChatHistory;
+      this.$nextTick(function () {
+        VueScrollTo.scrollTo("div.messages ul li:last-child", 0, {
+          container: '.messages'
+        });
+      });
+      this.messagetext = this.getRandomString;
+    }
+  },
+  methods: {}
 });
 
 /***/ }),
@@ -78003,9 +78011,11 @@ var render = function() {
     _vm.chats.length
       ? _c("div", { staticClass: "contact-profile" }, [
           _c("div", [
-            _c("img", { attrs: { src: _vm.img } }),
+            _c("img", { attrs: { src: _vm.getPersonalData.image } }),
             _vm._v(" "),
-            _c("p", { staticClass: "normal" }, [_vm._v(_vm._s(_vm.name))]),
+            _c("p", { staticClass: "normal" }, [
+              _vm._v(_vm._s(_vm.getPersonalData.name))
+            ]),
             _vm._v(" "),
             _c("div", { staticClass: "typeIndicator showhide" }, [
               _vm._v(" is Typing ...")
@@ -78020,22 +78030,22 @@ var render = function() {
       ? _c("div", { staticClass: "messages" }, [
           _c(
             "ul",
-            _vm._l(_vm.getChatHistory, function(chat, index) {
+            _vm._l(_vm.chats, function(chat, index) {
               return _c(
                 "li",
                 {
                   key: index,
                   class: {
-                    sent: chat.sender_id == _vm.idLogged,
-                    replies: chat.sender_id != _vm.idLogged
+                    sent: chat.sender_id == _vm.getPersonalData.id,
+                    replies: chat.sender_id != _vm.getPersonalData.id
                   }
                 },
                 [
-                  chat.sender_id == _vm.idLogged
+                  chat.sender_id == _vm.getPersonalData.id
                     ? _c("img", { attrs: { src: chat.sender_image } })
                     : _vm._e(),
                   _vm._v(" "),
-                  chat.sender_id != _vm.idLogged
+                  chat.sender_id != _vm.getPersonalData.id
                     ? _c("img", { attrs: { src: chat.sender_image } })
                     : _vm._e(),
                   _vm._v(" "),
@@ -92744,7 +92754,8 @@ var state = {
   chatHistory: [],
   loadingMessageStatus: false,
   emptyMessageStatus: false,
-  typingMessageStatus: false
+  typingMessageStatus: false,
+  randomString: ''
 };
 var getters = {
   getSender: function getSender(state) {
@@ -92767,6 +92778,9 @@ var getters = {
   },
   getTypingMessage: function getTypingMessage(state) {
     return state.typingMessageStatus;
+  },
+  getRandomString: function getRandomString(state) {
+    return state.randomString;
   }
 };
 var actions = (_actions = {
@@ -92826,38 +92840,40 @@ var actions = (_actions = {
           switch (_context2.prev = _context2.next) {
             case 0:
               commit = _ref2.commit;
+              commit('CLEAR_CHATHISTORY');
               commit('SET_LOADING_MESSAGE_TRUE');
               commit('SET_TYPING_MESSAGE_FALSE');
-              _context2.prev = 3;
-              _context2.next = 6;
+              commit('RANDOM_STR');
+              _context2.prev = 5;
+              _context2.next = 8;
               return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/chat/history', {
                 receiverID: id
               });
 
-            case 6:
+            case 8:
               response = _context2.sent;
-              _context2.next = 9;
+              _context2.next = 11;
               return response.data;
 
-            case 9:
+            case 11:
               dataDB = _context2.sent;
               commit('OPEN_CHATHISTORY', dataDB);
               commit('SET_LOADING_MESSAGE_FALSE');
               commit('SET_TYPING_MESSAGE_TRUE');
-              _context2.next = 18;
+              _context2.next = 20;
               break;
 
-            case 15:
-              _context2.prev = 15;
-              _context2.t0 = _context2["catch"](3);
+            case 17:
+              _context2.prev = 17;
+              _context2.t0 = _context2["catch"](5);
               state.errorBag = _context2.t0;
 
-            case 18:
+            case 20:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[3, 15]]);
+      }, _callee2, null, [[5, 17]]);
     }));
 
     function openChatHistory(_x3, _x4) {
@@ -92890,6 +92906,12 @@ var actions = (_actions = {
 }), _defineProperty(_actions, "setTypingMessageFalse", function setTypingMessageFalse(_ref9) {
   var commit = _ref9.commit;
   commit('SET_TYPING_MESSAGE_FALSE');
+}), _defineProperty(_actions, "setClearHistoryChat", function setClearHistoryChat(_ref10) {
+  var commit = _ref10.commit;
+  commit('OPEN_CHATHISTORY');
+}), _defineProperty(_actions, "setRandomStr", function setRandomStr(_ref11) {
+  var commit = _ref11.commit;
+  commit('RANDOM_STR');
 }), _actions);
 var mutations = {
   OPEN_CHAT_WITH: function OPEN_CHAT_WITH(state, data) {
@@ -92900,6 +92922,9 @@ var mutations = {
   },
   OPEN_CHATHISTORY: function OPEN_CHATHISTORY(state, data) {
     state.chatHistory = data;
+  },
+  CLEAR_CHATHISTORY: function CLEAR_CHATHISTORY(state) {
+    state.chatHistory = [];
   },
   SET_LOADING_MESSAGE_TRUE: function SET_LOADING_MESSAGE_TRUE(state) {
     state.loadingMessageStatus = true;
@@ -92918,6 +92943,13 @@ var mutations = {
   },
   SET_TYPING_MESSAGE_FALSE: function SET_TYPING_MESSAGE_FALSE(state) {
     state.typingMessageStatus = false;
+  },
+  RANDOM_STR: function RANDOM_STR(state) {
+    var str = RandomWords({
+      exactly: 10,
+      join: ' '
+    });
+    state.randomString = str.charAt(0).toUpperCase() + str.slice(1);
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = ({

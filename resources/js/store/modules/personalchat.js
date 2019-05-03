@@ -9,6 +9,7 @@ const state = {
     loadingMessageStatus: false,
     emptyMessageStatus: false,
     typingMessageStatus: false,
+    randomString: '',
 };
 
 const getters = {
@@ -19,6 +20,7 @@ const getters = {
     getLoadingMessage: state => state.loadingMessageStatus,
     getEmptyMessage: state => state.emptyMessageStatus,
     getTypingMessage: state => state.typingMessageStatus,
+    getRandomString: state => state.randomString,
 };
 
 const actions = {
@@ -32,8 +34,10 @@ const actions = {
         }
     },
     async openChatHistory({ commit }, id) {
+        commit('CLEAR_CHATHISTORY')
         commit('SET_LOADING_MESSAGE_TRUE')
         commit('SET_TYPING_MESSAGE_FALSE')
+        commit('RANDOM_STR')
         try {
             let response    = await axios.post('/chat/history', {receiverID: id})
             let dataDB      = await response.data;
@@ -65,6 +69,12 @@ const actions = {
     setTypingMessageFalse({ commit }) {
         commit('SET_TYPING_MESSAGE_FALSE')
     },
+    setClearHistoryChat({ commit }) {
+        commit('OPEN_CHATHISTORY')
+    },
+    setRandomStr({ commit }) {
+        commit('RANDOM_STR')
+    },
 };
 
 const mutations = {
@@ -76,6 +86,9 @@ const mutations = {
     },
     OPEN_CHATHISTORY: (state, data) => {
         state.chatHistory = data
+    },
+    CLEAR_CHATHISTORY: (state) => {
+        state.chatHistory = []
     },
     SET_LOADING_MESSAGE_TRUE: (state) => {
         state.loadingMessageStatus = true
@@ -94,6 +107,13 @@ const mutations = {
     },
     SET_TYPING_MESSAGE_FALSE: (state) => {
         state.typingMessageStatus = false
+    },
+    RANDOM_STR: (state) => {
+        var str = RandomWords({
+            exactly: 10,
+            join: ' '
+        })
+        state.randomString = str.charAt(0).toUpperCase() + str.slice(1)
     },
 };
 

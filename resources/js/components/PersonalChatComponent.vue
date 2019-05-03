@@ -19,9 +19,9 @@
 
     <div v-if="chats.length" class="contact-profile">
         <div>
-            <img :src="img">
-             <p class="normal">{{ name }}</p>
-             <div class="typeIndicator showhide"> is Typing ...</div>
+            <img :src="getPersonalData.image">
+            <p class="normal">{{ getPersonalData.name }}</p>
+            <div class="typeIndicator showhide"> is Typing ...</div>
         </div>
         <div class="social-media">
             <i class="fa fa-facebook" aria-hidden="true"></i>
@@ -31,9 +31,9 @@
     </div>
     <div v-if="chats.length" class="messages">
         <ul>
-            <li v-for="(chat, index) in getChatHistory" :key="index" :class="{'sent': chat.sender_id == idLogged,  'replies': chat.sender_id != idLogged}">
-                <img :src="chat.sender_image" v-if="chat.sender_id == idLogged">
-                <img :src="chat.sender_image" v-if="chat.sender_id != idLogged">
+            <li v-for="(chat, index) in chats" :key="index" :class="{'sent': chat.sender_id == getPersonalData.id,  'replies': chat.sender_id != getPersonalData.id}">
+                <img :src="chat.sender_image" v-if="chat.sender_id == getPersonalData.id">
+                <img :src="chat.sender_image" v-if="chat.sender_id != getPersonalData.id">
                 <p>{{ chat.message }}</p>
             </li>
         </ul>
@@ -64,23 +64,31 @@ export default {
     },
     computed: {
         ...mapGetters([
+            "getPersonalData",
             "getChatHistory",
             "getLoadingMessage",
             "getEmptyMessage",
             "getOpenChatStatus",
-            "getTypingMessage"
+            "getTypingMessage",
+            "getRandomString",
         ]),
     },
     mounted() {
-        this.idLogged = window.App.user.id
+        this.messagetext = this.getRandomString
     },
     watch: {
-        
+        getChatHistory: function() {
+            this.chats = this.getChatHistory
+            this.$nextTick(() => {
+                VueScrollTo.scrollTo("div.messages ul li:last-child", 0, {
+                    container: '.messages'
+                })
+            })
+            this.messagetext = this.getRandomString
+        }
     },
     methods: {
-        sendMessage() {
-
-        }
+ 
     }
 }
 </script>
