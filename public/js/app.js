@@ -1848,44 +1848,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   data: function data() {
     return {
       userlist: [],
-      // id: null,
-      // image: null,
-      // name: null,
-      // idLogged: null,
-      // pusharr: null,
-      // participants: [],
-      // toRemove: [],
-      // incomingMsgIcon: 'active',
-      // idToSend: null,
-      // activePeer: false,
-      // typingTimer: false,
-      typingIndicator: null,
-      // whisperTyping: null,
-      // whisperReading: null,
       inviteUserStatus: false,
       group_name: ''
     };
   },
-  computed: {
+  watch: {
+    getUserList: function getUserList() {
+      this.userlist = this.getUserList;
+    }
+  },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['getUserList']), {
     channel: function channel() {
       return window.Echo.join('online');
     }
-  },
+  }),
   created: function created() {
     var vue = this;
-    this.channel // .here(users => {
-    //     var notMe = __.without(users, __.findWhere(users, {
-    //         id: window.App.user.id
-    //     }))
-    //     this.participants = notMe
-    // })
-    .joining(function (user) {
-      console.log("JOIN");
-      console.log(user);
-    }).leaving(function (user) {
-      console.log("LEAVE");
-      console.log(user);
-    }).listen('OnlineStatus', function (e) {
+    this.channel.joining(function (user) {}).leaving(function (user) {}).listen('IncomingChat', function (e) {
       if (e.type == 'clean') {
         location.reload();
       } else {
@@ -1894,50 +1873,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }).listenForWhisper('typing', this.whisperAction);
   },
   mounted: function mounted() {
-    this.getUserList();
     this.idLogged = window.App.user.id;
     this.setPersonalData(window.App.user);
+    this.userListApi();
   },
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(["setPersonalData"]), {
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(["setPersonalData", "userListApi"]), {
     showModal: function showModal() {
       this.$refs['modal-invite'].show();
     },
     hideModal: function hideModal() {
       this.$refs['modal-invite'].hide();
     },
-    listenType: function listenType(typingID, typingWithID) {
-      var datax = [typingID, window.App.user.name, typingWithID, 'show'];
-      this.channel.whisper('typing', datax);
-    },
-    whisperAction: function whisperAction(e) {
-      var _this = this;
-
-      var dataWhisper = [e[0], window.App.user.name, e[2], 'hide'];
-      this.typingIndicator = e;
-      if (this.typingTimer) clearTimeout(this.typingTimer);
-      this.typingTimer = setTimeout(function () {
-        return _this.typingIndicator = dataWhisper;
-      }, 1000);
-    },
-    clean: function clean() {
-      axios.get('/delete').then(function (response) {
-        location.reload();
-      })["catch"](function (error) {
-        toastr.error("Error when delete data. Please reload page manual");
-      });
-    },
-    getUserList: function getUserList() {
-      var _this2 = this;
-
-      var userID = window.App.user.id;
-      axios.get('/api/user/online/' + userID).then(function (response) {
-        _this2.userlist = response.data;
-      })["catch"](function (error) {
-        console.log(error);
-      });
-    },
+    changePicture: function changePicture() {},
     createGroup: function createGroup() {
-      var _this3 = this;
+      var _this = this;
 
       if (this.group_name.trim().length < 1) return;
       var nama = this.group_name;
@@ -1945,7 +1894,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         group_name: nama
       }).then(function (response) {
         if (response.status == 201) {
-          _this3.group_name = '';
+          _this.group_name = '';
         }
       })["catch"](function (error) {
         console.log(error);
@@ -2216,17 +2165,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(["getReceiver", "getOpenChatStatus", "getChatHistory"])),
-  watch: {
-    typeIndi: function typeIndi() {
-      if (this.typeIndi[3] == 'hide') {
-        $("ul#listUser").find("div#" + this.typeIndi[0]).find(".typingNotif").removeClass().addClass("typingNotif showhide");
-      } else {
-        if (this.typeIndi[2] == window.App.user.id) {
-          $("ul#listUser").find("div#" + this.typeIndi[0]).find(".typingNotif").removeClass().addClass("typingNotif");
-        }
-      }
-    }
-  },
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(["openChatWith", "setOpenChatStatus", "openChatHistory"]), {
     openChat: function openChat(id, image, name) {
       this.openChatWith(id);
@@ -77687,7 +77625,7 @@ var render = function() {
         "div",
         { attrs: { id: "sidepanel" } },
         [
-          _c("comp-profile", { on: { del: _vm.clean } }),
+          _c("comp-profile"),
           _vm._v(" "),
           _vm._m(0),
           _vm._v(" "),
@@ -77698,7 +77636,7 @@ var render = function() {
               _vm._l(_vm.userlist, function(user, index) {
                 return _c("comp-user-list", {
                   key: index,
-                  attrs: { user: user, typeIndi: _vm.typingIndicator }
+                  attrs: { user: user }
                 })
               }),
               1
@@ -92703,6 +92641,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex_persistedstate__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex-persistedstate */ "./node_modules/vuex-persistedstate/dist/vuex-persistedstate.es.js");
 /* harmony import */ var _modules_personalchat__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/personalchat */ "./resources/js/store/modules/personalchat.js");
 /* harmony import */ var _modules_self__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/self */ "./resources/js/store/modules/self.js");
+/* harmony import */ var _modules_userlist__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/userlist */ "./resources/js/store/modules/userlist.js");
+
 
 
 
@@ -92714,7 +92654,8 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_0__
   namespaced: true,
   modules: {
     personalchat: _modules_personalchat__WEBPACK_IMPORTED_MODULE_3__["default"],
-    self: _modules_self__WEBPACK_IMPORTED_MODULE_4__["default"]
+    self: _modules_self__WEBPACK_IMPORTED_MODULE_4__["default"],
+    userlist: _modules_userlist__WEBPACK_IMPORTED_MODULE_5__["default"]
   }
 }));
 
@@ -93063,6 +93004,92 @@ var actions = {
 var mutations = {
   SET_PERSONAL_DATA: function SET_PERSONAL_DATA(state, data) {
     state.personalData = data;
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = ({
+  state: state,
+  getters: getters,
+  actions: actions,
+  mutations: mutations
+});
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/userlist.js":
+/*!************************************************!*\
+  !*** ./resources/js/store/modules/userlist.js ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var state = {
+  userList: [],
+  errorBag: null
+};
+var getters = {
+  getUserList: function getUserList(state) {
+    return state.userList;
+  }
+};
+var actions = {
+  userListApi: function () {
+    var _userListApi = _asyncToGenerator(
+    /*#__PURE__*/
+    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(_ref) {
+      var commit, response, dataDB;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              commit = _ref.commit;
+              _context.prev = 1;
+              _context.next = 4;
+              return axios.get('/user/online');
+
+            case 4:
+              response = _context.sent;
+              _context.next = 7;
+              return response.data;
+
+            case 7:
+              dataDB = _context.sent;
+              commit('SET_USER_LIST', dataDB);
+              _context.next = 14;
+              break;
+
+            case 11:
+              _context.prev = 11;
+              _context.t0 = _context["catch"](1);
+              state.errorBag = _context.t0;
+
+            case 14:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, null, [[1, 11]]);
+    }));
+
+    function userListApi(_x) {
+      return _userListApi.apply(this, arguments);
+    }
+
+    return userListApi;
+  }()
+};
+var mutations = {
+  SET_USER_LIST: function SET_USER_LIST(state, data) {
+    state.userList = data;
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = ({

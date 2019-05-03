@@ -33,17 +33,6 @@ export default {
             "getChatHistory"
         ]),
     },
-    watch: {
-        typeIndi: function() {
-            if(this.typeIndi[3] == 'hide') {
-                $("ul#listUser").find("div#"+this.typeIndi[0]).find(".typingNotif").removeClass().addClass("typingNotif showhide")
-            } else {
-                if(this.typeIndi[2] == window.App.user.id) {
-                    $("ul#listUser").find("div#"+this.typeIndi[0]).find(".typingNotif").removeClass().addClass("typingNotif")
-                }
-            }
-        }
-    },
     methods: {
         ...mapActions([
             "openChatWith",

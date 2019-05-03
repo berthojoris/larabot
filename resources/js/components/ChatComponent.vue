@@ -1,7 +1,7 @@
 <template>
 <div id="frame">
     <div id="sidepanel">
-        <comp-profile @del="clean"></comp-profile>
+        <comp-profile></comp-profile>
 
         <div id="search">
             <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
@@ -10,7 +10,7 @@
 
         <div id="contacts">
             <ul id="listUser">
-                <comp-user-list v-for="(user, index) in userlist" :key="index" :user="user" :typeIndi="typingIndicator">
+                <comp-user-list v-for="(user, index) in userlist" :key="index" :user="user">
                 </comp-user-list>
             </ul>
         </div>
@@ -67,48 +67,33 @@ export default {
     data() {
         return {
             userlist: [],
-            // id: null,
-            // image: null,
-            // name: null,
-            // idLogged: null,
-            // pusharr: null,
-            // participants: [],
-            // toRemove: [],
-            // incomingMsgIcon: 'active',
-            // idToSend: null,
-            // activePeer: false,
-            // typingTimer: false,
-            typingIndicator: null,
-            // whisperTyping: null,
-            // whisperReading: null,
             inviteUserStatus: false,
             group_name: ''
         }
     },
+    watch: {
+        getUserList: function() {
+            this.userlist = this.getUserList
+        }
+    },
     computed: {
+        ...mapGetters([
+            'getUserList'
+        ]),
         channel() {
             return window.Echo.join('online')
-        }
+        },
     },
     created() {
         var vue = this
-
         this.channel
-            // .here(users => {
-            //     var notMe = __.without(users, __.findWhere(users, {
-            //         id: window.App.user.id
-            //     }))
-            //     this.participants = notMe
-            // })
             .joining(user => {
-                console.log("JOIN");
-                console.log(user);
+                
             })
             .leaving(user => {
-                console.log("LEAVE");
-                console.log(user);
+                
             })
-            .listen('OnlineStatus', function (e) {
+            .listen('IncomingChat', function (e) {
                 if (e.type == 'clean') {
                     location.reload()
                 } else {
@@ -118,13 +103,14 @@ export default {
             .listenForWhisper('typing', this.whisperAction);
     },
     mounted() {
-        this.getUserList()
         this.idLogged = window.App.user.id
         this.setPersonalData(window.App.user)
+        this.userListApi()
     },
     methods: {
         ...mapActions([
-            "setPersonalData"
+            "setPersonalData",
+            "userListApi",
         ]),
         showModal() {
             this.$refs['modal-invite'].show()
@@ -132,36 +118,8 @@ export default {
         hideModal() {
             this.$refs['modal-invite'].hide()
         },
-        listenType(typingID, typingWithID) {
-            var datax = [typingID, window.App.user.name, typingWithID, 'show'];
-            this.channel.whisper('typing', datax)
-        },
-        whisperAction(e) {
-            var dataWhisper = [e[0], window.App.user.name, e[2], 'hide'];
+        changePicture() {
 
-            this.typingIndicator = e;
-            if (this.typingTimer) clearTimeout(this.typingTimer)
-            this.typingTimer = setTimeout(() => this.typingIndicator = dataWhisper, 1000)
-        },
-        clean() {
-            axios.get('/delete')
-                .then((response) => {
-                    location.reload()
-                })
-                .catch((error) => {
-                    toastr.error("Error when delete data. Please reload page manual")
-                })
-        },
-        getUserList() {
-            const userID = window.App.user.id
-
-            axios.get('/api/user/online/' + userID)
-                .then((response) => {
-                    this.userlist = response.data
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
         },
         createGroup() {
             if (this.group_name.trim().length < 1) return;

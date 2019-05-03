@@ -67,8 +67,9 @@ class ChatController extends Controller
         return $newData;
     }
 
-    public function online($currentID)
+    public function online()
     {
+        $currentID = auth()->user()->id;
         return UserListCollection::collection(User::where('id', '!=', $currentID)->get());
     }
 

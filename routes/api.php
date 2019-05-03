@@ -18,4 +18,3 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('chat/list/{senderID}/{receiveID}', 'ChatController@list');
-Route::get('user/online/{currentID}', 'ChatController@online');

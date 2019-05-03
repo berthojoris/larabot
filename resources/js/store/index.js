@@ -3,6 +3,7 @@ import Vue from 'vue';
 import createPersistedState from 'vuex-persistedstate';
 import personalchat from  './modules/personalchat';
 import self from  './modules/self';
+import userlist from  './modules/userlist';
 
 Vue.use(Vuex);
 
@@ -11,6 +12,7 @@ export default new Vuex.Store({
     namespaced: true,
     modules: {
         personalchat,
-        self
+        self,
+        userlist
     }
 });

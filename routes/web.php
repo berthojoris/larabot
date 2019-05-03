@@ -41,3 +41,4 @@ Route::post('friend/request', 'FriendRequestController@add');
 Route::post('user', 'HomeController@getUser');
 Route::post('chat/history', 'ChatController@chatHistory');
 Route::post('chat/insert', 'ChatController@insert');
+Route::get('user/online', 'ChatController@online');
