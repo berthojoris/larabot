@@ -69,8 +69,13 @@ class ChatController extends Controller
 
     public function online()
     {
-        $currentID = auth()->user()->id;
-        return UserListCollection::collection(User::where('id', '!=', $currentID)->get());
+        $currentID  = auth()->user()->id;
+
+        $listUser   = User::with(['lastChat' => function ($q) {
+            $q->latest();
+        }])->where('id', '!=', $currentID)->get();
+
+        return UserListCollection::collection($listUser);
     }
 
     public function deleteall()

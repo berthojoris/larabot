@@ -1,6 +1,6 @@
 <template>
 <div @click="openChat(user.id, user.image, user.name)">
-    <li @click="activate(user.id)" class="contact">
+    <li @click="setActiveClass" class="contact">
         <div class="wrap">
             <span v-if="user.online_status === 'ONLINE'" :id="user.id" class="contact-status online"></span>
             <span v-else :id="user.id" class="contact-status busy"></span>
@@ -9,7 +9,7 @@
                 <div :id="user.id" class="mtop">
                     <p class="name" v-text="user.name" style="display: inline-block;"></p>
                     <p class="typingNotif showhide"> is typing...</p>
-                    <p class="preview" :id="user.id" v-text="this.lastChat"></p>
+                    <p class="preview" :id="user.id" v-text="user.last_message"></p>
                 </div>
             </div>
         </div>
@@ -20,7 +20,7 @@
 <script>
 import {mapGetters, mapActions} from "vuex"
 export default {
-    props: ['user', 'senderID', 'receiveID', 'message', 'pushdata', 'idToSend', 'typeIndi'],
+    props: ['user'],
     data() {
         return {
             lastChat: 'Click to start chat',
@@ -44,7 +44,7 @@ export default {
             this.setOpenChatStatus()
             this.openChatHistory(id)
         },
-        activate: function(id) {
+        setActiveClass: function() {
             $('body').on('click', 'li', function() {
                 $('li.active').removeClass('active');
                 $(this).addClass('active');

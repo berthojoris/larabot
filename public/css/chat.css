@@ -374,7 +374,7 @@
 }
 
 #frame #sidepanel #contacts {
-  height: calc(100% - 177px);
+  height: calc(100% - 187px);
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -406,7 +406,7 @@
 
 #frame #sidepanel #contacts ul li.contact {
   position: relative;
-  padding: 10px 0 15px 0;
+  padding: 10px 0 10px 0;
   font-size: 0.9em;
   cursor: pointer;
 }
@@ -423,7 +423,6 @@
 
 #frame #sidepanel #contacts ul li.contact.active {
   background: #32465a;
-  border-right: 5px solid #435f7a;
 }
 
 #frame #sidepanel #contacts ul li.contact.active span.contact-status {

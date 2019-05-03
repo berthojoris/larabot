@@ -10,8 +10,7 @@
 
         <div id="contacts">
             <ul id="listUser">
-                <comp-user-list v-for="(user, index) in userlist" :key="index" :user="user">
-                </comp-user-list>
+                <comp-user-list v-for="(user, index) in userlist" :key="index" :user="user"></comp-user-list>
             </ul>
         </div>
 

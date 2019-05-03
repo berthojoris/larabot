@@ -10,7 +10,7 @@ const state = {
     emptyMessageStatus: false,
     typingMessageStatus: false,
     randomString: '',
-    message: ''
+    message: '',
 };
 
 const getters = {

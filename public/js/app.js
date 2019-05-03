@@ -1842,7 +1842,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2017,8 +2016,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     }
   }),
-  mounted: function mounted() {// this.messagetext = this.getRandomString
-  },
+  mounted: function mounted() {},
   watch: {
     getChatHistory: function getChatHistory() {
       this.chats = this.getChatHistory;
@@ -2026,7 +2024,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         VueScrollTo.scrollTo("div.messages ul li:last-child", 0, {
           container: '.messages'
         });
-      }); // this.messagetext = this.getRandomString
+      });
     }
   },
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(['send']))
@@ -2158,7 +2156,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'senderID', 'receiveID', 'message', 'pushdata', 'idToSend', 'typeIndi'],
+  props: ['user'],
   data: function data() {
     return {
       lastChat: 'Click to start chat'
@@ -2171,7 +2169,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.setOpenChatStatus();
       this.openChatHistory(id);
     },
-    activate: function activate(id) {
+    setActiveClass: function setActiveClass() {
       $('body').on('click', 'li', function () {
         $('li.active').removeClass('active');
         $(this).addClass('active');
@@ -31884,7 +31882,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.center[data-v-298d7b6c] {\r\n    margin-top: 40%;\r\n    margin-left: 20%;\r\n    width: 60%;\r\n    border: 3px solid #73AD21;\r\n    padding: 10px;\r\n    text-align: center;\n}\n.centerText[data-v-298d7b6c] {\r\n    margin-top: 40%;\r\n    font-size: 25px;\r\n    width: 100%;\r\n    text-align: center;\n}\n.typeIndicator[data-v-298d7b6c] {\r\n    position: absolute; \r\n    left: 62px; \r\n    top: 11px; \r\n    font-size: 12px;\n}\n.nameUp[data-v-298d7b6c] {\r\n    margin-top: -5px;\n}\n.showhide[data-v-298d7b6c] {\r\n    display: none;\n}\r\n", ""]);
+exports.push([module.i, "\n.center[data-v-298d7b6c] {\r\n    margin-top: 40%;\r\n    margin-left: 20%;\r\n    width: 60%;\r\n    border: 3px solid #73AD21;\r\n    padding: 10px;\r\n    text-align: center;\n}\n.centerText[data-v-298d7b6c] {\r\n    margin-top: 40%;\r\n    font-size: 25px;\r\n    width: 100%;\r\n    text-align: center;\n}\n.typeIndicator[data-v-298d7b6c] {\r\n    position: absolute; \r\n    left: 62px; \r\n    top: 11px; \r\n    font-size: 12px;\n}\n.nameUp[data-v-298d7b6c] {\r\n    margin-top: -5px;\n}\n.showhide[data-v-298d7b6c] {\r\n    display: none;\n}\n.messages[data-v-298d7b6c] {\r\n    background-image: url(\"/images/background.png\");\n}\r\n", ""]);
 
 // exports
 
@@ -78259,52 +78257,41 @@ var render = function() {
       }
     },
     [
-      _c(
-        "li",
-        {
-          staticClass: "contact",
-          on: {
-            click: function($event) {
-              return _vm.activate(_vm.user.id)
-            }
-          }
-        },
-        [
-          _c("div", { staticClass: "wrap" }, [
-            _vm.user.online_status === "ONLINE"
-              ? _c("span", {
-                  staticClass: "contact-status online",
-                  attrs: { id: _vm.user.id }
-                })
-              : _c("span", {
-                  staticClass: "contact-status busy",
-                  attrs: { id: _vm.user.id }
-                }),
-            _vm._v(" "),
-            _c("img", { attrs: { src: _vm.user.image } }),
-            _vm._v(" "),
-            _c("div", { staticClass: "meta" }, [
-              _c("div", { staticClass: "mtop", attrs: { id: _vm.user.id } }, [
-                _c("p", {
-                  staticClass: "name",
-                  staticStyle: { display: "inline-block" },
-                  domProps: { textContent: _vm._s(_vm.user.name) }
-                }),
-                _vm._v(" "),
-                _c("p", { staticClass: "typingNotif showhide" }, [
-                  _vm._v(" is typing...")
-                ]),
-                _vm._v(" "),
-                _c("p", {
-                  staticClass: "preview",
-                  attrs: { id: _vm.user.id },
-                  domProps: { textContent: _vm._s(this.lastChat) }
-                })
-              ])
+      _c("li", { staticClass: "contact", on: { click: _vm.setActiveClass } }, [
+        _c("div", { staticClass: "wrap" }, [
+          _vm.user.online_status === "ONLINE"
+            ? _c("span", {
+                staticClass: "contact-status online",
+                attrs: { id: _vm.user.id }
+              })
+            : _c("span", {
+                staticClass: "contact-status busy",
+                attrs: { id: _vm.user.id }
+              }),
+          _vm._v(" "),
+          _c("img", { attrs: { src: _vm.user.image } }),
+          _vm._v(" "),
+          _c("div", { staticClass: "meta" }, [
+            _c("div", { staticClass: "mtop", attrs: { id: _vm.user.id } }, [
+              _c("p", {
+                staticClass: "name",
+                staticStyle: { display: "inline-block" },
+                domProps: { textContent: _vm._s(_vm.user.name) }
+              }),
+              _vm._v(" "),
+              _c("p", { staticClass: "typingNotif showhide" }, [
+                _vm._v(" is typing...")
+              ]),
+              _vm._v(" "),
+              _c("p", {
+                staticClass: "preview",
+                attrs: { id: _vm.user.id },
+                domProps: { textContent: _vm._s(_vm.user.last_message) }
+              })
             ])
           ])
-        ]
-      )
+        ])
+      ])
     ]
   )
 }

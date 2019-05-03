@@ -14,11 +14,16 @@ class UserListCollection extends JsonResource
      */
     public function toArray($request)
     {
+        if(is_null($this->lastChat)) {
+            $msg = 'No last conversation';
+        } else {
+            $msg = $this->lastChat->message;
+        }
         return [
             'id' => $this->id,
             'name' => $this->name,
             'image' => $this->image,
-            'message' => 'Hahahah...',
+            'last_message' => $msg,
         ];
     }
 }

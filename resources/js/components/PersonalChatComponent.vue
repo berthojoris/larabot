@@ -79,7 +79,7 @@ export default {
         },
     },
     mounted() {
-        // this.messagetext = this.getRandomString
+        
     },
     watch: {
         getChatHistory: function() {
@@ -89,7 +89,6 @@ export default {
                     container: '.messages'
                 })
             })
-            // this.messagetext = this.getRandomString
         }
     },
     methods: {
@@ -127,5 +126,8 @@ export default {
 }
 .showhide {
     display: none;
+}
+.messages {
+    background-image: url("/images/background.png");
 }
 </style>

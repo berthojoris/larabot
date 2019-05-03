@@ -36,4 +36,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function lastChat()
+    {
+        return $this->hasOne('App\Chat', 'sender_id', 'id');
+    }
 }
