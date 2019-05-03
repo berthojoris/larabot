@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Chat;
 use App\User;
 use App\Events\IncomingChat;
-use App\Events\OnlineStatus;
 use Illuminate\Http\Request;
 use App\Http\Resources\ChatCollection;
 use App\Http\Resources\UserListCollection;
@@ -44,23 +43,28 @@ class ChatController extends Controller
 
     public function insert(Request $request)
     {
-        $request->validate([
-            'sender_id' => 'required',
-            'receive_id' => 'required',
-            'message' => 'required'
-        ]);
-        
         $saved = Chat::create([
-            'sender_id' => request('sender_id'),
+            'sender_id' => auth()->user()->id,
             'receive_id' => request('receive_id'),
             'message' => request('message')
         ]);
 
         $data = Chat::with('sender', 'receive')->whereId($saved->id)->first();
 
-        broadcast(new OnlineStatus($data, 'insert'))->toOthers();
+        $newData = [
+            'id' => $data->id,
+            'sender_id' => $data->sender_id,
+            'receive_id' => $data->receive_id,
+            'sender_image' => $data->sender->image,
+            'receive_image' => $data->receive->image,
+            'message' => $data->message,
+            'created_at' => $data->created_at,
+            'updated_at' => $data->updated_at,
+        ];
 
-        return $data;
+        broadcast(new IncomingChat($newData, 'insert'))->toOthers();
+
+        return $newData;
     }
 
     public function online($currentID)
@@ -71,7 +75,7 @@ class ChatController extends Controller
     public function deleteall()
     {
         Chat::truncate();
-        broadcast(new OnlineStatus(null, 'clean'));
+        broadcast(new IncomingChat(null, 'clean'));
         return "Done";
     }
 

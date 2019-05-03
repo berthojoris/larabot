@@ -10,6 +10,7 @@ const state = {
     emptyMessageStatus: false,
     typingMessageStatus: false,
     randomString: '',
+    message: ''
 };
 
 const getters = {
@@ -21,6 +22,7 @@ const getters = {
     getEmptyMessage: state => state.emptyMessageStatus,
     getTypingMessage: state => state.typingMessageStatus,
     getRandomString: state => state.randomString,
+    getMessage: state => state.message,
 };
 
 const actions = {
@@ -45,7 +47,20 @@ const actions = {
             }
             commit('OPEN_CHATHISTORY', dataDB)
             commit('SET_LOADING_MESSAGE_FALSE')
-            commit('SET_TYPING_MESSAGE_TRUE')
+            commit('SET_PANEL_MESSAGE_TRUE')
+        } catch(error) {
+            state.errorBag = error
+        }
+    },
+    async send({ commit }) {
+        try {
+            let response    = await axios.post('/chat/insert', {
+                receive_id: state.chatReceiver.id,
+                message: state.message
+            })
+            let dataDB      = await response.data;
+            commit('SET_EMPTY_MESSAGE_FALSE')
+            commit('DONE_SEND', dataDB)
         } catch(error) {
             state.errorBag = error
         }
@@ -66,7 +81,7 @@ const actions = {
         commit('SET_EMPTY_MESSAGE_FALSE')
     },
     setTypingMessageTrue({ commit }) {
-        commit('SET_TYPING_MESSAGE_TRUE')
+        commit('SET_PANEL_MESSAGE_TRUE')
     },
     setTypingMessageFalse({ commit }) {
         commit('SET_TYPING_MESSAGE_FALSE')
@@ -80,6 +95,17 @@ const actions = {
 };
 
 const mutations = {
+    DONE_SEND: (state, data) => {
+        state.message = '';
+        state.chatHistory.push(data)
+    },
+    message (state, value) {
+        state.message = value;
+    },
+    sendMessage (state, value) {
+        if (state.message.trim().length < 1) return;
+        
+    },
     OPEN_CHAT_WITH: (state, data) => {
         state.chatReceiver = data
     },
@@ -104,7 +130,7 @@ const mutations = {
     SET_EMPTY_MESSAGE_FALSE: (state) => {
         state.emptyMessageStatus = false
     },
-    SET_TYPING_MESSAGE_TRUE: (state) => {
+    SET_PANEL_MESSAGE_TRUE: (state) => {
         state.typingMessageStatus = true
     },
     SET_TYPING_MESSAGE_FALSE: (state) => {

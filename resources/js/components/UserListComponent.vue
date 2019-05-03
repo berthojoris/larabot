@@ -54,8 +54,6 @@ export default {
             this.openChatWith(id)
             this.setOpenChatStatus()
             this.openChatHistory(id)
-            // this.$emit('openChatNow', id, image, name)
-            // this.chatStatus = true
         },
         activate: function(id) {
             $('body').on('click', 'li', function() {

@@ -2058,9 +2058,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       chats: []
     };
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(["getPersonalData", "getChatHistory", "getLoadingMessage", "getEmptyMessage", "getOpenChatStatus", "getTypingMessage", "getRandomString"])),
-  mounted: function mounted() {
-    this.messagetext = this.getRandomString;
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(["getReceiver", "getPersonalData", "getChatHistory", "getLoadingMessage", "getEmptyMessage", "getOpenChatStatus", "getTypingMessage", "getRandomString"]), {
+    message: {
+      get: function get() {
+        return this.$store.state.message;
+      },
+      set: function set(value) {
+        return this.$store.commit('message', value);
+      }
+    }
+  }),
+  mounted: function mounted() {// this.messagetext = this.getRandomString
   },
   watch: {
     getChatHistory: function getChatHistory() {
@@ -2069,13 +2077,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         VueScrollTo.scrollTo("div.messages ul li:last-child", 0, {
           container: '.messages'
         });
-      });
-      this.messagetext = this.getRandomString;
+      }); // this.messagetext = this.getRandomString
     }
   },
-  methods: {
-    sendMessage: function sendMessage() {}
-  }
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(['send']))
 });
 
 /***/ }),
@@ -2226,8 +2231,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     openChat: function openChat(id, image, name) {
       this.openChatWith(id);
       this.setOpenChatStatus();
-      this.openChatHistory(id); // this.$emit('openChatNow', id, image, name)
-      // this.chatStatus = true
+      this.openChatHistory(id);
     },
     activate: function activate(id) {
       $('body').on('click', 'li', function () {
@@ -78009,10 +78013,10 @@ var render = function() {
     _vm.chats.length
       ? _c("div", { staticClass: "contact-profile" }, [
           _c("div", [
-            _c("img", { attrs: { src: _vm.getPersonalData.image } }),
+            _c("img", { attrs: { src: _vm.getReceiver.image } }),
             _vm._v(" "),
             _c("p", { staticClass: "normal" }, [
-              _vm._v(_vm._s(_vm.getPersonalData.name))
+              _vm._v(_vm._s(_vm.getReceiver.name))
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "typeIndicator showhide" }, [
@@ -78064,13 +78068,13 @@ var render = function() {
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.messagetext,
-                  expression: "messagetext"
+                  value: _vm.message,
+                  expression: "message"
                 }
               ],
               ref: "writemsg",
               attrs: { type: "text", placeholder: "Write your message..." },
-              domProps: { value: _vm.messagetext },
+              domProps: { value: _vm.message },
               on: {
                 keyup: function($event) {
                   if (
@@ -78079,13 +78083,13 @@ var render = function() {
                   ) {
                     return null
                   }
-                  return _vm.sendMessage($event)
+                  return _vm.send($event)
                 },
                 input: function($event) {
                   if ($event.target.composing) {
                     return
                   }
-                  _vm.messagetext = $event.target.value
+                  _vm.message = $event.target.value
                 }
               }
             }),
@@ -78095,16 +78099,12 @@ var render = function() {
               attrs: { "aria-hidden": "true" }
             }),
             _vm._v(" "),
-            _c(
-              "button",
-              { staticClass: "submit", on: { click: _vm.sendMessage } },
-              [
-                _c("i", {
-                  staticClass: "fa fa-paper-plane",
-                  attrs: { "aria-hidden": "true" }
-                })
-              ]
-            )
+            _c("button", { staticClass: "submit", on: { click: _vm.send } }, [
+              _c("i", {
+                staticClass: "fa fa-paper-plane",
+                attrs: { "aria-hidden": "true" }
+              })
+            ])
           ])
         ])
       : _vm._e()
@@ -92753,7 +92753,8 @@ var state = {
   loadingMessageStatus: false,
   emptyMessageStatus: false,
   typingMessageStatus: false,
-  randomString: ''
+  randomString: '',
+  message: ''
 };
 var getters = {
   getSender: function getSender(state) {
@@ -92779,6 +92780,9 @@ var getters = {
   },
   getRandomString: function getRandomString(state) {
     return state.randomString;
+  },
+  getMessage: function getMessage(state) {
+    return state.message;
   }
 };
 var actions = (_actions = {
@@ -92861,7 +92865,7 @@ var actions = (_actions = {
 
               commit('OPEN_CHATHISTORY', dataDB);
               commit('SET_LOADING_MESSAGE_FALSE');
-              commit('SET_TYPING_MESSAGE_TRUE');
+              commit('SET_PANEL_MESSAGE_TRUE');
               _context2.next = 18;
               break;
 
@@ -92884,38 +92888,96 @@ var actions = (_actions = {
 
     return openChatHistory;
   }(),
-  setOpenChatStatus: function setOpenChatStatus(_ref3) {
-    var commit = _ref3.commit;
+  send: function () {
+    var _send = _asyncToGenerator(
+    /*#__PURE__*/
+    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(_ref3) {
+      var commit, response, dataDB;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              commit = _ref3.commit;
+              _context3.prev = 1;
+              _context3.next = 4;
+              return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/chat/insert', {
+                receive_id: state.chatReceiver.id,
+                message: state.message
+              });
+
+            case 4:
+              response = _context3.sent;
+              _context3.next = 7;
+              return response.data;
+
+            case 7:
+              dataDB = _context3.sent;
+              commit('SET_EMPTY_MESSAGE_FALSE');
+              commit('DONE_SEND', dataDB);
+              _context3.next = 15;
+              break;
+
+            case 12:
+              _context3.prev = 12;
+              _context3.t0 = _context3["catch"](1);
+              state.errorBag = _context3.t0;
+
+            case 15:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[1, 12]]);
+    }));
+
+    function send(_x5) {
+      return _send.apply(this, arguments);
+    }
+
+    return send;
+  }(),
+  setOpenChatStatus: function setOpenChatStatus(_ref4) {
+    var commit = _ref4.commit;
     commit('SET_OPEN_CHAT_STATUS');
   },
-  setLoadingMessageTrue: function setLoadingMessageTrue(_ref4) {
-    var commit = _ref4.commit;
+  setLoadingMessageTrue: function setLoadingMessageTrue(_ref5) {
+    var commit = _ref5.commit;
     commit('SET_LOADING_MESSAGE_TRUE');
   },
-  setLoadingMessageFalse: function setLoadingMessageFalse(_ref5) {
-    var commit = _ref5.commit;
+  setLoadingMessageFalse: function setLoadingMessageFalse(_ref6) {
+    var commit = _ref6.commit;
     commit('SET_LOADING_MESSAGE_FALSE');
   }
-}, _defineProperty(_actions, "setLoadingMessageTrue", function setLoadingMessageTrue(_ref6) {
-  var commit = _ref6.commit;
-  commit('SET_EMPTY_MESSAGE_TRUE');
-}), _defineProperty(_actions, "setLoadingMessageFalse", function setLoadingMessageFalse(_ref7) {
+}, _defineProperty(_actions, "setLoadingMessageTrue", function setLoadingMessageTrue(_ref7) {
   var commit = _ref7.commit;
-  commit('SET_EMPTY_MESSAGE_FALSE');
-}), _defineProperty(_actions, "setTypingMessageTrue", function setTypingMessageTrue(_ref8) {
+  commit('SET_EMPTY_MESSAGE_TRUE');
+}), _defineProperty(_actions, "setLoadingMessageFalse", function setLoadingMessageFalse(_ref8) {
   var commit = _ref8.commit;
-  commit('SET_TYPING_MESSAGE_TRUE');
-}), _defineProperty(_actions, "setTypingMessageFalse", function setTypingMessageFalse(_ref9) {
+  commit('SET_EMPTY_MESSAGE_FALSE');
+}), _defineProperty(_actions, "setTypingMessageTrue", function setTypingMessageTrue(_ref9) {
   var commit = _ref9.commit;
-  commit('SET_TYPING_MESSAGE_FALSE');
-}), _defineProperty(_actions, "setClearHistoryChat", function setClearHistoryChat(_ref10) {
+  commit('SET_PANEL_MESSAGE_TRUE');
+}), _defineProperty(_actions, "setTypingMessageFalse", function setTypingMessageFalse(_ref10) {
   var commit = _ref10.commit;
-  commit('OPEN_CHATHISTORY');
-}), _defineProperty(_actions, "setRandomStr", function setRandomStr(_ref11) {
+  commit('SET_TYPING_MESSAGE_FALSE');
+}), _defineProperty(_actions, "setClearHistoryChat", function setClearHistoryChat(_ref11) {
   var commit = _ref11.commit;
+  commit('OPEN_CHATHISTORY');
+}), _defineProperty(_actions, "setRandomStr", function setRandomStr(_ref12) {
+  var commit = _ref12.commit;
   commit('RANDOM_STR');
 }), _actions);
 var mutations = {
+  DONE_SEND: function DONE_SEND(state, data) {
+    state.message = '';
+    state.chatHistory.push(data);
+  },
+  message: function message(state, value) {
+    state.message = value;
+  },
+  sendMessage: function sendMessage(state, value) {
+    if (state.message.trim().length < 1) return;
+  },
   OPEN_CHAT_WITH: function OPEN_CHAT_WITH(state, data) {
     state.chatReceiver = data;
   },
@@ -92940,7 +93002,7 @@ var mutations = {
   SET_EMPTY_MESSAGE_FALSE: function SET_EMPTY_MESSAGE_FALSE(state) {
     state.emptyMessageStatus = false;
   },
-  SET_TYPING_MESSAGE_TRUE: function SET_TYPING_MESSAGE_TRUE(state) {
+  SET_PANEL_MESSAGE_TRUE: function SET_PANEL_MESSAGE_TRUE(state) {
     state.typingMessageStatus = true;
   },
   SET_TYPING_MESSAGE_FALSE: function SET_TYPING_MESSAGE_FALSE(state) {

@@ -14,16 +14,17 @@ class IncomingChat implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $pushchat;
+    public $pushchat, $type;
 
-    public function __construct($data)
+    public function __construct($data, $typeMsg)
     {
         $this->pushchat = $data;
+        $this->type = $typeMsg;
         $this->dontBroadcastToCurrentUser();
     }
 
     public function broadcastOn()
     {
-        return new Channel('pushchat');
+        return new PresenceChannel('online');
     }
 }

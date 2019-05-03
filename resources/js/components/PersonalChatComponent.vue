@@ -19,8 +19,8 @@
 
     <div v-if="chats.length" class="contact-profile">
         <div>
-            <img :src="getPersonalData.image">
-            <p class="normal">{{ getPersonalData.name }}</p>
+            <img :src="getReceiver.image">
+            <p class="normal">{{ getReceiver.name }}</p>
             <div class="typeIndicator showhide"> is Typing ...</div>
         </div>
         <div class="social-media">
@@ -40,9 +40,9 @@
     </div>
     <div v-if="getTypingMessage" class="message-input">
         <div class="wrap">
-            <input ref="writemsg" type="text" @keyup.enter="sendMessage" v-model="messagetext" placeholder="Write your message..." />
+            <input ref="writemsg" type="text" @keyup.enter="send" v-model="message" placeholder="Write your message..." />
             <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
-            <button @click="sendMessage" class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+            <button @click="send" class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
         </div>
     </div>
 </div>
@@ -60,6 +60,7 @@ export default {
     },
     computed: {
         ...mapGetters([
+            "getReceiver",
             "getPersonalData",
             "getChatHistory",
             "getLoadingMessage",
@@ -68,9 +69,17 @@ export default {
             "getTypingMessage",
             "getRandomString",
         ]),
+        message: {
+            get() {
+                return this.$store.state.message
+            },
+            set(value) {
+                return this.$store.commit('message', value)
+            },
+        },
     },
     mounted() {
-        this.messagetext = this.getRandomString
+        // this.messagetext = this.getRandomString
     },
     watch: {
         getChatHistory: function() {
@@ -80,13 +89,13 @@ export default {
                     container: '.messages'
                 })
             })
-            this.messagetext = this.getRandomString
+            // this.messagetext = this.getRandomString
         }
     },
     methods: {
-        sendMessage() {
-
-        }
+        ...mapActions([
+            'send'
+        ]),
     }
 }
 </script>

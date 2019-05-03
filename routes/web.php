@@ -40,3 +40,4 @@ Route::post('group/create', 'GroupController@createGroup');
 Route::post('friend/request', 'FriendRequestController@add');
 Route::post('user', 'HomeController@getUser');
 Route::post('chat/history', 'ChatController@chatHistory');
+Route::post('chat/insert', 'ChatController@insert');
