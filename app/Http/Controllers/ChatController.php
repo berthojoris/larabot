@@ -12,6 +12,19 @@ use App\Http\Resources\UserListCollection;
 
 class ChatController extends Controller
 {
+    public function chatHistory()
+    {
+        $senderID   = auth()->user()->id;
+        $receiveID  = request('receiverID');
+
+        $data = Chat::with('sender', 'receive')->where(function($query) use ($senderID, $receiveID) {
+            return $query->whereSenderId($senderID)->orWhere('receive_id', $senderID);
+        })->where(function($query) use ($senderID, $receiveID) {
+            return $query->whereSenderId($receiveID)->orWhere('receive_id', $receiveID);
+        })->get();
+        return ChatCollection::collection($data);
+    }
+
     public function list($senderID, $receiveID)
     {
         // "select * from `chat` where (`sender_id` = ? or `receive_id` = ?) and (`sender_id` = ? or `receive_id` = ?)"

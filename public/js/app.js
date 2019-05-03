@@ -1775,6 +1775,11 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -1838,25 +1843,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       userlist: [],
-      id: null,
-      image: null,
-      name: null,
-      idLogged: null,
-      pusharr: null,
-      participants: [],
-      toRemove: [],
-      incomingMsgIcon: 'active',
-      idToSend: null,
-      activePeer: false,
-      typingTimer: false,
+      // id: null,
+      // image: null,
+      // name: null,
+      // idLogged: null,
+      // pusharr: null,
+      // participants: [],
+      // toRemove: [],
+      // incomingMsgIcon: 'active',
+      // idToSend: null,
+      // activePeer: false,
+      // typingTimer: false,
       typingIndicator: null,
-      whisperTyping: null,
-      whisperReading: null,
+      // whisperTyping: null,
+      // whisperReading: null,
       inviteUserStatus: false,
       group_name: ''
     };
@@ -1891,8 +1896,9 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     this.getUserList();
     this.idLogged = window.App.user.id;
+    this.setPersonalData(window.App.user);
   },
-  methods: {
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(["setPersonalData"]), {
     showModal: function showModal() {
       this.$refs['modal-invite'].show();
     },
@@ -1920,13 +1926,6 @@ __webpack_require__.r(__webpack_exports__);
         toastr.error("Error when delete data. Please reload page manual");
       });
     },
-    openChatViaID: function openChatViaID(id, image, name) {
-      this.id = id, this.image = image;
-      this.name = name;
-    },
-    chatWithID: function chatWithID(sentid) {
-      this.idToSend = sentid;
-    },
     getUserList: function getUserList() {
       var _this2 = this;
 
@@ -1952,7 +1951,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     }
-  }
+  })
 });
 
 /***/ }),
@@ -1996,7 +1995,11 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _ErrorBag__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ErrorBag */ "./resources/js/ErrorBag.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -2049,194 +2052,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['id', 'img', 'name', 'pushdata', 'typeIndi'],
   data: function data() {
     return {
       messagetext: '',
       chats: [],
-      loadStatus: false,
+      firstEmpty: false,
       emptyChat: false,
-      idLogged: null,
-      typeChatHere: false,
-      firstEmpty: true,
-      alreadyOpen: false,
-      activePeer: false,
-      errors: new _ErrorBag__WEBPACK_IMPORTED_MODULE_0__["default"]()
+      loadStatus: false,
+      typeChatHere: false
     };
   },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(["getChatHistory", "getLoadingMessage", "getEmptyMessage", "getOpenChatStatus", "getTypingMessage"])),
   mounted: function mounted() {
     this.idLogged = window.App.user.id;
-    this.getRandomChat();
   },
-  watch: {
-    typeIndi: function typeIndi() {
-      if (this.typeIndi[3] == 'hide') {
-        $(".typeIndicator").removeClass().addClass("typeIndicator showhide");
-        $(".nameUp").removeClass().addClass("normal");
-      } else {
-        if (this.typeIndi[2] == window.App.user.id) {
-          $(".typeIndicator").removeClass().addClass("typeIndicator");
-          $(".normal").removeClass().addClass("nameUp");
-        }
-      }
-    },
-    id: function id(val) {
-      this.getChatList(val);
-    },
-    pushdata: function pushdata(val) {
-      if (!_.isEmpty(val)) {
-        if (this.alreadyOpen) {
-          this.whenChatReady();
-          this.chats.push({
-            sender_id: val.sender_id,
-            sender_image: val.sender.image,
-            receive_image: val.receive.image,
-            type: 'replies',
-            message: val.message
-          });
-        }
-      } else {
-        this.chats = [];
-        this.whenFirstInit();
-      }
-
-      if (!_.isEmpty(this.chats)) {
-        this.$nextTick(function () {
-          VueScrollTo.scrollTo("div.messages ul li:last-child", 0, {
-            container: '.messages'
-          });
-        });
-      }
-
-      this.getRandomChat();
-    }
-  },
+  watch: {},
   methods: {
-    tagPeers: function tagPeers() {
-      this.$emit('typeNow', window.App.user.id, this.id);
-    },
-    whenFirstInit: function whenFirstInit() {
-      this.firstEmpty = true;
-      this.emptyChat = false;
-      this.typeChatHere = true;
-      this.loadStatus = false;
-      this.alreadyOpen = false;
-    },
-    whenLoading: function whenLoading() {
-      this.firstEmpty = false;
-      this.emptyChat = false;
-      this.typeChatHere = false;
-      this.loadStatus = true;
-      this.alreadyOpen = true;
-    },
-    whenNoChat: function whenNoChat() {
-      this.firstEmpty = false;
-      this.loadStatus = false;
-      this.emptyChat = true;
-      this.typeChatHere = true;
-      this.alreadyOpen = true;
-    },
-    whenChatReady: function whenChatReady() {
-      this.firstEmpty = false;
-      this.loadStatus = false;
-      this.emptyChat = false;
-      this.typeChatHere = true;
-      this.alreadyOpen = true;
-    },
-    sendMessage: function sendMessage() {
-      if (this.messagetext.trim().length < 1) return;
-
-      if (this.id == null) {
-        toastr.warning("Select the user before starting the conversation");
-        return;
-      }
-
-      this.whenChatReady();
-      var picture = window.App.user.image;
-      this.chats.push({
-        sender_id: this.idLogged,
-        sender_image: picture,
-        receive_image: '',
-        type: 'sent',
-        message: this.messagetext
-      });
-
-      if (!_.isEmpty(this.chats)) {
-        if (this.messagetext.length > 10) {
-          var limitStr = this.messagetext.substring(0, 32) + " ...";
-        } else {
-          var limitStr = this.messagetext;
-        }
-
-        $("div.meta").find("p#" + this.id).empty().html(limitStr);
-        this.$nextTick(function () {
-          VueScrollTo.scrollTo("div.messages ul li:last-child", 0, {
-            container: '.messages'
-          });
-        });
-      }
-
-      this.saveChatToDB();
-    },
-    getRandomChat: function getRandomChat() {
-      this.messagetext = this.upperFirst();
-    },
-    upperFirst: function upperFirst() {
-      var str = RandomWords({
-        exactly: 10,
-        join: ' '
-      });
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    },
-    getChatList: function getChatList(receiverID) {
-      var _this = this;
-
-      var userID = window.App.user.id;
-      this.chats = [];
-      this.$emit('chatWith', receiverID);
-      this.whenLoading();
-      axios.get('/api/chat/list/' + userID + '/' + receiverID).then(function (response) {
-        _this.loadStatus = false;
-        var chatDB = response.data;
-        _this.chats = chatDB;
-
-        if (!_.isEmpty(_this.chats)) {
-          _this.whenChatReady();
-
-          _this.$nextTick(function () {
-            VueScrollTo.scrollTo("div.messages ul li:last-child", 0, {
-              container: '.messages'
-            });
-          });
-        } else {
-          _this.whenNoChat();
-        }
-      })["catch"](function (error) {
-        _this.whenNoChat();
-      }).then(function () {});
-    },
-    saveChatToDB: function saveChatToDB() {
-      var _this2 = this;
-
-      var userID = window.App.user.id;
-      axios.post('/api/chat/insert', {
-        message: this.messagetext,
-        sender_id: userID,
-        receive_id: this.id
-      }).then(function (response) {
-        _this2.getRandomChat();
-
-        _this2.errors.clearAll();
-      })["catch"](function (error) {
-        if (error.response.status == 422) {
-          var errorsCollection = error.response.data.errors;
-
-          _this2.errors.setErrors(errorsCollection);
-
-          toastr.error(_this2.errors.first('message'));
-        }
-      });
-    }
+    sendMessage: function sendMessage() {}
   }
 });
 
@@ -2369,13 +2201,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   props: ['user', 'senderID', 'receiveID', 'message', 'pushdata', 'idToSend', 'typeIndi'],
   data: function data() {
     return {
-      online: true,
-      lastChat: 'Click to start chat',
-      activePeer: false,
-      chatStatus: false
+      lastChat: 'Click to start chat'
     };
   },
-  mounted: function mounted() {},
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(["getReceiver", "getOpenChatStatus", "getChatHistory"])),
   watch: {
     typeIndi: function typeIndi() {
       if (this.typeIndi[3] == 'hide') {
@@ -2385,30 +2214,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           $("ul#listUser").find("div#" + this.typeIndi[0]).find(".typingNotif").removeClass().addClass("typingNotif");
         }
       }
-    },
-    idToSend: function idToSend() {},
-    message: function message() {
-      this.lastChat = this.message;
-    },
-    pushdata: function pushdata(val) {
-      var _this = this;
-
-      if (!_.isEmpty(val)) {
-        this.$nextTick(function () {
-          if (val.receive_id == window.App.user.id) {
-            if (!_this.chatStatus) {
-              $("span#" + val.sender_id).removeClass().addClass('contact-status busy');
-            }
-          }
-        });
-      }
     }
   },
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(["getReceiver"]), Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(["openChatWith"]), {
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(["openChatWith", "setOpenChatStatus", "openChatHistory"]), {
     openChat: function openChat(id, image, name) {
       this.openChatWith(id);
-      this.$emit('openChatNow', id, image, name);
-      this.chatStatus = true;
+      this.setOpenChatStatus();
+      this.openChatHistory(id); // this.$emit('openChatNow', id, image, name)
+      // this.chatStatus = true
     },
     activate: function activate(id) {
       $('body').on('click', 'li', function () {
@@ -77875,13 +77688,7 @@ var render = function() {
               _vm._l(_vm.userlist, function(user, index) {
                 return _c("comp-user-list", {
                   key: index,
-                  attrs: {
-                    user: user,
-                    idToSend: _vm.idToSend,
-                    pushdata: _vm.pusharr,
-                    typeIndi: _vm.typingIndicator
-                  },
-                  on: { openChatNow: _vm.openChatViaID }
+                  attrs: { user: user, typeIndi: _vm.typingIndicator }
                 })
               }),
               1
@@ -77910,16 +77717,7 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c("comp-personal-chat", {
-        attrs: {
-          pushdata: _vm.pusharr,
-          id: _vm.id,
-          img: _vm.image,
-          name: _vm.name,
-          typeIndi: _vm.typingIndicator
-        },
-        on: { chatWith: _vm.chatWithID, typeNow: _vm.listenType }
-      }),
+      _c("comp-personal-chat"),
       _vm._v(" "),
       _c(
         "b-modal",
@@ -78167,19 +77965,19 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "content" }, [
-    _vm.firstEmpty
+    !_vm.getOpenChatStatus
       ? _c("div", { staticClass: "centerText" }, [
           _c("p", [_vm._v('"Stay connected with people around you"')])
         ])
       : _vm._e(),
     _vm._v(" "),
-    _vm.emptyChat
+    _vm.getEmptyMessage
       ? _c("div", { staticClass: "circonf-wrapper centerText" }, [
           _c("p", [_vm._v("Sorry there is no chat history with this user")])
         ])
       : _vm._e(),
     _vm._v(" "),
-    _vm.loadStatus
+    _vm.getLoadingMessage
       ? _c("div", { staticClass: "item loading-5" }, [
           _c("div", { staticClass: "svg-wrapper" }, [
             _c(
@@ -78222,7 +78020,7 @@ var render = function() {
       ? _c("div", { staticClass: "messages" }, [
           _c(
             "ul",
-            _vm._l(_vm.chats, function(chat, index) {
+            _vm._l(_vm.getChatHistory, function(chat, index) {
               return _c(
                 "li",
                 {
@@ -78250,7 +78048,7 @@ var render = function() {
         ])
       : _vm._e(),
     _vm._v(" "),
-    _vm.typeChatHere
+    _vm.getTypingMessage
       ? _c("div", { staticClass: "message-input" }, [
           _c("div", { staticClass: "wrap" }, [
             _c("input", {
@@ -78266,7 +78064,6 @@ var render = function() {
               attrs: { type: "text", placeholder: "Write your message..." },
               domProps: { value: _vm.messagetext },
               on: {
-                keydown: _vm.tagPeers,
                 keyup: function($event) {
                   if (
                     !$event.type.indexOf("key") &&
@@ -92278,82 +92075,6 @@ module.exports = function(module) {
 
 /***/ }),
 
-/***/ "./resources/js/ErrorBag.js":
-/*!**********************************!*\
-  !*** ./resources/js/ErrorBag.js ***!
-  \**********************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-// https://stackoverflow.com/questions/51766297/how-to-show-laravel-vue-js-errors
-var ErrorBag =
-/*#__PURE__*/
-function () {
-  function ErrorBag() {
-    var errors = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-    _classCallCheck(this, ErrorBag);
-
-    this.setErrors(errors);
-  }
-
-  _createClass(ErrorBag, [{
-    key: "hasErrors",
-    value: function hasErrors() {
-      return !!this.keys.length;
-    }
-  }, {
-    key: "hasError",
-    value: function hasError(key) {
-      return this.keys.indexOf(key) > -1;
-    }
-  }, {
-    key: "firstKey",
-    value: function firstKey() {
-      return this.keys[0];
-    }
-  }, {
-    key: "first",
-    value: function first(key) {
-      return this.errors[key] ? this.errors[key][0] : undefined;
-    }
-  }, {
-    key: "setErrors",
-    value: function setErrors(errors) {
-      this.errors = errors;
-    }
-  }, {
-    key: "clearAll",
-    value: function clearAll() {
-      this.setErrors({});
-    }
-  }, {
-    key: "clear",
-    value: function clear(key) {
-      return delete this.errors[key];
-    }
-  }, {
-    key: "keys",
-    get: function get() {
-      return Object.keys(this.errors);
-    }
-  }]);
-
-  return ErrorBag;
-}();
-
-/* harmony default export */ __webpack_exports__["default"] = (ErrorBag);
-
-/***/ }),
-
 /***/ "./resources/js/app.js":
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
@@ -92973,6 +92694,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var vuex_persistedstate__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex-persistedstate */ "./node_modules/vuex-persistedstate/dist/vuex-persistedstate.es.js");
 /* harmony import */ var _modules_personalchat__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/personalchat */ "./resources/js/store/modules/personalchat.js");
+/* harmony import */ var _modules_self__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/self */ "./resources/js/store/modules/self.js");
+
 
 
 
@@ -92982,7 +92705,8 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_0__
   // plugins: [createPersistedState()],
   namespaced: true,
   modules: {
-    personalchat: _modules_personalchat__WEBPACK_IMPORTED_MODULE_3__["default"]
+    personalchat: _modules_personalchat__WEBPACK_IMPORTED_MODULE_3__["default"],
+    self: _modules_self__WEBPACK_IMPORTED_MODULE_4__["default"]
   }
 }));
 
@@ -93003,6 +92727,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 
 
+var _actions;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -93013,7 +92741,10 @@ var state = {
   chatReceiver: [],
   errorBag: null,
   chatOpenStatus: false,
-  chatHistory: []
+  chatHistory: [],
+  loadingMessageStatus: false,
+  emptyMessageStatus: false,
+  typingMessageStatus: false
 };
 var getters = {
   getSender: function getSender(state) {
@@ -93021,9 +92752,24 @@ var getters = {
   },
   getReceiver: function getReceiver(state) {
     return state.chatReceiver;
+  },
+  getOpenChatStatus: function getOpenChatStatus(state) {
+    return state.chatOpenStatus;
+  },
+  getChatHistory: function getChatHistory(state) {
+    return state.chatHistory;
+  },
+  getLoadingMessage: function getLoadingMessage(state) {
+    return state.loadingMessageStatus;
+  },
+  getEmptyMessage: function getEmptyMessage(state) {
+    return state.emptyMessageStatus;
+  },
+  getTypingMessage: function getTypingMessage(state) {
+    return state.typingMessageStatus;
   }
 };
-var actions = {
+var actions = (_actions = {
   openChatWith: function () {
     var _openChatWith = _asyncToGenerator(
     /*#__PURE__*/
@@ -93069,11 +92815,147 @@ var actions = {
     }
 
     return openChatWith;
-  }()
-};
+  }(),
+  openChatHistory: function () {
+    var _openChatHistory = _asyncToGenerator(
+    /*#__PURE__*/
+    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(_ref2, id) {
+      var commit, response, dataDB;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              commit = _ref2.commit;
+              commit('SET_LOADING_MESSAGE_TRUE');
+              commit('SET_TYPING_MESSAGE_FALSE');
+              _context2.prev = 3;
+              _context2.next = 6;
+              return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/chat/history', {
+                receiverID: id
+              });
+
+            case 6:
+              response = _context2.sent;
+              _context2.next = 9;
+              return response.data;
+
+            case 9:
+              dataDB = _context2.sent;
+              commit('OPEN_CHATHISTORY', dataDB);
+              commit('SET_LOADING_MESSAGE_FALSE');
+              commit('SET_TYPING_MESSAGE_TRUE');
+              _context2.next = 18;
+              break;
+
+            case 15:
+              _context2.prev = 15;
+              _context2.t0 = _context2["catch"](3);
+              state.errorBag = _context2.t0;
+
+            case 18:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[3, 15]]);
+    }));
+
+    function openChatHistory(_x3, _x4) {
+      return _openChatHistory.apply(this, arguments);
+    }
+
+    return openChatHistory;
+  }(),
+  setOpenChatStatus: function setOpenChatStatus(_ref3) {
+    var commit = _ref3.commit;
+    commit('SET_OPEN_CHAT_STATUS');
+  },
+  setLoadingMessageTrue: function setLoadingMessageTrue(_ref4) {
+    var commit = _ref4.commit;
+    commit('SET_LOADING_MESSAGE_TRUE');
+  },
+  setLoadingMessageFalse: function setLoadingMessageFalse(_ref5) {
+    var commit = _ref5.commit;
+    commit('SET_LOADING_MESSAGE_FALSE');
+  }
+}, _defineProperty(_actions, "setLoadingMessageTrue", function setLoadingMessageTrue(_ref6) {
+  var commit = _ref6.commit;
+  commit('SET_EMPTY_MESSAGE_TRUE');
+}), _defineProperty(_actions, "setLoadingMessageFalse", function setLoadingMessageFalse(_ref7) {
+  var commit = _ref7.commit;
+  commit('SET_EMPTY_MESSAGE_FALSE');
+}), _defineProperty(_actions, "setTypingMessageTrue", function setTypingMessageTrue(_ref8) {
+  var commit = _ref8.commit;
+  commit('SET_TYPING_MESSAGE_TRUE');
+}), _defineProperty(_actions, "setTypingMessageFalse", function setTypingMessageFalse(_ref9) {
+  var commit = _ref9.commit;
+  commit('SET_TYPING_MESSAGE_FALSE');
+}), _actions);
 var mutations = {
   OPEN_CHAT_WITH: function OPEN_CHAT_WITH(state, data) {
     state.chatReceiver = data;
+  },
+  SET_OPEN_CHAT_STATUS: function SET_OPEN_CHAT_STATUS(state) {
+    state.chatOpenStatus = true;
+  },
+  OPEN_CHATHISTORY: function OPEN_CHATHISTORY(state, data) {
+    state.chatHistory = data;
+  },
+  SET_LOADING_MESSAGE_TRUE: function SET_LOADING_MESSAGE_TRUE(state) {
+    state.loadingMessageStatus = true;
+  },
+  SET_LOADING_MESSAGE_FALSE: function SET_LOADING_MESSAGE_FALSE(state) {
+    state.loadingMessageStatus = false;
+  },
+  SET_EMPTY_MESSAGE_TRUE: function SET_EMPTY_MESSAGE_TRUE(state) {
+    state.emptyMessageStatus = true;
+  },
+  SET_EMPTY_MESSAGE_FALSE: function SET_EMPTY_MESSAGE_FALSE(state) {
+    state.emptyMessageStatus = false;
+  },
+  SET_TYPING_MESSAGE_TRUE: function SET_TYPING_MESSAGE_TRUE(state) {
+    state.typingMessageStatus = true;
+  },
+  SET_TYPING_MESSAGE_FALSE: function SET_TYPING_MESSAGE_FALSE(state) {
+    state.typingMessageStatus = false;
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = ({
+  state: state,
+  getters: getters,
+  actions: actions,
+  mutations: mutations
+});
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/self.js":
+/*!********************************************!*\
+  !*** ./resources/js/store/modules/self.js ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var state = {
+  personalData: [],
+  errorBag: null
+};
+var getters = {
+  getPersonalData: function getPersonalData(state) {
+    return state.personalData;
+  }
+};
+var actions = {
+  setPersonalData: function setPersonalData(_ref, data) {
+    var commit = _ref.commit;
+    commit('SET_PERSONAL_DATA', data);
+  }
+};
+var mutations = {
+  SET_PERSONAL_DATA: function SET_PERSONAL_DATA(state, data) {
+    state.personalData = data;
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = ({

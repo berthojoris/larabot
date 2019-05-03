@@ -23,14 +23,15 @@ export default {
     props: ['user', 'senderID', 'receiveID', 'message', 'pushdata', 'idToSend', 'typeIndi'],
     data() {
         return {
-            online: true,
             lastChat: 'Click to start chat',
-            activePeer: false,
-            chatStatus: false
         }
     },
-    mounted() {
-        
+    computed: {
+        ...mapGetters([
+            "getReceiver",
+            "getOpenChatStatus",
+            "getChatHistory"
+        ]),
     },
     watch: {
         typeIndi: function() {
@@ -41,36 +42,20 @@ export default {
                     $("ul#listUser").find("div#"+this.typeIndi[0]).find(".typingNotif").removeClass().addClass("typingNotif")
                 }
             }
-        },
-        idToSend: function() {
-
-        },
-        message: function() {
-            this.lastChat = this.message
-        },
-        pushdata: function(val) {
-            if(!_.isEmpty(val)) {
-                this.$nextTick(() => {
-                    if(val.receive_id == window.App.user.id) {
-                        if(!this.chatStatus) {
-                            $("span#"+val.sender_id).removeClass().addClass('contact-status busy')
-                        }
-                    }
-                })
-            }
         }
     },
     methods: {
-        ...mapGetters([
-            "getReceiver"
-        ]),
         ...mapActions([
-            "openChatWith"
+            "openChatWith",
+            "setOpenChatStatus",
+            "openChatHistory"
         ]),
         openChat: function(id, image, name) {
             this.openChatWith(id)
-            this.$emit('openChatNow', id, image, name)
-            this.chatStatus = true
+            this.setOpenChatStatus()
+            this.openChatHistory(id)
+            // this.$emit('openChatNow', id, image, name)
+            // this.chatStatus = true
         },
         activate: function(id) {
             $('body').on('click', 'li', function() {

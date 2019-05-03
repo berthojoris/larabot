@@ -10,7 +10,7 @@
 
         <div id="contacts">
             <ul id="listUser">
-                <comp-user-list v-for="(user, index) in userlist" :key="index" :user="user" :idToSend="idToSend" :pushdata="pusharr" @openChatNow="openChatViaID" :typeIndi="typingIndicator">
+                <comp-user-list v-for="(user, index) in userlist" :key="index" :user="user" :typeIndi="typingIndicator">
                 </comp-user-list>
             </ul>
         </div>
@@ -28,8 +28,7 @@
         </div>
     </div>
 
-    <comp-personal-chat :pushdata="pusharr" :id="id" :img="image" :name="name" @chatWith="chatWithID" @typeNow="listenType" :typeIndi="typingIndicator">
-    </comp-personal-chat>
+    <comp-personal-chat></comp-personal-chat>
 
     <b-modal ref="modal-invite" hide-footer title="Sent Invitation" :no-close-on-esc="true" :no-close-on-backdrop="true">
         <b-form-group id="group_create_group">
@@ -63,24 +62,25 @@
 </template>
 
 <script>
+import {mapGetters, mapActions} from "vuex"
 export default {
     data() {
         return {
             userlist: [],
-            id: null,
-            image: null,
-            name: null,
-            idLogged: null,
-            pusharr: null,
-            participants: [],
-            toRemove: [],
-            incomingMsgIcon: 'active',
-            idToSend: null,
-            activePeer: false,
-            typingTimer: false,
+            // id: null,
+            // image: null,
+            // name: null,
+            // idLogged: null,
+            // pusharr: null,
+            // participants: [],
+            // toRemove: [],
+            // incomingMsgIcon: 'active',
+            // idToSend: null,
+            // activePeer: false,
+            // typingTimer: false,
             typingIndicator: null,
-            whisperTyping: null,
-            whisperReading: null,
+            // whisperTyping: null,
+            // whisperReading: null,
             inviteUserStatus: false,
             group_name: ''
         }
@@ -120,8 +120,12 @@ export default {
     mounted() {
         this.getUserList()
         this.idLogged = window.App.user.id
+        this.setPersonalData(window.App.user)
     },
     methods: {
+        ...mapActions([
+            "setPersonalData"
+        ]),
         showModal() {
             this.$refs['modal-invite'].show()
         },
@@ -147,14 +151,6 @@ export default {
                 .catch((error) => {
                     toastr.error("Error when delete data. Please reload page manual")
                 })
-        },
-        openChatViaID(id, image, name) {
-            this.id = id,
-            this.image = image
-            this.name = name
-        },
-        chatWithID(sentid) {
-            this.idToSend = sentid
         },
         getUserList() {
             const userID = window.App.user.id
