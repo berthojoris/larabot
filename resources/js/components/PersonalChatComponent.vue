@@ -56,10 +56,6 @@ export default {
         return {
             messagetext: '',
             chats: [],
-            firstEmpty: false,
-            emptyChat: false,
-            loadStatus: false,
-            typeChatHere: false
         }
     },
     computed: {
@@ -88,7 +84,9 @@ export default {
         }
     },
     methods: {
- 
+        sendMessage() {
+
+        }
     }
 }
 </script>

@@ -34,13 +34,15 @@ const actions = {
         }
     },
     async openChatHistory({ commit }, id) {
-        commit('CLEAR_CHATHISTORY')
-        commit('SET_LOADING_MESSAGE_TRUE')
-        commit('SET_TYPING_MESSAGE_FALSE')
-        commit('RANDOM_STR')
+        commit('DEFAULT')
         try {
             let response    = await axios.post('/chat/history', {receiverID: id})
             let dataDB      = await response.data;
+            if(_.isEmpty(dataDB)) {
+                commit('SET_EMPTY_MESSAGE_TRUE')
+            } else {
+                commit('SET_EMPTY_MESSAGE_FALSE')
+            }
             commit('OPEN_CHATHISTORY', dataDB)
             commit('SET_LOADING_MESSAGE_FALSE')
             commit('SET_TYPING_MESSAGE_TRUE')
@@ -109,6 +111,17 @@ const mutations = {
         state.typingMessageStatus = false
     },
     RANDOM_STR: (state) => {
+        var str = RandomWords({
+            exactly: 10,
+            join: ' '
+        })
+        state.randomString = str.charAt(0).toUpperCase() + str.slice(1)
+    },
+    DEFAULT: (state) => {
+        state.chatHistory = []
+        state.emptyMessageStatus = false
+        state.loadingMessageStatus = true
+        state.typingMessageStatus = false
         var str = RandomWords({
             exactly: 10,
             join: ' '

@@ -2055,11 +2055,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   data: function data() {
     return {
       messagetext: '',
-      chats: [],
-      firstEmpty: false,
-      emptyChat: false,
-      loadStatus: false,
-      typeChatHere: false
+      chats: []
     };
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(["getPersonalData", "getChatHistory", "getLoadingMessage", "getEmptyMessage", "getOpenChatStatus", "getTypingMessage", "getRandomString"])),
@@ -2077,7 +2073,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.messagetext = this.getRandomString;
     }
   },
-  methods: {}
+  methods: {
+    sendMessage: function sendMessage() {}
+  }
 });
 
 /***/ }),
@@ -92840,40 +92838,44 @@ var actions = (_actions = {
           switch (_context2.prev = _context2.next) {
             case 0:
               commit = _ref2.commit;
-              commit('CLEAR_CHATHISTORY');
-              commit('SET_LOADING_MESSAGE_TRUE');
-              commit('SET_TYPING_MESSAGE_FALSE');
-              commit('RANDOM_STR');
-              _context2.prev = 5;
-              _context2.next = 8;
+              commit('DEFAULT');
+              _context2.prev = 2;
+              _context2.next = 5;
               return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/chat/history', {
                 receiverID: id
               });
 
-            case 8:
+            case 5:
               response = _context2.sent;
-              _context2.next = 11;
+              _context2.next = 8;
               return response.data;
 
-            case 11:
+            case 8:
               dataDB = _context2.sent;
+
+              if (_.isEmpty(dataDB)) {
+                commit('SET_EMPTY_MESSAGE_TRUE');
+              } else {
+                commit('SET_EMPTY_MESSAGE_FALSE');
+              }
+
               commit('OPEN_CHATHISTORY', dataDB);
               commit('SET_LOADING_MESSAGE_FALSE');
               commit('SET_TYPING_MESSAGE_TRUE');
-              _context2.next = 20;
+              _context2.next = 18;
               break;
 
-            case 17:
-              _context2.prev = 17;
-              _context2.t0 = _context2["catch"](5);
+            case 15:
+              _context2.prev = 15;
+              _context2.t0 = _context2["catch"](2);
               state.errorBag = _context2.t0;
 
-            case 20:
+            case 18:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[5, 17]]);
+      }, _callee2, null, [[2, 15]]);
     }));
 
     function openChatHistory(_x3, _x4) {
@@ -92945,6 +92947,17 @@ var mutations = {
     state.typingMessageStatus = false;
   },
   RANDOM_STR: function RANDOM_STR(state) {
+    var str = RandomWords({
+      exactly: 10,
+      join: ' '
+    });
+    state.randomString = str.charAt(0).toUpperCase() + str.slice(1);
+  },
+  DEFAULT: function DEFAULT(state) {
+    state.chatHistory = [];
+    state.emptyMessageStatus = false;
+    state.loadingMessageStatus = true;
+    state.typingMessageStatus = false;
     var str = RandomWords({
       exactly: 10,
       join: ' '
