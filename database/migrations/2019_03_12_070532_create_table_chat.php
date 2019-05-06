@@ -18,7 +18,7 @@ class CreateTableChat extends Migration
             $table->string('sender_id');
             $table->string('receive_id');
             $table->text('message');
-            $table->boolean('receive_is_read')->default(0);
+            $table->enum('is_read', ['UNREAD', 'READ'])->default('UNREAD');
             $table->timestamps();
         });
     }

@@ -127,7 +127,7 @@ export default {
 .showhide {
     display: none;
 }
-.messages {
+.content {
     background-image: url("/images/background.png");
 }
 </style>

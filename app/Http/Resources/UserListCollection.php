@@ -15,7 +15,7 @@ class UserListCollection extends JsonResource
     public function toArray($request)
     {
         if(is_null($this->lastChat)) {
-            $msg = 'No last conversation';
+            $msg = 'No replies';
         } else {
             $msg = $this->lastChat->message;
         }
@@ -24,6 +24,7 @@ class UserListCollection extends JsonResource
             'name' => $this->name,
             'image' => $this->image,
             'last_message' => $msg,
+            'is_read' => 0
         ];
     }
 }

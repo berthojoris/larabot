@@ -86,13 +86,25 @@ export default {
     created() {
         var vue = this
         this.channel
+            .here(users => {
+                if(_.isEmpty(users)) {
+                    $.each(userlist, function (index, value) {
+                        $("span").removeClass("contact-status online").addClass("contact-status busy")
+                    });
+                } else {
+                     $.each(users, function (index, value) {
+                        $("span#"+value.id).removeClass("contact-status busy").addClass("contact-status online")
+                    });
+                }
+            })
             .joining(user => {
-                
+                $("span#"+user.id).removeClass("contact-status busy").addClass("contact-status online")
             })
             .leaving(user => {
-                
+                $("span#"+user.id).removeClass("contact-status online").addClass("contact-status busy")
             })
             .listen('IncomingChat', function (e) {
+                console.log(vue.pusharr);
                 if (e.type == 'clean') {
                     location.reload()
                 } else {

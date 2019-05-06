@@ -23,7 +23,7 @@ export default {
     props: ['user'],
     data() {
         return {
-            lastChat: 'Click to start chat',
+            
         }
     },
     computed: {
