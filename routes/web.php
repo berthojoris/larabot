@@ -42,5 +42,5 @@ Route::post('user', 'HomeController@getUser');
 Route::post('chat/history', 'ChatController@chatHistory');
 Route::post('chat/insert', 'ChatController@insert');
 Route::get('user/online', 'ChatController@online');
-Route::get('chat/set/read', 'ChatController@read');
+Route::get('chat/set/read/{id}', 'ChatController@read');
 Route::get('chat/get/unread', 'ChatController@getAllUnread');

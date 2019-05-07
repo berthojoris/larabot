@@ -13,9 +13,9 @@ const actions = {
     async userListApi({ commit, dispatch }) {
         try {
             const response    = await axios.get('/user/online')
-            const dataDB      = await response.data;
+            const dataDB      = await response.data
             commit('SET_USER_LIST', dataDB)
-            dispatch('userMessageCount');
+            dispatch('userMessageCount')
         } catch(error) {
             state.errorBag = error
         }
@@ -23,11 +23,10 @@ const actions = {
     async userMessageCount({ commit }) {
         try {
             const response    = await axios.get('/chat/get/unread')
-            const dataDB      = await response.data;
+            const dataDB      = await response.data
             commit('SET_USER_MESSAGE_COUNT', dataDB)
         } catch(error) {
             state.errorBag = error
-            console.log(error);
         }
     }
 };
@@ -39,7 +38,7 @@ const mutations = {
     SET_USER_MESSAGE_COUNT: (state, data) => {
         if(!_.isEmpty(state.userList)) {
             _.forEach(data, function(value, key) {
-                __.findWhere(state.userList, {id: value.sender_id}).unread = value.msg_count
+                _.find(state.userList, {id: value.sender_id}).unread = value.msg_count
             });
             state.userMessageCount = data
         }

@@ -7,7 +7,7 @@
             <div class="meta">
                 <div :id="user.id" class="mtop">
                     <p class="name" v-text="user.name" style="display: inline-block;"></p>
-                    <label class="chat_unread" v-text="user.unread"></label>
+                    <label v-if="user.unread > 0" class="chat_unread" v-text="user.unread"></label>
                     <p class="typingNotif showhide"> is typing...</p>
                     <p class="preview" :id="user.id" v-text="user.last_message"></p>
                 </div>

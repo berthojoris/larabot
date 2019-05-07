@@ -92,13 +92,18 @@ class ChatController extends Controller
         return $faker->paragraph();
     }
 
-    public function read()
+    public function read($id)
     {
         $currentID  = auth()->user()->id;
-        $updated    = DB::table('chat')->where('receive_id', $currentID)->update([
+        $updated    = DB::table('chat')->where('receive_id', $currentID)
+        ->where('sender_id', $id)
+        ->update([
             'is_read' => 'READ'
         ]);
-        return "READED";
+        return [
+            'id' => $id,
+            'read_chat' => 'UPDATED'
+        ];
     }
 
     public function getAllUnread()
@@ -122,6 +127,7 @@ class ChatController extends Controller
         $currentID  = auth()->user()->id;
         $getData    = DB::table('chat')->where('receive_id', $currentID)
             ->where('sender_id', $sender)
+            ->where('is_read', 'UNREAD')
             ->count();
         return $getData;
     }

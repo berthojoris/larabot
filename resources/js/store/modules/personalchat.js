@@ -26,10 +26,11 @@ const getters = {
 };
 
 const actions = {
-    async openChatWith({ commit }, id) {
+    async openChatWith({ commit, dispatch }, id) {
         try {
             let response    = await axios.post('/user', {id: id})
-            let dataDB      = await response.data;
+            let dataDB      = await response.data
+            dispatch('setToRead', id)
             commit('OPEN_CHAT_WITH', dataDB)
         } catch(error) {
             state.errorBag = error
@@ -39,7 +40,7 @@ const actions = {
         commit('DEFAULT')
         try {
             let response    = await axios.post('/chat/history', {receiverID: id})
-            let dataDB      = await response.data;
+            let dataDB      = await response.data
             if(_.isEmpty(dataDB)) {
                 commit('SET_EMPTY_MESSAGE_TRUE')
             } else {
@@ -58,9 +59,18 @@ const actions = {
                 receive_id: state.chatReceiver.id,
                 message: state.message
             })
-            let dataDB      = await response.data;
+            let dataDB      = await response.data
             commit('SET_EMPTY_MESSAGE_FALSE')
             commit('DONE_SEND', dataDB)
+        } catch(error) {
+            state.errorBag = error
+        }
+    },
+    async setToRead({ commit }, id) {
+        try {
+            const response    = await axios.get('/chat/set/read/'+id)
+            const dataDB      = await response.data
+            commit('SET_TO_READ', dataDB)
         } catch(error) {
             state.errorBag = error
         }
@@ -95,8 +105,13 @@ const actions = {
 };
 
 const mutations = {
+    SET_TO_READ: (state, data) => {
+        if(data.read_chat == 'UPDATED') {
+            console.log(data.id);
+        }
+    },
     DONE_SEND: (state, data) => {
-        state.message = '';
+        state.message = ''
         state.chatHistory.push(data)
     },
     message (state, value) {
