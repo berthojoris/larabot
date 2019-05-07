@@ -1883,7 +1883,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   mounted: function mounted() {
     this.idLogged = window.App.user.id;
     this.setPersonalData(window.App.user);
-    this.userMessageCount();
   },
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(["setPersonalData", "userListApi", "userMessageCount"]), {
     showModal: function showModal() {
@@ -82723,7 +82722,10 @@ var render = function() {
                 domProps: { textContent: _vm._s(_vm.user.name) }
               }),
               _vm._v(" "),
-              _c("label", { staticClass: "chat_unread" }, [_vm._v("0")]),
+              _c("label", {
+                staticClass: "chat_unread",
+                domProps: { textContent: _vm._s(_vm.user.unread) }
+              }),
               _vm._v(" "),
               _c("p", { staticClass: "typingNotif showhide" }, [
                 _vm._v(" is typing...")
@@ -97077,13 +97079,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_personalchat__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/personalchat */ "./resources/js/store/modules/personalchat.js");
 /* harmony import */ var _modules_self__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/self */ "./resources/js/store/modules/self.js");
 /* harmony import */ var _modules_userlist__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/userlist */ "./resources/js/store/modules/userlist.js");
-/* harmony import */ var _modules_unread__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/unread */ "./resources/js/store/modules/unread.js");
 
 
 
 
 
-
+ // import unread from  './modules/unread';
 
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_0__["default"]);
 /* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
@@ -97092,8 +97093,7 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_0__
   modules: {
     personalchat: _modules_personalchat__WEBPACK_IMPORTED_MODULE_3__["default"],
     self: _modules_self__WEBPACK_IMPORTED_MODULE_4__["default"],
-    userlist: _modules_userlist__WEBPACK_IMPORTED_MODULE_5__["default"],
-    unread: _modules_unread__WEBPACK_IMPORTED_MODULE_6__["default"]
+    userlist: _modules_userlist__WEBPACK_IMPORTED_MODULE_5__["default"]
   }
 }));
 
@@ -97453,51 +97453,6 @@ var mutations = {
 
 /***/ }),
 
-/***/ "./resources/js/store/modules/unread.js":
-/*!**********************************************!*\
-  !*** ./resources/js/store/modules/unread.js ***!
-  \**********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-var state = {
-  chantUnread: [],
-  errorBag: null
-};
-var getters = {
-  getUnreadChat: function getUnreadChat(state) {
-    return state.chantUnread;
-  }
-};
-var actions = {
-  setUnreadChat: function setUnreadChat(_ref, data) {
-    var commit = _ref.commit;
-    commit('SET_UNREAD', data);
-  },
-  setReadChat: function setReadChat(_ref2, data) {
-    var commit = _ref2.commit;
-    commit('SET_READ', data);
-  }
-};
-var mutations = {
-  SET_UNREAD: function SET_UNREAD(state, data) {
-    state.chantUnread = data;
-  },
-  SET_TO_READ: function SET_TO_READ(state, data) {
-    state.chantUnread = data;
-  }
-};
-/* harmony default export */ __webpack_exports__["default"] = ({
-  state: state,
-  getters: getters,
-  actions: actions,
-  mutations: mutations
-});
-
-/***/ }),
-
 /***/ "./resources/js/store/modules/userlist.js":
 /*!************************************************!*\
   !*** ./resources/js/store/modules/userlist.js ***!
@@ -97533,12 +97488,12 @@ var actions = {
     var _userListApi = _asyncToGenerator(
     /*#__PURE__*/
     _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(_ref) {
-      var commit, response, dataDB;
+      var commit, dispatch, response, dataDB;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              commit = _ref.commit;
+              commit = _ref.commit, dispatch = _ref.dispatch;
               _context.prev = 1;
               _context.next = 4;
               return axios.get('/user/online');
@@ -97551,20 +97506,21 @@ var actions = {
             case 7:
               dataDB = _context.sent;
               commit('SET_USER_LIST', dataDB);
-              _context.next = 14;
+              dispatch('userMessageCount');
+              _context.next = 15;
               break;
 
-            case 11:
-              _context.prev = 11;
+            case 12:
+              _context.prev = 12;
               _context.t0 = _context["catch"](1);
               state.errorBag = _context.t0;
 
-            case 14:
+            case 15:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 11]]);
+      }, _callee, null, [[1, 12]]);
     }));
 
     function userListApi(_x) {
@@ -97595,15 +97551,16 @@ var actions = {
             case 7:
               dataDB = _context2.sent;
               commit('SET_USER_MESSAGE_COUNT', dataDB);
-              _context2.next = 14;
+              _context2.next = 15;
               break;
 
             case 11:
               _context2.prev = 11;
               _context2.t0 = _context2["catch"](1);
               state.errorBag = _context2.t0;
+              console.log(_context2.t0);
 
-            case 14:
+            case 15:
             case "end":
               return _context2.stop();
           }
@@ -97623,7 +97580,15 @@ var mutations = {
     state.userList = data;
   },
   SET_USER_MESSAGE_COUNT: function SET_USER_MESSAGE_COUNT(state, data) {
-    state.userMessageCount = data;
+    if (!_.isEmpty(state.userList)) {
+      _.forEach(data, function (value, key) {
+        __.findWhere(state.userList, {
+          id: value.sender_id
+        }).unread = value.msg_count;
+      });
+
+      state.userMessageCount = data;
+    }
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = ({

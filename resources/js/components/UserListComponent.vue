@@ -7,7 +7,7 @@
             <div class="meta">
                 <div :id="user.id" class="mtop">
                     <p class="name" v-text="user.name" style="display: inline-block;"></p>
-                    <label class="chat_unread">0</label>
+                    <label class="chat_unread" v-text="user.unread"></label>
                     <p class="typingNotif showhide"> is typing...</p>
                     <p class="preview" :id="user.id" v-text="user.last_message"></p>
                 </div>
@@ -30,7 +30,7 @@ export default {
         ...mapGetters([
             "getReceiver",
             "getOpenChatStatus",
-            "getChatHistory"
+            "getChatHistory",
         ]),
     },
     methods: {

@@ -111,7 +111,6 @@ export default {
     mounted() {
         this.idLogged = window.App.user.id
         this.setPersonalData(window.App.user)
-        this.userMessageCount()
     },
     methods: {
         ...mapActions([
