@@ -6,6 +6,7 @@ use App\Chat;
 use App\User;
 use App\Events\IncomingChat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Resources\ChatCollection;
 use App\Http\Resources\UserListCollection;
 
@@ -89,5 +90,39 @@ class ChatController extends Controller
     {
         $faker = \Faker\Factory::create();
         return $faker->paragraph();
+    }
+
+    public function read()
+    {
+        $currentID  = auth()->user()->id;
+        $updated    = DB::table('chat')->where('receive_id', $currentID)->update([
+            'is_read' => 'READ'
+        ]);
+        return "READED";
+    }
+
+    public function getAllUnread()
+    {
+        $currentID  = auth()->user()->id;
+        $listUser   = User::where('id', '!=', $currentID)->get();
+
+        $newdata    = [];
+
+        foreach($listUser as $user) {
+            array_push($newdata, [
+                'sender_id' => (int) $user->id,
+                'msg_count' => $this->getCount($user->id)
+            ]);
+        }
+
+        return $newdata;
+    }
+
+    function getCount($sender) {
+        $currentID  = auth()->user()->id;
+        $getData    = DB::table('chat')->where('receive_id', $currentID)
+            ->where('sender_id', $sender)
+            ->count();
+        return $getData;
     }
 }

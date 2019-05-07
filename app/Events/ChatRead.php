@@ -10,21 +10,22 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class OnlineStatus implements ShouldBroadcast
+class ChatRead implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $pushchat, $type;
+    public $type;
+    public $chatFrom;
+    public $chatTo;
 
-    public function __construct($data, $typeMsg)
+    public function __construct($typeMsg)
     {
-        $this->pushchat = $data;
         $this->type = $typeMsg;
         $this->dontBroadcastToCurrentUser();
     }
 
     public function broadcastOn()
     {
-        return new PresenceChannel('onlinestatus');
+        return new PresenceChannel('chat');
     }
 }

@@ -84,31 +84,26 @@ export default {
         },
     },
     created() {
+        this.userListApi()
         var vue = this
         this.channel
             .here(users => {
-                if(_.isEmpty(users)) {
-                    $.each(userlist, function (index, value) {
-                        $("span").removeClass("contact-status online").addClass("contact-status busy")
-                    });
-                } else {
-                     $.each(users, function (index, value) {
-                        $("span#"+value.id).removeClass("contact-status busy").addClass("contact-status online")
-                    });
-                }
+                _.forEach(users, function(value, key) {
+                    $("span#"+value.id).removeClass("busy").addClass("online")
+                });
             })
             .joining(user => {
-                $("span#"+user.id).removeClass("contact-status busy").addClass("contact-status online")
+                $("span#"+user.id).removeClass("busy").addClass("online")
             })
             .leaving(user => {
-                $("span#"+user.id).removeClass("contact-status online").addClass("contact-status busy")
+                $("span#"+user.id).removeClass("online").addClass("busy")
             })
             .listen('IncomingChat', function (e) {
-                console.log(vue.pusharr);
+                var chat = e.pushchat
                 if (e.type == 'clean') {
                     location.reload()
                 } else {
-                    vue.pusharr = e.pushchat
+                    
                 }
             })
             .listenForWhisper('typing', this.whisperAction);
@@ -116,12 +111,13 @@ export default {
     mounted() {
         this.idLogged = window.App.user.id
         this.setPersonalData(window.App.user)
-        this.userListApi()
+        this.userMessageCount()
     },
     methods: {
         ...mapActions([
             "setPersonalData",
             "userListApi",
+            "userMessageCount"
         ]),
         showModal() {
             this.$refs['modal-invite'].show()

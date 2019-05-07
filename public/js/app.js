@@ -1862,37 +1862,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   }),
   created: function created() {
+    this.userListApi();
     var vue = this;
     this.channel.here(function (users) {
-      if (_.isEmpty(users)) {
-        $.each(userlist, function (index, value) {
-          $("span").removeClass("contact-status online").addClass("contact-status busy");
-        });
-      } else {
-        $.each(users, function (index, value) {
-          $("span#" + value.id).removeClass("contact-status busy").addClass("contact-status online");
-        });
-      }
+      _.forEach(users, function (value, key) {
+        $("span#" + value.id).removeClass("busy").addClass("online");
+      });
     }).joining(function (user) {
-      $("span#" + user.id).removeClass("contact-status busy").addClass("contact-status online");
+      $("span#" + user.id).removeClass("busy").addClass("online");
     }).leaving(function (user) {
-      $("span#" + user.id).removeClass("contact-status online").addClass("contact-status busy");
+      $("span#" + user.id).removeClass("online").addClass("busy");
     }).listen('IncomingChat', function (e) {
-      console.log(vue.pusharr);
+      var chat = e.pushchat;
 
       if (e.type == 'clean') {
         location.reload();
-      } else {
-        vue.pusharr = e.pushchat;
-      }
+      } else {}
     }).listenForWhisper('typing', this.whisperAction);
   },
   mounted: function mounted() {
     this.idLogged = window.App.user.id;
     this.setPersonalData(window.App.user);
-    this.userListApi();
+    this.userMessageCount();
   },
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(["setPersonalData", "userListApi"]), {
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(["setPersonalData", "userListApi", "userMessageCount"]), {
     showModal: function showModal() {
       this.$refs['modal-invite'].show();
     },
@@ -36360,7 +36353,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.typingNotif[data-v-22f71719] {\r\n    display: inline-block;\r\n    font-style: italic;\r\n    color: greenyellow;\r\n    margin-bottom: 0px;\n}\n.showhide[data-v-22f71719] {\r\n    display: none;\n}\n.mtop[data-v-22f71719] {\r\n    margin-top: -8px;\n}\r\n", ""]);
+exports.push([module.i, "\n.chat_unread[data-v-22f71719] {\r\n    font-weight: bold;\r\n    color: white;\r\n    background: #e74c3c;\r\n    border-radius: 3px;\r\n    padding-left: 5px;\r\n    padding-right: 5px;\r\n    position: absolute;\r\n    right: 5px;\r\n    margin-top: 12px;\n}\n.typingNotif[data-v-22f71719] {\r\n    display: inline-block;\r\n    font-style: italic;\r\n    color: greenyellow;\r\n    margin-bottom: 0px;\n}\n.showhide[data-v-22f71719] {\r\n    display: none;\n}\n.mtop[data-v-22f71719] {\r\n    margin-top: -8px;\n}\r\n", ""]);
 
 // exports
 
@@ -82718,15 +82711,7 @@ var render = function() {
     [
       _c("li", { staticClass: "contact", on: { click: _vm.setActiveClass } }, [
         _c("div", { staticClass: "wrap" }, [
-          _vm.user.online_status === "ONLINE"
-            ? _c("span", {
-                staticClass: "contact-status online",
-                attrs: { id: _vm.user.id }
-              })
-            : _c("span", {
-                staticClass: "contact-status busy",
-                attrs: { id: _vm.user.id }
-              }),
+          _c("span", { attrs: { id: _vm.user.id } }),
           _vm._v(" "),
           _c("img", { attrs: { src: _vm.user.image } }),
           _vm._v(" "),
@@ -82737,6 +82722,8 @@ var render = function() {
                 staticStyle: { display: "inline-block" },
                 domProps: { textContent: _vm._s(_vm.user.name) }
               }),
+              _vm._v(" "),
+              _c("label", { staticClass: "chat_unread" }, [_vm._v("0")]),
               _vm._v(" "),
               _c("p", { staticClass: "typingNotif showhide" }, [
                 _vm._v(" is typing...")
@@ -97090,6 +97077,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_personalchat__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/personalchat */ "./resources/js/store/modules/personalchat.js");
 /* harmony import */ var _modules_self__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/self */ "./resources/js/store/modules/self.js");
 /* harmony import */ var _modules_userlist__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/userlist */ "./resources/js/store/modules/userlist.js");
+/* harmony import */ var _modules_unread__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/unread */ "./resources/js/store/modules/unread.js");
+
 
 
 
@@ -97103,7 +97092,8 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_0__
   modules: {
     personalchat: _modules_personalchat__WEBPACK_IMPORTED_MODULE_3__["default"],
     self: _modules_self__WEBPACK_IMPORTED_MODULE_4__["default"],
-    userlist: _modules_userlist__WEBPACK_IMPORTED_MODULE_5__["default"]
+    userlist: _modules_userlist__WEBPACK_IMPORTED_MODULE_5__["default"],
+    unread: _modules_unread__WEBPACK_IMPORTED_MODULE_6__["default"]
   }
 }));
 
@@ -97463,6 +97453,51 @@ var mutations = {
 
 /***/ }),
 
+/***/ "./resources/js/store/modules/unread.js":
+/*!**********************************************!*\
+  !*** ./resources/js/store/modules/unread.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var state = {
+  chantUnread: [],
+  errorBag: null
+};
+var getters = {
+  getUnreadChat: function getUnreadChat(state) {
+    return state.chantUnread;
+  }
+};
+var actions = {
+  setUnreadChat: function setUnreadChat(_ref, data) {
+    var commit = _ref.commit;
+    commit('SET_UNREAD', data);
+  },
+  setReadChat: function setReadChat(_ref2, data) {
+    var commit = _ref2.commit;
+    commit('SET_READ', data);
+  }
+};
+var mutations = {
+  SET_UNREAD: function SET_UNREAD(state, data) {
+    state.chantUnread = data;
+  },
+  SET_TO_READ: function SET_TO_READ(state, data) {
+    state.chantUnread = data;
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = ({
+  state: state,
+  getters: getters,
+  actions: actions,
+  mutations: mutations
+});
+
+/***/ }),
+
 /***/ "./resources/js/store/modules/userlist.js":
 /*!************************************************!*\
   !*** ./resources/js/store/modules/userlist.js ***!
@@ -97482,11 +97517,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var state = {
   userList: [],
+  userMessageCount: [],
   errorBag: null
 };
 var getters = {
   getUserList: function getUserList(state) {
     return state.userList;
+  },
+  getUserMessageCount: function getUserMessageCount(state) {
+    return state.userMessageCount;
   }
 };
 var actions = {
@@ -97533,11 +97572,58 @@ var actions = {
     }
 
     return userListApi;
+  }(),
+  userMessageCount: function () {
+    var _userMessageCount = _asyncToGenerator(
+    /*#__PURE__*/
+    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(_ref2) {
+      var commit, response, dataDB;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              commit = _ref2.commit;
+              _context2.prev = 1;
+              _context2.next = 4;
+              return axios.get('/chat/get/unread');
+
+            case 4:
+              response = _context2.sent;
+              _context2.next = 7;
+              return response.data;
+
+            case 7:
+              dataDB = _context2.sent;
+              commit('SET_USER_MESSAGE_COUNT', dataDB);
+              _context2.next = 14;
+              break;
+
+            case 11:
+              _context2.prev = 11;
+              _context2.t0 = _context2["catch"](1);
+              state.errorBag = _context2.t0;
+
+            case 14:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[1, 11]]);
+    }));
+
+    function userMessageCount(_x2) {
+      return _userMessageCount.apply(this, arguments);
+    }
+
+    return userMessageCount;
   }()
 };
 var mutations = {
   SET_USER_LIST: function SET_USER_LIST(state, data) {
     state.userList = data;
+  },
+  SET_USER_MESSAGE_COUNT: function SET_USER_MESSAGE_COUNT(state, data) {
+    state.userMessageCount = data;
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = ({

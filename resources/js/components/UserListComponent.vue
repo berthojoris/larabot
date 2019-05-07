@@ -2,12 +2,12 @@
 <div @click="openChat(user.id, user.image, user.name)">
     <li @click="setActiveClass" class="contact">
         <div class="wrap">
-            <span v-if="user.online_status === 'ONLINE'" :id="user.id" class="contact-status online"></span>
-            <span v-else :id="user.id" class="contact-status busy"></span>
+            <span :id="user.id"></span>
             <img :src="user.image">
             <div class="meta">
                 <div :id="user.id" class="mtop">
                     <p class="name" v-text="user.name" style="display: inline-block;"></p>
+                    <label class="chat_unread">0</label>
                     <p class="typingNotif showhide"> is typing...</p>
                     <p class="preview" :id="user.id" v-text="user.last_message"></p>
                 </div>
@@ -55,6 +55,17 @@ export default {
 </script>
 
 <style scoped>
+.chat_unread {
+    font-weight: bold;
+    color: white;
+    background: #e74c3c;
+    border-radius: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
+    position: absolute;
+    right: 5px;
+    margin-top: 12px;
+}
 .typingNotif {
     display: inline-block;
     font-style: italic;
