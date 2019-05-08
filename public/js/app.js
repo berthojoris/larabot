@@ -83634,8 +83634,8 @@ var render = function() {
                 {
                   key: index,
                   class: {
-                    sent: chat.sender_id == _vm.getPersonalData.id,
-                    replies: chat.sender_id != _vm.getPersonalData.id
+                    replies: chat.sender_id == _vm.getPersonalData.id,
+                    sent: chat.sender_id != _vm.getPersonalData.id
                   }
                 },
                 [
@@ -98550,42 +98550,47 @@ var actions = (_actions = {
     var _send = _asyncToGenerator(
     /*#__PURE__*/
     _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(_ref4) {
-      var commit, response, dataDB;
+      var commit, rootState, currentUser, sendUser, response, dataDB;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              commit = _ref4.commit;
-              _context3.prev = 1;
-              _context3.next = 4;
+              commit = _ref4.commit, rootState = _ref4.rootState;
+              currentUser = rootState.self.personalData;
+              sendUser = state.chatReceiver;
+              commit('SET_EMPTY_MESSAGE_FALSE');
+              commit('DONE_SEND', {
+                from: currentUser,
+                to: sendUser
+              });
+              _context3.prev = 5;
+              _context3.next = 8;
               return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/chat/insert', {
                 receive_id: state.chatReceiver.id,
                 message: state.message
               });
 
-            case 4:
+            case 8:
               response = _context3.sent;
-              _context3.next = 7;
+              _context3.next = 11;
               return response.data;
 
-            case 7:
+            case 11:
               dataDB = _context3.sent;
-              commit('SET_EMPTY_MESSAGE_FALSE');
-              commit('DONE_SEND', dataDB);
-              _context3.next = 15;
+              _context3.next = 17;
               break;
 
-            case 12:
-              _context3.prev = 12;
-              _context3.t0 = _context3["catch"](1);
+            case 14:
+              _context3.prev = 14;
+              _context3.t0 = _context3["catch"](5);
               state.errorBag = _context3.t0;
 
-            case 15:
+            case 17:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[1, 12]]);
+      }, _callee3, null, [[5, 14]]);
     }));
 
     function send(_x5) {
@@ -98688,19 +98693,24 @@ var mutations = {
   },
   SET_TO_READ: function SET_TO_READ(state, payload) {
     var userOpenWith = state.chatReceiver;
-    _.find(payload, {
-      id: userOpenWith.id
-    }).unread = 0;
+
+    if (!_.isEmpty(userOpenWith)) {
+      _.find(payload, {
+        id: userOpenWith.id
+      }).unread = 0;
+    }
   },
-  DONE_SEND: function DONE_SEND(state, data) {
-    state.message = '';
-    state.chatHistory.push(data);
+  DONE_SEND: function DONE_SEND(state, payload) {
+    state.chatHistory.push({
+      sender_id: payload.from.id,
+      sender_image: payload.from.image,
+      receive_image: payload.to.image,
+      type: 'replies',
+      message: state.message
+    });
   },
   message: function message(state, value) {
     state.message = value;
-  },
-  sendMessage: function sendMessage(state, value) {
-    if (state.message.trim().length < 1) return;
   },
   OPEN_CHAT_WITH: function OPEN_CHAT_WITH(state, data) {
     state.chatReceiver = data;

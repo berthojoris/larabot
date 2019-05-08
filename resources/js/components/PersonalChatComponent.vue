@@ -31,7 +31,7 @@
     </div>
     <div v-if="chats.length" class="messages">
         <ul>
-            <li v-for="(chat, index) in chats" :key="index" :class="{'sent': chat.sender_id == getPersonalData.id,  'replies': chat.sender_id != getPersonalData.id}">
+            <li v-for="(chat, index) in chats" :key="index" :class="{'replies': chat.sender_id == getPersonalData.id,  'sent': chat.sender_id != getPersonalData.id}">
                 <img :src="chat.sender_image" v-if="chat.sender_id == getPersonalData.id">
                 <img :src="chat.sender_image" v-if="chat.sender_id != getPersonalData.id">
                 <p>{{ chat.message }}</p>

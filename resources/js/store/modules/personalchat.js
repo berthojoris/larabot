@@ -63,15 +63,20 @@ const actions = {
             state.errorBag = error
         }
     },
-    async send({ commit }) {
+    async send({ commit, rootState }) {
+        const currentUser   = rootState.self.personalData
+        const sendUser      = state.chatReceiver
+        commit('SET_EMPTY_MESSAGE_FALSE')
+        commit('DONE_SEND', {
+            from: currentUser,
+            to: sendUser
+        })
         try {
             const response    = await axios.post('/chat/insert', {
                 receive_id: state.chatReceiver.id,
                 message: state.message
             })
             const dataDB      = await response.data
-            commit('SET_EMPTY_MESSAGE_FALSE')
-            commit('DONE_SEND', dataDB)
         } catch(error) {
             state.errorBag = error
         }
@@ -127,18 +132,21 @@ const mutations = {
     },
     SET_TO_READ: (state, payload) => {
         const userOpenWith = state.chatReceiver
-        _.find(payload, {id: userOpenWith.id}).unread = 0
+        if(!_.isEmpty(userOpenWith)) {
+            _.find(payload, {id: userOpenWith.id}).unread = 0
+        }
     },
-    DONE_SEND: (state, data) => {
-        state.message = ''
-        state.chatHistory.push(data)
+    DONE_SEND: (state, payload) => {
+        state.chatHistory.push({
+            sender_id: payload.from.id,
+            sender_image: payload.from.image,
+            receive_image: payload.to.image,
+            type: 'replies',
+            message: state.message
+        })
     },
     message (state, value) {
         state.message = value;
-    },
-    sendMessage (state, value) {
-        if (state.message.trim().length < 1) return;
-        
     },
     OPEN_CHAT_WITH: (state, data) => {
         state.chatReceiver = data
