@@ -74,11 +74,18 @@ export default {
     watch: {
         getUserList: function() {
             this.userlist = this.getUserList
+        },
+        getOnlineTrigger: function() {
+            const tUserList = this.tmpUserList
+            _.forEach(tUserList, function(value, key) {
+                $("span#"+value.id).removeClass("busy").addClass("online")
+            });
         }
     },
     computed: {
         ...mapGetters([
-            "getUserList"
+            "getUserList",
+            "getOnlineTrigger"
         ]),
         channel() {
             return window.Echo.join('online')

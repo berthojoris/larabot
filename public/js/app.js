@@ -1855,9 +1855,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   watch: {
     getUserList: function getUserList() {
       this.userlist = this.getUserList;
+    },
+    getOnlineTrigger: function getOnlineTrigger() {
+      var tUserList = this.tmpUserList;
+
+      _.forEach(tUserList, function (value, key) {
+        $("span#" + value.id).removeClass("busy").addClass("online");
+      });
     }
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(["getUserList"]), {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(["getUserList", "getOnlineTrigger"]), {
     channel: function channel() {
       return window.Echo.join('online');
     }
@@ -98831,7 +98838,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 var state = {
   userList: [],
   userMessageCount: [],
-  errorBag: null
+  errorBag: null,
+  onlineTrigger: new Date().getTime()
 };
 var getters = {
   getUserList: function getUserList(state) {
@@ -98839,6 +98847,9 @@ var getters = {
   },
   getUserMessageCount: function getUserMessageCount(state) {
     return state.userMessageCount;
+  },
+  getOnlineTrigger: function getOnlineTrigger(state) {
+    return state.onlineTrigger;
   }
 };
 var actions = {
@@ -98945,6 +98956,7 @@ var mutations = {
       });
 
       state.userMessageCount = data;
+      state.onlineTrigger = new Date().getTime();
     }
   }
 };

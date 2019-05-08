@@ -1,12 +1,14 @@
 const state = {
     userList: [],
     userMessageCount: [],
-    errorBag: null
+    errorBag: null,
+    onlineTrigger: new Date().getTime()
 };
 
 const getters = {
     getUserList: state => state.userList,
     getUserMessageCount: state => state.userMessageCount,
+    getOnlineTrigger: state => state.onlineTrigger,
 };
 
 const actions = {
@@ -41,6 +43,7 @@ const mutations = {
                 _.find(state.userList, {id: value.sender_id}).unread = value.msg_count
             });
             state.userMessageCount = data
+            state.onlineTrigger = new Date().getTime()
         }
     }
 };
