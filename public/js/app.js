@@ -98605,27 +98605,24 @@ var actions = (_actions = {
             case 0:
               commit = _ref5.commit, rootState = _ref5.rootState;
               userListData = rootState.userlist.userList;
-              _context4.prev = 2;
-              _context4.next = 5;
+              commit('SET_TO_READ', userListData);
+              _context4.prev = 3;
+              _context4.next = 6;
               return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/chat/set/read/' + id);
 
-            case 5:
+            case 6:
               response = _context4.sent;
-              _context4.next = 8;
+              _context4.next = 9;
               return response.data;
 
-            case 8:
+            case 9:
               dataDB = _context4.sent;
-              commit('SET_TO_READ', {
-                outputDB: dataDB,
-                sessionUserList: userListData
-              });
               _context4.next = 15;
               break;
 
             case 12:
               _context4.prev = 12;
-              _context4.t0 = _context4["catch"](2);
+              _context4.t0 = _context4["catch"](3);
               state.errorBag = _context4.t0;
 
             case 15:
@@ -98633,7 +98630,7 @@ var actions = (_actions = {
               return _context4.stop();
           }
         }
-      }, _callee4, null, [[2, 12]]);
+      }, _callee4, null, [[3, 12]]);
     }));
 
     function setToRead(_x6, _x7) {
@@ -98687,13 +98684,10 @@ var mutations = {
     state.chatHistory.push(payload);
   },
   SET_TO_READ: function SET_TO_READ(state, payload) {
-    if (payload.outputDB.read_chat == "UPDATED") {
-      var ul = payload.sessionUserList;
-      var userOpenWith = state.chatReceiver;
-      _.find(ul, {
-        id: userOpenWith.id
-      }).unread = 0;
-    }
+    var userOpenWith = state.chatReceiver;
+    _.find(payload, {
+      id: userOpenWith.id
+    }).unread = 0;
   },
   DONE_SEND: function DONE_SEND(state, data) {
     state.message = '';

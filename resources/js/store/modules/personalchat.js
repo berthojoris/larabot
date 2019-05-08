@@ -77,14 +77,11 @@ const actions = {
         }
     },
     async setToRead({ commit, rootState }, id) {
-        const userListData = rootState.userlist.userList
+        const userListData    = rootState.userlist.userList
+        commit('SET_TO_READ', userListData)
         try {
             const response    = await axios.get('/chat/set/read/'+id)
             const dataDB      = await response.data
-            commit('SET_TO_READ', {
-                outputDB: dataDB,
-                sessionUserList: userListData
-            })
         } catch(error) {
             state.errorBag = error
         }
@@ -128,11 +125,8 @@ const mutations = {
         state.chatHistory.push(payload)
     },
     SET_TO_READ: (state, payload) => {
-        if(payload.outputDB.read_chat == "UPDATED") {
-            const ul = payload.sessionUserList
-            const userOpenWith = state.chatReceiver
-            _.find(ul, {id: userOpenWith.id}).unread = 0
-        }
+        const userOpenWith = state.chatReceiver
+        _.find(payload, {id: userOpenWith.id}).unread = 0
     },
     DONE_SEND: (state, data) => {
         state.message = ''
