@@ -117,9 +117,10 @@ const actions = {
 
 const mutations = {
     NEW_CHAT_MESSAGE_BUBLE: (state, payload) => {
-        const ul = payload.userList
-        const pay = payload.payload
-        _.find(ul, {'id': pay.sender_id}).unread = _.find(ul, {'id': pay.sender_id}).unread+1
+        const ul    = payload.userList
+        const pay   = payload.payload
+        _.find(ul, {'id': pay.sender_id}).last_message   = pay.message
+        _.find(ul, {'id': pay.sender_id}).unread         = _.find(ul, {'id': pay.sender_id}).unread+1
     },
     NEW_CHAT_ARRIVED: (state, payload) => {
         state.chatHistory.push(payload)

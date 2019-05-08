@@ -98676,6 +98676,9 @@ var mutations = {
     var pay = payload.payload;
     _.find(ul, {
       'id': pay.sender_id
+    }).last_message = pay.message;
+    _.find(ul, {
+      'id': pay.sender_id
     }).unread = _.find(ul, {
       'id': pay.sender_id
     }).unread + 1;
