@@ -67,7 +67,8 @@ export default {
         return {
             userlist: [],
             inviteUserStatus: false,
-            group_name: ''
+            group_name: '',
+            tmpUserList: null
         }
     },
     watch: {
@@ -77,7 +78,7 @@ export default {
     },
     computed: {
         ...mapGetters([
-            'getUserList'
+            "getUserList"
         ]),
         channel() {
             return window.Echo.join('online')
@@ -85,12 +86,19 @@ export default {
     },
     created() {
         this.userListApi()
+    },
+    mounted() {
+        this.idLogged = window.App.user.id
+        this.setPersonalData(window.App.user)
         var vue = this
         this.channel
             .here(users => {
-                _.forEach(users, function(value, key) {
-                    $("span#"+value.id).removeClass("busy").addClass("online")
-                });
+                this.tmpUserList = users
+                if(!_.isEmpty(users)) {
+                    _.forEach(users, function(value, key) {
+                        $("span#"+value.id).removeClass("busy").addClass("online")
+                    });
+                }
             })
             .joining(user => {
                 $("span#"+user.id).removeClass("busy").addClass("online")
@@ -107,10 +115,6 @@ export default {
                 }
             })
             .listenForWhisper('typing', this.whisperAction);
-    },
-    mounted() {
-        this.idLogged = window.App.user.id
-        this.setPersonalData(window.App.user)
     },
     methods: {
         ...mapActions([

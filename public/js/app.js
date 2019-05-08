@@ -1848,7 +1848,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     return {
       userlist: [],
       inviteUserStatus: false,
-      group_name: ''
+      group_name: '',
+      tmpUserList: null
     };
   },
   watch: {
@@ -1856,18 +1857,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.userlist = this.getUserList;
     }
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['getUserList']), {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(["getUserList"]), {
     channel: function channel() {
       return window.Echo.join('online');
     }
   }),
   created: function created() {
     this.userListApi();
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    this.idLogged = window.App.user.id;
+    this.setPersonalData(window.App.user);
     var vue = this;
     this.channel.here(function (users) {
-      _.forEach(users, function (value, key) {
-        $("span#" + value.id).removeClass("busy").addClass("online");
-      });
+      _this.tmpUserList = users;
+
+      if (!_.isEmpty(users)) {
+        _.forEach(users, function (value, key) {
+          $("span#" + value.id).removeClass("busy").addClass("online");
+        });
+      }
     }).joining(function (user) {
       $("span#" + user.id).removeClass("busy").addClass("online");
     }).leaving(function (user) {
@@ -1880,10 +1891,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       } else {}
     }).listenForWhisper('typing', this.whisperAction);
   },
-  mounted: function mounted() {
-    this.idLogged = window.App.user.id;
-    this.setPersonalData(window.App.user);
-  },
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(["setPersonalData", "userListApi", "userMessageCount"]), {
     showModal: function showModal() {
       this.$refs['modal-invite'].show();
@@ -1893,7 +1900,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     changePicture: function changePicture() {},
     createGroup: function createGroup() {
-      var _this = this;
+      var _this2 = this;
 
       if (this.group_name.trim().length < 1) return;
       var nama = this.group_name;
@@ -1901,7 +1908,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         group_name: nama
       }).then(function (response) {
         if (response.status == 201) {
-          _this.group_name = '';
+          _this2.group_name = '';
         }
       })["catch"](function (error) {
         console.log(error);
@@ -98374,7 +98381,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 var state = {
-  chatSender: [],
   chatReceiver: [],
   errorBag: null,
   chatOpenStatus: false,
@@ -98386,9 +98392,6 @@ var state = {
   message: ''
 };
 var getters = {
-  getSender: function getSender(state) {
-    return state.chatSender;
-  },
   getReceiver: function getReceiver(state) {
     return state.chatReceiver;
   },
@@ -98419,12 +98422,12 @@ var actions = (_actions = {
     var _openChatWith = _asyncToGenerator(
     /*#__PURE__*/
     _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(_ref, id) {
-      var commit, dispatch, response, dataDB;
+      var commit, response, dataDB;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              commit = _ref.commit, dispatch = _ref.dispatch;
+              commit = _ref.commit;
               _context.prev = 1;
               _context.next = 4;
               return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/user', {
@@ -98438,22 +98441,21 @@ var actions = (_actions = {
 
             case 7:
               dataDB = _context.sent;
-              dispatch('setToRead', id);
               commit('OPEN_CHAT_WITH', dataDB);
-              _context.next = 15;
+              _context.next = 14;
               break;
 
-            case 12:
-              _context.prev = 12;
+            case 11:
+              _context.prev = 11;
               _context.t0 = _context["catch"](1);
               state.errorBag = _context.t0;
 
-            case 15:
+            case 14:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 12]]);
+      }, _callee, null, [[1, 11]]);
     }));
 
     function openChatWith(_x, _x2) {
@@ -98466,12 +98468,12 @@ var actions = (_actions = {
     var _openChatHistory = _asyncToGenerator(
     /*#__PURE__*/
     _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(_ref2, id) {
-      var commit, response, dataDB;
+      var commit, dispatch, response, dataDB;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              commit = _ref2.commit;
+              commit = _ref2.commit, dispatch = _ref2.dispatch;
               commit('DEFAULT');
               _context2.prev = 2;
               _context2.next = 5;
@@ -98496,20 +98498,21 @@ var actions = (_actions = {
               commit('OPEN_CHATHISTORY', dataDB);
               commit('SET_LOADING_MESSAGE_FALSE');
               commit('SET_PANEL_MESSAGE_TRUE');
-              _context2.next = 18;
+              dispatch('setToRead', id);
+              _context2.next = 19;
               break;
 
-            case 15:
-              _context2.prev = 15;
+            case 16:
+              _context2.prev = 16;
               _context2.t0 = _context2["catch"](2);
               state.errorBag = _context2.t0;
 
-            case 18:
+            case 19:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[2, 15]]);
+      }, _callee2, null, [[2, 16]]);
     }));
 
     function openChatHistory(_x3, _x4) {
@@ -98570,38 +98573,42 @@ var actions = (_actions = {
     var _setToRead = _asyncToGenerator(
     /*#__PURE__*/
     _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4(_ref4, id) {
-      var commit, response, dataDB;
+      var commit, rootState, userListData, response, dataDB;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
-              commit = _ref4.commit;
-              _context4.prev = 1;
-              _context4.next = 4;
+              commit = _ref4.commit, rootState = _ref4.rootState;
+              userListData = rootState.userlist.userList;
+              _context4.prev = 2;
+              _context4.next = 5;
               return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/chat/set/read/' + id);
 
-            case 4:
+            case 5:
               response = _context4.sent;
-              _context4.next = 7;
+              _context4.next = 8;
               return response.data;
 
-            case 7:
+            case 8:
               dataDB = _context4.sent;
-              commit('SET_TO_READ', dataDB);
-              _context4.next = 14;
+              commit('SET_TO_READ', {
+                outputDB: dataDB,
+                sessionUserList: userListData
+              });
+              _context4.next = 15;
               break;
 
-            case 11:
-              _context4.prev = 11;
-              _context4.t0 = _context4["catch"](1);
+            case 12:
+              _context4.prev = 12;
+              _context4.t0 = _context4["catch"](2);
               state.errorBag = _context4.t0;
 
-            case 14:
+            case 15:
             case "end":
               return _context4.stop();
           }
         }
-      }, _callee4, null, [[1, 11]]);
+      }, _callee4, null, [[2, 12]]);
     }));
 
     function setToRead(_x6, _x7) {
@@ -98642,9 +98649,15 @@ var actions = (_actions = {
   commit('RANDOM_STR');
 }), _actions);
 var mutations = {
-  SET_TO_READ: function SET_TO_READ(state, data) {
-    if (data.read_chat == 'UPDATED') {
-      console.log(data.id);
+  SET_TO_READ: function SET_TO_READ(state, payload) {
+    if (payload.outputDB.read_chat == "UPDATED") {
+      var session = payload.sessionUserList;
+
+      _.forEach(session, function (value, key) {
+        _.find(session, {
+          id: value.id
+        }).unread = 0;
+      });
     }
   },
   DONE_SEND: function DONE_SEND(state, data) {

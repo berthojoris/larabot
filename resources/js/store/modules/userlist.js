@@ -6,7 +6,7 @@ const state = {
 
 const getters = {
     getUserList: state => state.userList,
-    getUserMessageCount: state => state.userMessageCount
+    getUserMessageCount: state => state.userMessageCount,
 };
 
 const actions = {

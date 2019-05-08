@@ -101,7 +101,7 @@ class ChatController extends Controller
             'is_read' => 'READ'
         ]);
         return [
-            'id' => $id,
+            'id' => (int) $id,
             'read_chat' => 'UPDATED'
         ];
     }

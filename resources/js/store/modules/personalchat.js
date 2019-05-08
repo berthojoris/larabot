@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 const state = {
-    chatSender: [],
     chatReceiver: [],
     errorBag: null,
     chatOpenStatus: false,
@@ -14,7 +13,6 @@ const state = {
 };
 
 const getters = {
-    getSender: state => state.chatSender,
     getReceiver: state => state.chatReceiver,
     getOpenChatStatus: state => state.chatOpenStatus,
     getChatHistory: state => state.chatHistory,
@@ -26,17 +24,16 @@ const getters = {
 };
 
 const actions = {
-    async openChatWith({ commit, dispatch }, id) {
+    async openChatWith({ commit }, id) {
         try {
             let response    = await axios.post('/user', {id: id})
             let dataDB      = await response.data
-            dispatch('setToRead', id)
             commit('OPEN_CHAT_WITH', dataDB)
         } catch(error) {
             state.errorBag = error
         }
     },
-    async openChatHistory({ commit }, id) {
+    async openChatHistory({ commit, dispatch }, id) {
         commit('DEFAULT')
         try {
             let response    = await axios.post('/chat/history', {receiverID: id})
@@ -49,6 +46,7 @@ const actions = {
             commit('OPEN_CHATHISTORY', dataDB)
             commit('SET_LOADING_MESSAGE_FALSE')
             commit('SET_PANEL_MESSAGE_TRUE')
+            dispatch('setToRead', id)
         } catch(error) {
             state.errorBag = error
         }
@@ -66,11 +64,15 @@ const actions = {
             state.errorBag = error
         }
     },
-    async setToRead({ commit }, id) {
+    async setToRead({ commit, rootState }, id) {
+        const userListData = rootState.userlist.userList
         try {
             const response    = await axios.get('/chat/set/read/'+id)
             const dataDB      = await response.data
-            commit('SET_TO_READ', dataDB)
+            commit('SET_TO_READ', {
+                outputDB: dataDB,
+                sessionUserList: userListData
+            })
         } catch(error) {
             state.errorBag = error
         }
@@ -105,9 +107,12 @@ const actions = {
 };
 
 const mutations = {
-    SET_TO_READ: (state, data) => {
-        if(data.read_chat == 'UPDATED') {
-            console.log(data.id);
+    SET_TO_READ: (state, payload) => {
+        if(payload.outputDB.read_chat == "UPDATED") {
+            const session = payload.sessionUserList
+            _.forEach(session, function(value, key) {
+                _.find(session, {id: value.id}).unread = 0
+            });
         }
     },
     DONE_SEND: (state, data) => {
