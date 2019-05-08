@@ -98429,10 +98429,17 @@ var getters = {
 var actions = (_actions = {
   newChatReceive: function newChatReceive(_ref, payload) {
     var commit = _ref.commit,
+        rootState = _ref.rootState,
         dispatch = _ref.dispatch;
-    commit('NEW_CHAT_ARRIVED', payload);
 
-    if (!_.isEmpty(state.chatReceiver)) {
+    if (_.isEmpty(state.chatReceiver)) {
+      var userListData = rootState.userlist.userList;
+      commit('NEW_CHAT_MESSAGE_BUBLE', {
+        userList: userListData,
+        payload: payload
+      });
+    } else {
+      commit('NEW_CHAT_ARRIVED', payload);
       dispatch('setToRead', payload.sender_id);
     }
   },
@@ -98667,18 +98674,25 @@ var actions = (_actions = {
   commit('RANDOM_STR');
 }), _actions);
 var mutations = {
+  NEW_CHAT_MESSAGE_BUBLE: function NEW_CHAT_MESSAGE_BUBLE(state, payload) {
+    var ul = payload.userList;
+    var pay = payload.payload;
+    _.find(ul, {
+      'id': pay.sender_id
+    }).unread = _.find(ul, {
+      'id': pay.sender_id
+    }).unread + 1;
+  },
   NEW_CHAT_ARRIVED: function NEW_CHAT_ARRIVED(state, payload) {
     state.chatHistory.push(payload);
   },
   SET_TO_READ: function SET_TO_READ(state, payload) {
     if (payload.outputDB.read_chat == "UPDATED") {
-      var session = payload.sessionUserList;
-
-      _.forEach(session, function (value, key) {
-        _.find(session, {
-          id: value.id
-        }).unread = 0;
-      });
+      var ul = payload.sessionUserList;
+      var userOpenWith = state.chatReceiver;
+      _.find(ul, {
+        id: userOpenWith.id
+      }).unread = 0;
     }
   },
   DONE_SEND: function DONE_SEND(state, data) {

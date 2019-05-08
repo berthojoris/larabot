@@ -24,16 +24,22 @@ const getters = {
 };
 
 const actions = {
-    newChatReceive({ commit, dispatch }, payload) {
-        commit('NEW_CHAT_ARRIVED', payload)
-        if(!_.isEmpty(state.chatReceiver)) {
+    newChatReceive({ commit, rootState, dispatch }, payload) {
+        if(_.isEmpty(state.chatReceiver)) {
+            const userListData  = rootState.userlist.userList
+            commit('NEW_CHAT_MESSAGE_BUBLE', {
+                userList: userListData,
+                payload: payload
+            })
+        } else {
+            commit('NEW_CHAT_ARRIVED', payload)
             dispatch('setToRead', payload.sender_id)
         }
     },
     async openChatWith({ commit }, id) {
         try {
-            let response    = await axios.post('/user', {id: id})
-            let dataDB      = await response.data
+            const response    = await axios.post('/user', {id: id})
+            const dataDB      = await response.data
             commit('OPEN_CHAT_WITH', dataDB)
         } catch(error) {
             state.errorBag = error
@@ -42,8 +48,8 @@ const actions = {
     async openChatHistory({ commit, dispatch }, id) {
         commit('DEFAULT')
         try {
-            let response    = await axios.post('/chat/history', {receiverID: id})
-            let dataDB      = await response.data
+            const response    = await axios.post('/chat/history', {receiverID: id})
+            const dataDB      = await response.data
             if(_.isEmpty(dataDB)) {
                 commit('SET_EMPTY_MESSAGE_TRUE')
             } else {
@@ -59,11 +65,11 @@ const actions = {
     },
     async send({ commit }) {
         try {
-            let response    = await axios.post('/chat/insert', {
+            const response    = await axios.post('/chat/insert', {
                 receive_id: state.chatReceiver.id,
                 message: state.message
             })
-            let dataDB      = await response.data
+            const dataDB      = await response.data
             commit('SET_EMPTY_MESSAGE_FALSE')
             commit('DONE_SEND', dataDB)
         } catch(error) {
@@ -113,15 +119,19 @@ const actions = {
 };
 
 const mutations = {
+    NEW_CHAT_MESSAGE_BUBLE: (state, payload) => {
+        const ul = payload.userList
+        const pay = payload.payload
+        _.find(ul, {'id': pay.sender_id}).unread = _.find(ul, {'id': pay.sender_id}).unread+1
+    },
     NEW_CHAT_ARRIVED: (state, payload) => {
         state.chatHistory.push(payload)
     },
     SET_TO_READ: (state, payload) => {
         if(payload.outputDB.read_chat == "UPDATED") {
-            const session = payload.sessionUserList
-            _.forEach(session, function(value, key) {
-                _.find(session, {id: value.id}).unread = 0
-            });
+            const ul = payload.sessionUserList
+            const userOpenWith = state.chatReceiver
+            _.find(ul, {id: userOpenWith.id}).unread = 0
         }
     },
     DONE_SEND: (state, data) => {

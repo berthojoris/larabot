@@ -54,8 +54,8 @@ class ChatController extends Controller
 
         $newData = [
             'id' => $data->id,
-            'sender_id' => $data->sender_id,
-            'receive_id' => $data->receive_id,
+            'sender_id' => (int) $data->sender_id,
+            'receive_id' => (int) $data->receive_id,
             'sender_image' => $data->sender->image,
             'receive_image' => $data->receive->image,
             'message' => $data->message,
@@ -116,7 +116,7 @@ class ChatController extends Controller
         foreach($listUser as $user) {
             array_push($newdata, [
                 'sender_id' => (int) $user->id,
-                'msg_count' => $this->getCount($user->id)
+                'msg_count' => (int) $this->getCount($user->id)
             ]);
         }
 
