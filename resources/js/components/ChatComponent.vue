@@ -80,12 +80,12 @@ export default {
             _.forEach(tUserList, function(value, key) {
                 $("span#"+value.id).removeClass("busy").addClass("online")
             });
-        }
+        },
     },
     computed: {
         ...mapGetters([
             "getUserList",
-            "getOnlineTrigger"
+            "getOnlineTrigger",
         ]),
         channel() {
             return window.Echo.join('online')
@@ -97,7 +97,7 @@ export default {
     mounted() {
         this.idLogged = window.App.user.id
         this.setPersonalData(window.App.user)
-        var vue = this
+        var self = this
         this.channel
             .here(users => {
                 this.tmpUserList = users
@@ -118,7 +118,7 @@ export default {
                 if (e.type == 'clean') {
                     location.reload()
                 } else {
-                    
+                    self.$store.dispatch('newChatReceive', chat)
                 }
             })
             .listenForWhisper('typing', this.whisperAction);
@@ -127,7 +127,7 @@ export default {
         ...mapActions([
             "setPersonalData",
             "userListApi",
-            "userMessageCount"
+            "userMessageCount",
         ]),
         showModal() {
             this.$refs['modal-invite'].show()

@@ -24,6 +24,12 @@ const getters = {
 };
 
 const actions = {
+    newChatReceive({ commit, dispatch }, payload) {
+        commit('NEW_CHAT_ARRIVED', payload)
+        if(!_.isEmpty(state.chatReceiver)) {
+            dispatch('setToRead', payload.sender_id)
+        }
+    },
     async openChatWith({ commit }, id) {
         try {
             let response    = await axios.post('/user', {id: id})
@@ -107,6 +113,9 @@ const actions = {
 };
 
 const mutations = {
+    NEW_CHAT_ARRIVED: (state, payload) => {
+        state.chatHistory.push(payload)
+    },
     SET_TO_READ: (state, payload) => {
         if(payload.outputDB.read_chat == "UPDATED") {
             const session = payload.sessionUserList

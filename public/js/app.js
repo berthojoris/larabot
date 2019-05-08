@@ -1877,7 +1877,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     this.idLogged = window.App.user.id;
     this.setPersonalData(window.App.user);
-    var vue = this;
+    var self = this;
     this.channel.here(function (users) {
       _this.tmpUserList = users;
 
@@ -1895,7 +1895,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       if (e.type == 'clean') {
         location.reload();
-      } else {}
+      } else {
+        self.$store.dispatch('newChatReceive', chat);
+      }
     }).listenForWhisper('typing', this.whisperAction);
   },
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(["setPersonalData", "userListApi", "userMessageCount"]), {
@@ -36347,7 +36349,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.center[data-v-298d7b6c] {\r\n    margin-top: 40%;\r\n    margin-left: 20%;\r\n    width: 60%;\r\n    border: 3px solid #73AD21;\r\n    padding: 10px;\r\n    text-align: center;\n}\n.centerText[data-v-298d7b6c] {\r\n    margin-top: 40%;\r\n    font-size: 25px;\r\n    width: 100%;\r\n    text-align: center;\n}\n.typeIndicator[data-v-298d7b6c] {\r\n    position: absolute; \r\n    left: 62px; \r\n    top: 11px; \r\n    font-size: 12px;\n}\n.nameUp[data-v-298d7b6c] {\r\n    margin-top: -5px;\n}\n.showhide[data-v-298d7b6c] {\r\n    display: none;\n}\n.content[data-v-298d7b6c] {\r\n    background-image: url(\"/images/background.png\");\n}\r\n", ""]);
+exports.push([module.i, "\n.center[data-v-298d7b6c] {\r\n    margin-top: 40%;\r\n    margin-left: 20%;\r\n    width: 60%;\r\n    border: 3px solid #73AD21;\r\n    padding: 10px;\r\n    text-align: center;\n}\n.centerText[data-v-298d7b6c] {\r\n    margin-top: 40%;\r\n    font-size: 25px;\r\n    width: 100%;\r\n    text-align: center;\r\n    color: rgb(110, 108, 108);\n}\n.typeIndicator[data-v-298d7b6c] {\r\n    position: absolute; \r\n    left: 62px; \r\n    top: 11px; \r\n    font-size: 12px;\n}\n.nameUp[data-v-298d7b6c] {\r\n    margin-top: -5px;\n}\n.showhide[data-v-298d7b6c] {\r\n    display: none;\n}\n.content[data-v-298d7b6c] {\r\n    background-image: url(\"/images/background.png\");\n}\r\n", ""]);
 
 // exports
 
@@ -98425,16 +98427,25 @@ var getters = {
   }
 };
 var actions = (_actions = {
+  newChatReceive: function newChatReceive(_ref, payload) {
+    var commit = _ref.commit,
+        dispatch = _ref.dispatch;
+    commit('NEW_CHAT_ARRIVED', payload);
+
+    if (!_.isEmpty(state.chatReceiver)) {
+      dispatch('setToRead', payload.sender_id);
+    }
+  },
   openChatWith: function () {
     var _openChatWith = _asyncToGenerator(
     /*#__PURE__*/
-    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(_ref, id) {
+    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(_ref2, id) {
       var commit, response, dataDB;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              commit = _ref.commit;
+              commit = _ref2.commit;
               _context.prev = 1;
               _context.next = 4;
               return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/user', {
@@ -98474,13 +98485,13 @@ var actions = (_actions = {
   openChatHistory: function () {
     var _openChatHistory = _asyncToGenerator(
     /*#__PURE__*/
-    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(_ref2, id) {
+    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(_ref3, id) {
       var commit, dispatch, response, dataDB;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              commit = _ref2.commit, dispatch = _ref2.dispatch;
+              commit = _ref3.commit, dispatch = _ref3.dispatch;
               commit('DEFAULT');
               _context2.prev = 2;
               _context2.next = 5;
@@ -98531,13 +98542,13 @@ var actions = (_actions = {
   send: function () {
     var _send = _asyncToGenerator(
     /*#__PURE__*/
-    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(_ref3) {
+    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(_ref4) {
       var commit, response, dataDB;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              commit = _ref3.commit;
+              commit = _ref4.commit;
               _context3.prev = 1;
               _context3.next = 4;
               return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/chat/insert', {
@@ -98579,13 +98590,13 @@ var actions = (_actions = {
   setToRead: function () {
     var _setToRead = _asyncToGenerator(
     /*#__PURE__*/
-    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4(_ref4, id) {
+    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4(_ref5, id) {
       var commit, rootState, userListData, response, dataDB;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
-              commit = _ref4.commit, rootState = _ref4.rootState;
+              commit = _ref5.commit, rootState = _ref5.rootState;
               userListData = rootState.userlist.userList;
               _context4.prev = 2;
               _context4.next = 5;
@@ -98624,38 +98635,41 @@ var actions = (_actions = {
 
     return setToRead;
   }(),
-  setOpenChatStatus: function setOpenChatStatus(_ref5) {
-    var commit = _ref5.commit;
+  setOpenChatStatus: function setOpenChatStatus(_ref6) {
+    var commit = _ref6.commit;
     commit('SET_OPEN_CHAT_STATUS');
   },
-  setLoadingMessageTrue: function setLoadingMessageTrue(_ref6) {
-    var commit = _ref6.commit;
+  setLoadingMessageTrue: function setLoadingMessageTrue(_ref7) {
+    var commit = _ref7.commit;
     commit('SET_LOADING_MESSAGE_TRUE');
   },
-  setLoadingMessageFalse: function setLoadingMessageFalse(_ref7) {
-    var commit = _ref7.commit;
+  setLoadingMessageFalse: function setLoadingMessageFalse(_ref8) {
+    var commit = _ref8.commit;
     commit('SET_LOADING_MESSAGE_FALSE');
   }
-}, _defineProperty(_actions, "setLoadingMessageTrue", function setLoadingMessageTrue(_ref8) {
-  var commit = _ref8.commit;
-  commit('SET_EMPTY_MESSAGE_TRUE');
-}), _defineProperty(_actions, "setLoadingMessageFalse", function setLoadingMessageFalse(_ref9) {
+}, _defineProperty(_actions, "setLoadingMessageTrue", function setLoadingMessageTrue(_ref9) {
   var commit = _ref9.commit;
-  commit('SET_EMPTY_MESSAGE_FALSE');
-}), _defineProperty(_actions, "setTypingMessageTrue", function setTypingMessageTrue(_ref10) {
+  commit('SET_EMPTY_MESSAGE_TRUE');
+}), _defineProperty(_actions, "setLoadingMessageFalse", function setLoadingMessageFalse(_ref10) {
   var commit = _ref10.commit;
-  commit('SET_PANEL_MESSAGE_TRUE');
-}), _defineProperty(_actions, "setTypingMessageFalse", function setTypingMessageFalse(_ref11) {
+  commit('SET_EMPTY_MESSAGE_FALSE');
+}), _defineProperty(_actions, "setTypingMessageTrue", function setTypingMessageTrue(_ref11) {
   var commit = _ref11.commit;
-  commit('SET_TYPING_MESSAGE_FALSE');
-}), _defineProperty(_actions, "setClearHistoryChat", function setClearHistoryChat(_ref12) {
+  commit('SET_PANEL_MESSAGE_TRUE');
+}), _defineProperty(_actions, "setTypingMessageFalse", function setTypingMessageFalse(_ref12) {
   var commit = _ref12.commit;
-  commit('OPEN_CHATHISTORY');
-}), _defineProperty(_actions, "setRandomStr", function setRandomStr(_ref13) {
+  commit('SET_TYPING_MESSAGE_FALSE');
+}), _defineProperty(_actions, "setClearHistoryChat", function setClearHistoryChat(_ref13) {
   var commit = _ref13.commit;
+  commit('OPEN_CHATHISTORY');
+}), _defineProperty(_actions, "setRandomStr", function setRandomStr(_ref14) {
+  var commit = _ref14.commit;
   commit('RANDOM_STR');
 }), _actions);
 var mutations = {
+  NEW_CHAT_ARRIVED: function NEW_CHAT_ARRIVED(state, payload) {
+    state.chatHistory.push(payload);
+  },
   SET_TO_READ: function SET_TO_READ(state, payload) {
     if (payload.outputDB.read_chat == "UPDATED") {
       var session = payload.sessionUserList;

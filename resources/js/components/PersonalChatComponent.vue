@@ -114,6 +114,7 @@ export default {
     font-size: 25px;
     width: 100%;
     text-align: center;
+    color: rgb(110, 108, 108);
 }
 .typeIndicator {
     position: absolute; 
